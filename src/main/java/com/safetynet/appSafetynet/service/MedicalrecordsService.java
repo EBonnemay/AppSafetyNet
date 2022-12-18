@@ -1,21 +1,18 @@
 package com.safetynet.appSafetynet.service;
-import java.util.Optional;
 
-import com.safetynet.appSafetynet.model.Firestation;
-import com.safetynet.appSafetynet.repository.FirestationRepository;
-import com.safetynet.appSafetynet.repository.MedicalrecordsRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.safetynet.appSafetynet.model.Medicalrecords;
 import com.safetynet.appSafetynet.repository.MedicalrecordsRepository;
-
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Data
 @Service
 public class MedicalrecordsService {
     @Autowired
-private MedicalrecordsRepository medicalrecordsRepository;
+    private MedicalrecordsRepository medicalrecordsRepository;
 
     public Optional<Medicalrecords> getMedicalrecords(final Long id) {
         return medicalrecordsRepository.findById(id);
