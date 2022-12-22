@@ -4,22 +4,20 @@ package com.safetynet.appSafetynet.model;
 
 import lombok.Data;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 
 
 @Data
-@Entity
-@Table(name = "medicalrecords")
-public class Medicalrecords {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long Id;
+//@Entity
+//@Table(name = "medicalrecords")
+public class MedicalrecordsModel {
 
-    @Column(name = "first_name")
+
+
+    //@Column(name = "first_name")
     private String firstName;
 
-    @Column (name = "last_name")
+    //@Column (name = "last_name")
     private String lastName;
     private String birthdate;
     private ArrayList<String> medications;

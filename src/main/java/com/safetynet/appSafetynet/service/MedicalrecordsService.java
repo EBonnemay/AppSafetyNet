@@ -1,12 +1,9 @@
 package com.safetynet.appSafetynet.service;
 
-import com.safetynet.appSafetynet.model.Medicalrecords;
 import com.safetynet.appSafetynet.repository.MedicalrecordsRepository;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Data
 @Service
@@ -14,7 +11,7 @@ public class MedicalrecordsService {
     @Autowired
     private MedicalrecordsRepository medicalrecordsRepository;
 
-    public Optional<Medicalrecords> getMedicalrecords(final Long id) {
+    /*public Optional<Medicalrecords> getMedicalrecords(final Long id) {
         return medicalrecordsRepository.findById(id);
     }
 
@@ -30,5 +27,5 @@ public class MedicalrecordsService {
         Medicalrecords savedMedicalrecords = medicalrecordsRepository.save(medicalrecords);
         return savedMedicalrecords;
     }
-
+*/
 }
