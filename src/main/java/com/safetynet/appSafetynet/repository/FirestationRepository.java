@@ -4,106 +4,33 @@ import com.jsoniter.JsonIterator;
 import com.jsoniter.any.Any;
 import com.safetynet.appSafetynet.model.FirestationModel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
 import java.io.*;
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
 
-public class FirestationRepository implements CrudRepository {
+public class FirestationRepository implements Repository {
 
-    //@Autowired
-    //private EntityManager entityManager;
+    //ATTENTION PEU PERTINENT
 
     @Autowired
-    FirestationModel firestationObject;
-
+    FirestationModel model;
+//
+    ArrayList<FirestationModel> arrayList = new ArrayList<>();
     public FirestationRepository() throws FileNotFoundException {
     }
 
-    @Override
-    public Iterable saveAll(Iterable entities) {
-        return null;
-    }
 
-    @Override
-    public Object save(Object entity) {
-        return null;
-    }
-
-    @Override
-    public Optional findById(Object o) {
-        return Optional.empty();
-    }
-
-    @Override
-    public boolean existsById(Object o) {
-        return false;
-    }
-
-    /*@Override
-    public Iterable findAll() {
-        return null;
-    }*/
-
-    @Override
-    public Iterable findAllById(Iterable iterable) {
-        return null;
-    }
-
-    @Override
-    public long count() {
-        return 0;
-    }
-
-    @Override
-    public void deleteById(Object o) {
-
-    }
-
-    @Override
-    public void delete(Object entity) {
-
-    }
-
-    @Override
-    public void deleteAll(Iterable entities) {
-
-    }
-
-    @Override
-    public void deleteAll() {
-
-    }
-
-    /*@Override
-    public String value() {
-        return "";
-    }
-
-    @Override
-    public Class<? extends Annotation> annotationType() {
-        return null;
-    }*/
-
-   /* public void JSONToJavaObject() throws JsonParseException, JsonMappingException, IOException {
-        ObjectMapper om = new ObjectMapper();
-        File jsonFile = new File("classpath:data.json");
-        FirestationModel fm = om.readValue(jsonFile, FirestationModel.class);
-        System.out.println(fm.getAddress());
-        System.out.println(fm.getStation());
-
-    */
 
 
     public Iterable<FirestationModel> findAll() {
-        ArrayList<FirestationModel> arrayList = new ArrayList<>();
+
         try {
             // Use JSONiter to parse the JSON file
             File file = ResourceUtils.getFile("classpath:data.json");
@@ -121,13 +48,13 @@ public class FirestationRepository implements CrudRepository {
 
                 //voir ce que fait jsoniter bindapi
 
-                FirestationModel firestationObject = new FirestationModel();
+                //FirestationModel firestationOject = new FirestationModel();
+                FirestationModel model = new FirestationModel();
+                model.setAddress(list.get(i).get("address").toString());
+                model.setStation(list.get(i).get("station").toString());
+                System.out.println(model);
 
-                firestationObject.setAddress(list.get(i).get("address").toString());
-                firestationObject.setStation(list.get(i).get("station").toString());
-                System.out.println(firestationObject);
-
-                arrayList.add(firestationObject);
+                arrayList.add(model);
 
             }
             return arrayList;
@@ -136,5 +63,71 @@ public class FirestationRepository implements CrudRepository {
                 return null;
             }
         }
+    public String findStationServingOneAddress(String address){
+        findAll();
+        for (FirestationModel element : arrayList){
+            if (element.getAddress().equals(address)){
+                return(element.getStation());
+            }
+        }
+        return null;
+        //trouver la station correspondant à une adresse
     }
+    public ArrayList<String> findAddressesServedByOneStation(String station){
+        ArrayList<String> listOfAddressesServedByOneStation = new ArrayList<>();
+        findAll();
+        for (FirestationModel element : arrayList) {
+            if (element.getStation().equals(station)) {
+                listOfAddressesServedByOneStation.add(element.getAddress());
+            }
+        }
+        return listOfAddressesServedByOneStation;
+        //trouver les adresses desservies par une station
+    }
+    public void deleteOneAddressStationMapping(String address){
+        findAll();
+        for (FirestationModel element : arrayList) {
+            if (element.getAddress().equals(address)) {
+                arrayList.remove(element);
+            }
+        }
+    }
+    public void addOneAddressStationMapping(FirestationModel element){
+            findAll();
+            arrayList.add(element);
+            //est ce pertinent de faire un bean de firestation model?
+        //pourquoi firestationModel ne voit pas le bean?
+
+        //ajouter un objet firemodel à une liste de firemodels
+
+    }
+    public void updateFirestationNumberForAddress(String address, String number){
+        findAll();
+        for (FirestationModel element : arrayList) {
+            if (element.getAddress().equals(address)) {
+                element.setStation(number);
+                System.out.println("address "+ address + " has now firestation number "+ number);
+                System.out.println(arrayList);
+            }
+        }
+    }
+
+
+
+
+
+
+
+   @Override
+    public String value() {
+        return "";
+    }
+
+    @Override
+    public Class<? extends Annotation> annotationType() {
+        return null;
+    }
+
+
+}
 

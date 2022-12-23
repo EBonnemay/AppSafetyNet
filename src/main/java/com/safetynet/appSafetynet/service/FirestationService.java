@@ -21,6 +21,9 @@ public class FirestationService {
     public Iterable<FirestationModel> getFirestations() {
         return firestationRepository.findAll();
     }
+    public void updateF(String address, String number){
+        firestationRepository.updateFirestationNumberForAddress( address,  number);
+    }
     /*
     public void deleteFirestation(final Long id) {
         firestationRepository.deleteById(id);
