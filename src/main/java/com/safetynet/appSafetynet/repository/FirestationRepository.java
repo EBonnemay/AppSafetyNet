@@ -3,24 +3,19 @@ package com.safetynet.appSafetynet.repository;
 import com.jsoniter.JsonIterator;
 import com.jsoniter.any.Any;
 import com.safetynet.appSafetynet.model.FirestationModel;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
 import java.io.*;
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Repository
 
-public class FirestationRepository implements Repository {
+public class FirestationRepository {
 
     //ATTENTION PEU PERTINENT
-
-    @Autowired
-    FirestationModel model;
 //
     ArrayList<FirestationModel> arrayList = new ArrayList<>();
     public FirestationRepository() throws FileNotFoundException {
@@ -115,18 +110,6 @@ public class FirestationRepository implements Repository {
 
 
 
-
-
-
-   @Override
-    public String value() {
-        return "";
-    }
-
-    @Override
-    public Class<? extends Annotation> annotationType() {
-        return null;
-    }
 
 
 }
