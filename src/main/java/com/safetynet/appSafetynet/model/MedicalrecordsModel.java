@@ -5,6 +5,7 @@ package com.safetynet.appSafetynet.model;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 @Data
@@ -20,7 +21,7 @@ public class MedicalrecordsModel {
     //@Column (name = "last_name")
     private String lastName;
     private String birthdate;
-    private ArrayList<String> medications;
+    private HashMap<String, String> medications;
     private ArrayList<String> allergies;
 
 

@@ -22,7 +22,7 @@ public class FirestationController {
 
     @PutMapping("/firestations")
     public void updateFirestation(@RequestParam String address, @RequestParam String number){
-        firestationService.updateF( address,  number);
+        firestationService.updateF( address, number);
         //que renvoie-t-il? 200? mais si après ça je fais un get mapping il va reprendre la liste initiale...
 
     }
