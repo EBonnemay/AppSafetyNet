@@ -1,9 +1,11 @@
 package com.safetynet.appSafetynet.service;
 
+import com.jsoniter.any.Any;
 import com.safetynet.appSafetynet.model.FirestationModel;
 import com.safetynet.appSafetynet.model.MedicalrecordsModel;
 import com.safetynet.appSafetynet.model.PersonModel;
 import com.safetynet.appSafetynet.repository.FirestationRepository;
+import com.safetynet.appSafetynet.repository.MakingModels;
 import com.safetynet.appSafetynet.repository.MedicalrecordsRepository;
 import com.safetynet.appSafetynet.repository.PersonRepository;
 import lombok.Data;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +27,10 @@ public class UrlService1 {
     @Autowired
     PersonRepository personRepository;
 
+    @Autowired
+    MakingModels makingModels;
 
+    Any root;
 
    ArrayList<PersonModel> arrayListPersons;
    ArrayList<FirestationModel> arrayListFirestations;
@@ -61,30 +67,44 @@ public class UrlService1 {
     }
         return mapOfPersonsServedByOneStation;
     }
-public boolean isThisPersonAChild(String firstLastName){
-    for (MedicalrecordsModel model : arrayListMedicalrecords) {
+public int howOldIsThisPerson(String firstLastName, ArrayList <MedicalrecordsModel> list ){
+    try{
+        System.out.println("in function how old");
 
-        if (firstLastName.equals(model.getFirstName() + model.getLastName())) {
-            LocalDate today = LocalDate.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        for (MedicalrecordsModel model : list) {
+            System.out.println(model.toString());
+            String modelsName = model.getFirstName()+model.getLastName();
+            if (firstLastName.equals(modelsName)) {
+                LocalDate today = LocalDate.now();
+                System.out.println("today"+today);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+                System.out.println("formatter ok");
+                String stringDateOfBirth = model.getBirthdate();
+                System.out.println("stringdateofBirth" +stringDateOfBirth);
 
-            String stringDateOfBirth = model.getBirthdate();
 
-
-            LocalDate dateOfBirth = LocalDate.parse(stringDateOfBirth, formatter);
-            LocalDate nineteenthBirthday = dateOfBirth.plusYears(19);
-            if (today.isBefore(nineteenthBirthday)) {
-                return true;
+                LocalDate dateOfBirth = LocalDate.parse(stringDateOfBirth, formatter);
+                System.out.println("dateOfBirth"+ dateOfBirth);
+                //LocalDate nineteenthBirthday = dateOfBirth.plusYears(19);
+                int age = Period.between(dateOfBirth, today).getYears();
+                System.out.println("age"+ age);
+                return age;
             }
-
         }
+    }catch(Exception e){
+        throw new RuntimeException("not found person");
+        }
+    return -1;
     }
-    return false;
-}
+
+
+
 public HashMap<String, Integer> numberOfChildrenServedByOneStation() {
     int numberOfChildrenServedByOneStation = 0;
     for (String id : mapOfPersonsServedByOneStation.keySet()) {
-        if (isThisPersonAChild(id)) {
+
+        int age = howOldIsThisPerson(id, arrayListMedicalrecords);
+        if(age<19) {
             numberOfChildrenServedByOneStation += 1;
         }
     }
@@ -95,11 +115,16 @@ public HashMap<String, Integer> numberOfChildrenServedByOneStation() {
 
 
 public HashMap<String,HashMap> urlOne(String firestationNumber){
-    firestationRepository.makeFirestationModels();
+    if (root ==null){
+        root = makingModels.modelMaker();
+    }
+    firestationRepository.makeFirestationModels(root);
     this.arrayListFirestations = firestationRepository.getArrayListFirestations();
-    medicalrecordsRepository.makeMedicalrecordsModels();;
+
+    medicalrecordsRepository.makeMedicalrecordsModels(root);
     this.arrayListMedicalrecords = medicalrecordsRepository.getArrayListMedicalrecords();
-    personRepository.makePersonModels();
+
+    personRepository.makePersonModels(root);
     this.arrayListPersons=personRepository.getArrayListPersons();
     mapOfPersonsServedByOneStation(firestationNumber);
     numberOfChildrenServedByOneStation();

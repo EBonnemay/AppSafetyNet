@@ -16,11 +16,12 @@ public class PersonRepository{
     @Autowired
     MakingModels makingModels;
     ArrayList<PersonModel> arrayListPersons = new ArrayList<>();
+    Any root;
     public PersonRepository() throws FileNotFoundException {
     }
-    public void makePersonModels(){
+    public void makePersonModels(Any deserializedFile){
         try {
-            Any deserializedFile = makingModels.modelMaker();
+            //deserializedFile = makingModels.modelMaker();
             Any json_persons = deserializedFile.get("persons");
             List<Any> list = json_persons.asList();
 
@@ -44,7 +45,10 @@ public class PersonRepository{
     public Iterable<PersonModel> findAll() {
         //arrayListPersons.clear();
         if (arrayListPersons.isEmpty()){
-            makePersonModels();
+            if(root == null){
+                root = makingModels.modelMaker();
+            }
+            makePersonModels(root);
         }
         return arrayListPersons;
     }
@@ -57,7 +61,10 @@ public class PersonRepository{
     }
     public void updatePerson(String firstLastName, String field, String newContent ){
         if (arrayListPersons.isEmpty()){
-            makePersonModels();
+            if(root == null){
+                root = makingModels.modelMaker();
+            }
+            makePersonModels(root);
         }
         for (PersonModel element : arrayListPersons){
             if((element.getFirstName()+element.getLastName()).equals(firstLastName)){

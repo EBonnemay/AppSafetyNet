@@ -15,11 +15,14 @@ public class FirestationRepository {
     @Autowired
    MakingModels makingModels;
     ArrayList<FirestationModel> arrayListFirestations = new ArrayList<>();
+
+    Any root;
     public FirestationRepository() throws FileNotFoundException {
     }
-    public void makeFirestationModels(){
+    public void makeFirestationModels(Any deserializedFile){
         try {
-            Any deserializedFile = makingModels.modelMaker();
+            //Any deserializedFile = makingModels.modelMaker();
+
             Any json_firestations = deserializedFile.get("firestations");
             List<Any> list = json_firestations.asList();
 
@@ -37,13 +40,19 @@ public class FirestationRepository {
     public Iterable<FirestationModel> findAll() {
         //arrayListFirestations.clear();
         if (arrayListFirestations.isEmpty()){
-            makeFirestationModels();
+            if(root == null){
+                root = makingModels.modelMaker();
+            }
+            makeFirestationModels(root);
         }
         return arrayListFirestations;
     }
     public String findStationServingOneAddress(String address){
         if (arrayListFirestations.isEmpty()){
-            makeFirestationModels();
+            if(root == null){
+                root = makingModels.modelMaker();
+            }
+            makeFirestationModels(root);
         }
         for (FirestationModel element : arrayListFirestations){
             if (element.getAddress().equals(address)){
@@ -55,7 +64,10 @@ public class FirestationRepository {
 
     public void deleteOneAddressStationMapping(String address){
         if (arrayListFirestations.isEmpty()){
-            makeFirestationModels();
+            if(root == null){
+                root = makingModels.modelMaker();
+            }
+            makeFirestationModels(root);
         }
         for (FirestationModel element : arrayListFirestations) {
             if (element.getAddress().equals(address)) {
@@ -65,7 +77,10 @@ public class FirestationRepository {
     }
     public void addOneAddressStationMapping(FirestationModel element){
         if (arrayListFirestations.isEmpty()){
-            makeFirestationModels();
+            if(root == null){
+                root = makingModels.modelMaker();
+            }
+            makeFirestationModels(root);
         }
             arrayListFirestations.add(element);
 
@@ -73,7 +88,10 @@ public class FirestationRepository {
     }
     public void updateFirestationNumberForAddress(String address, String number){
         if (arrayListFirestations.isEmpty()){
-            makeFirestationModels();
+            if(root == null){
+                root = makingModels.modelMaker();
+            }
+            makeFirestationModels(root);
         }
         for (FirestationModel element : arrayListFirestations) {
             if (element.getAddress().equals(address)) {

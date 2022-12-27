@@ -17,13 +17,14 @@ public class MedicalrecordsRepository {
     @Autowired
     MakingModels makingModels;
     ArrayList<MedicalrecordsModel> arrayListMedicalrecords = new ArrayList<>();
+    Any root;
 
     public MedicalrecordsRepository() throws FileNotFoundException {
     }
 
-    public void makeMedicalrecordsModels() {
+    public void makeMedicalrecordsModels(Any deserializedFile) {
         try {
-            Any deserializedFile = makingModels.modelMaker();
+            //Any deserializedFile = makingModels.modelMaker();
             Any json_medicalrecords = deserializedFile.get("medicalrecords");
             List<Any> list = json_medicalrecords.asList();
 
@@ -63,14 +64,20 @@ public class MedicalrecordsRepository {
     public Iterable<MedicalrecordsModel> findAll() {
         //arrayListMedicalrecords.clear();
         if (arrayListMedicalrecords.isEmpty()) {
-            makeMedicalrecordsModels();
+            if (root == null){
+                root = makingModels.modelMaker();
+            }
+            makeMedicalrecordsModels(root);
         }
         return arrayListMedicalrecords;
     }
 
     public MedicalrecordsModel findMedicalRecordsForOnePerson(String firstLastName) {
         if (arrayListMedicalrecords.isEmpty()) {
-            makeMedicalrecordsModels();
+            if(root == null){
+                root = makingModels.modelMaker();
+            }
+            makeMedicalrecordsModels(root);
         }
         for (MedicalrecordsModel element : arrayListMedicalrecords) {
             if ((element.getFirstName() + element.getLastName()).equals(firstLastName)) {
@@ -83,14 +90,20 @@ public class MedicalrecordsRepository {
     //ajouter un dossier médical ;
     public void addOneMedicalRecords(MedicalrecordsModel element) {
         if (arrayListMedicalrecords.isEmpty()) {
-            makeMedicalrecordsModels();
+            if (root == null){
+                root = makingModels.modelMaker();
+            }
+            makeMedicalrecordsModels(root);
         }
         arrayListMedicalrecords.add(element);
     }
 
     public void deleteOneMedicalRecord(String firstLastName) {
         if (arrayListMedicalrecords.isEmpty()) {
-            makeMedicalrecordsModels();
+            if (root == null){
+                root = makingModels.modelMaker();
+            }
+            makeMedicalrecordsModels(root);
         }
         for (MedicalrecordsModel element : arrayListMedicalrecords) {
             if ((element.getFirstName() + element.getLastName()).equals(firstLastName)) {
@@ -105,12 +118,12 @@ public class MedicalrecordsRepository {
 
     public void updateAllergiesOrMeds(String firstLastName, String field, String action, String newAllergyOrMed) {
         if (arrayListMedicalrecords.isEmpty()) {
-            makeMedicalrecordsModels();
+            if (root == null){
+                root = makingModels.modelMaker();
+            }
+            makeMedicalrecordsModels(root);
         }
         for (MedicalrecordsModel element : arrayListMedicalrecords) {
-
-
-
             if ((element.getFirstName() + element.getLastName()).equals(firstLastName)) {
                 if (field.equals("allergies")) {
                     ArrayList<String> listOfAllergies = element.getAllergies();
