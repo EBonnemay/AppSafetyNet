@@ -176,39 +176,5 @@ public class MedicalrecordsRepository {
     }
 
 
-   /* public int howOldIsThisPerson(String firstLastName, ArrayList <MedicalrecordsModel> list ){
-        try{
-            System.out.println("in function how old");
-            System.out.println("firstlastName = "+ firstLastName);
-            System.out.println(list);
-            System.out.println("list printed");
-            for (MedicalrecordsModel model : list) {
-                System.out.println(model.toString());
-                String modelsName = model.getFirstName()+" "+model.getLastName();
-                if (firstLastName.equals(modelsName)) {
-                    LocalDate today = LocalDate.now();
-                    System.out.println("today"+today);
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-                    System.out.println("formatter ok");
-                    String stringDateOfBirth = model.getBirthdate();
-                    System.out.println("stringdateofBirth" +stringDateOfBirth);
-
-
-                    LocalDate dateOfBirth = LocalDate.parse(stringDateOfBirth, formatter);
-                    System.out.println("dateOfBirth"+ dateOfBirth);
-                    //LocalDate nineteenthBirthday = dateOfBirth.plusYears(19);
-                    int age = Period.between(dateOfBirth, today).getYears();
-                    System.out.println("age"+ age);
-                    return age;
-                }
-            }
-        }catch(Exception e){
-            throw new RuntimeException("not found person");
-        }
-        return -1;
-    }*/
-
-
-
 }
 

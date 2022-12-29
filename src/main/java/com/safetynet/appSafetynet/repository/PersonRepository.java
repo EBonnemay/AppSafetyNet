@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.io.FileNotFoundException;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +51,8 @@ public class PersonRepository{
                 model.setPhone(listPersons.get(i).get("phone").toString());
                 model.setEmail(listPersons.get(i).get("email").toString());
                 model.setMedicalrecords(arrayListMedicalrecords.get(i));
+                String dateOfBirth = model.getMedicalrecords().getBirthdate();
+                model.setAge(howOldIsThisPerson2(dateOfBirth));
 
 
                 //model.setMedicalrecords();
@@ -68,12 +73,16 @@ public class PersonRepository{
         }
         return arrayListPersons;
     }
-    public void addOnePerson(){
-
+    public void addOnePerson(PersonModel person){
+        arrayListPersons.add(person);
 
     }
     public void deleteOnePerson(String firstLastName){
-
+        for(PersonModel person : arrayListPersons){
+            if(firstLastName.equals(person.getFirstName()+" "+person.getLastName())){
+                arrayListPersons.remove(person);
+            }
+        }
     }
     public void updatePerson(String firstLastName, String field, String newContent ){
         if (arrayListPersons.isEmpty()){
@@ -114,6 +123,16 @@ public class PersonRepository{
 
         }
         return peopleInSameHousehold;
+    }
+    public int howOldIsThisPerson2(String stringDateOfBirth){
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        System.out.println("formatter ok");
+
+        LocalDate dateOfBirth = LocalDate.parse(stringDateOfBirth, formatter);
+        int age = Period.between(dateOfBirth, today).getYears();
+        System.out.println("age"+ age);
+        return age;
     }
 
 }

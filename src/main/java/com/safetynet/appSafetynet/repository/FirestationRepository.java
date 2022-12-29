@@ -98,6 +98,15 @@ public class FirestationRepository {
 
 
     }
+    public void deleteOneAddressStationMapping(FirestationModel element){
+        if (arrayListFirestations.isEmpty()){
+            if(root == null){
+                root = makingModels.modelMaker();
+            }
+            makeFirestationModels(root);
+        }
+        arrayListFirestations.remove(element);
+    }
     public void updateFirestationNumberForAddress(String address, String number){
         if (arrayListFirestations.isEmpty()){
             if(root == null){

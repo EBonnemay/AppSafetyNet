@@ -13,14 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 
 @Data
 @Service
-public class UrlService5 {
-
+public class UrlService7 {
 
     @Autowired
     MakingModels makingModels;
@@ -40,11 +36,11 @@ public class UrlService5 {
     ArrayList<MedicalrecordsModel> arrayListMedicalrecords;
 
     Any root;
-    // HashMap<String, ArrayList> resultUrl5 = new HashMap<>();//the key is first and last name concatenated
-    public HashMap<String, Object> urlFive(String stringNumbersOfFirestations){
 
-        HashMap<String, Object> resultUrl5 = new HashMap<>();
-        if(root==null){
+    public ArrayList<String> urlSeven(String city) {
+        ArrayList<String> resultUrl7 = new ArrayList<>();
+
+        if (root == null) {
             root = makingModels.modelMaker();
         }
 
@@ -57,23 +53,15 @@ public class UrlService5 {
         this.arrayListPersons = personRepository.getArrayListPersons();
 
         System.out.println("models are filled in");
-        List<String> numbersOfFirestations = Arrays.asList(stringNumbersOfFirestations.split(","));
-        for (String numberOfFirestation : numbersOfFirestations){
-            System.out.println("number = "+numberOfFirestation);
-            HashMap<String, Object>householdDataWithAddressesKeys = new HashMap<>();
-            ArrayList<String> addressesServedByOneStation = firestationRepository.findAddressesServedByOneStation(numberOfFirestation, arrayListFirestations);
 
-            for (String address : addressesServedByOneStation){
-                HashMap<String, Object> householdDataWithNameKeys = urlService4.getHouseholdDataWithNameKey(address, arrayListPersons);
-                householdDataWithAddressesKeys.put(address, householdDataWithNameKeys);
-                System.out.println("household "+householdDataWithAddressesKeys);
+        for (PersonModel person : arrayListPersons){
+            if(person.getCity().equals(city)){
+                resultUrl7.add(person.getEmail());
             }
-            resultUrl5.put("firestation"+ numberOfFirestation, householdDataWithAddressesKeys);
-        }
-        // pour chaque firestation faire la liste des adresses (dans firestation repository : public ArrayList <String> findAddressesServedByOneStation(String numberOfStation){
-        // pour chaque adresse récupérer un hashmap householdDataWithNameKey (bean de urlservice 4
 
-        System.out.println(resultUrl5);
-        return resultUrl5;
+        }
+
+        return resultUrl7;
+
     }
 }

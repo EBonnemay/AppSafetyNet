@@ -23,6 +23,7 @@ public class PersonModel {
 
     private String phone;
     private String email;
+    private int age;
     private MedicalrecordsModel medicalrecords;
 
 // utiliser jsoniter pour aller chercher dans le fichier json

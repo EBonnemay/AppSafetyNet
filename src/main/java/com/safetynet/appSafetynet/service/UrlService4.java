@@ -58,7 +58,7 @@ public class UrlService4 {
 
             }
         }
-        HashMap<String, Object> householdDataWithNameKey =  getHouseholdDataWithNameKey(address, arrayListMedicalrecords, arrayListPersons);
+        HashMap<String, Object> householdDataWithNameKey =  getHouseholdDataWithNameKey(address, arrayListPersons);
 
         resultUrl4.put("firestation number of "+ address,numberOfStation );
         resultUrl4.put ("persons living at "+ address, householdDataWithNameKey );
@@ -67,31 +67,22 @@ public class UrlService4 {
         return resultUrl4;
     }
 
-    public HashMap<String, Object> getHouseholdDataWithNameKey(String address, ArrayList<MedicalrecordsModel> arrayMedicalrecords, ArrayList<PersonModel> arrayPersons){
-        ArrayList<PersonModel> arrayListHousehold = new ArrayList<>();
+    public HashMap<String, Object> getHouseholdDataWithNameKey(String address,ArrayList<PersonModel> arrayPersons){
+        //ArrayList<PersonModel> arrayListHousehold = new ArrayList<>();
         HashMap<String, Object> householdDataWithNameKey = new HashMap<>();
-        arrayListHousehold = personRepository.getPeopleInSameHouseHold(address, arrayPersons);
+        ArrayList<PersonModel> arrayListHousehold = personRepository.getPeopleInSameHouseHold(address, arrayPersons);
         for (PersonModel item : arrayListHousehold){ //pour chaque personModel dans la liste du foyer
             HashMap<String, Object> dataForOnePerson = new HashMap<>();//crée une hashmap vide "dataforoneperson"
 
             dataForOnePerson.put("phone", item.getPhone());
-            String firstLastName = item.getFirstName()+ " "+item.getLastName();
-
-            //int ageOfItem = medicalrecordsRepository.howOldIsThisPerson(firstLastName, arrayListMedicalrecords);
-
-            //dataForOnePerson.put("age",ageOfItem );
-            for( MedicalrecordsModel medicalFile : arrayMedicalrecords){
-                if(firstLastName.equals(medicalFile.getFirstName()+" "+medicalFile.getLastName())){
-                    String stringDateOfBirth = medicalFile.getBirthdate();
-                    int age = medicalrecordsRepository.howOldIsThisPerson2(stringDateOfBirth);
-                    dataForOnePerson.put ("age", age);
-                    dataForOnePerson.put("medications", medicalFile.getMedications());
-                    dataForOnePerson.put("allergies", medicalFile.getAllergies());
+            dataForOnePerson.put("age", item.getAge());
+            dataForOnePerson.put("medications", item.getMedicalrecords().getMedications());
+            dataForOnePerson.put("allergies", item.getMedicalrecords().getAllergies());
 
 
-                    householdDataWithNameKey.put(item.getFirstName()+" "+item.getLastName(), dataForOnePerson);
-                }
-            }
+            householdDataWithNameKey.put(item.getFirstName()+" "+item.getLastName(), dataForOnePerson);
+
+
         }
         return householdDataWithNameKey;
     }

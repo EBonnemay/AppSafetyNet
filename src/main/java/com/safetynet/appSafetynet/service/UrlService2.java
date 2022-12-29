@@ -74,6 +74,7 @@ membres du foyer. S'il n'y a pas d'enfant, cette url peut renvoyer une chaîne v
 
     public HashMap<String, ArrayList> urlTwo(String address) {
         HashMap<String, ArrayList> resultUrl2 = new HashMap<>();
+        String nameOfChild = "";
         if(root==null){
             root = makingModels.modelMaker();
         }
@@ -86,23 +87,15 @@ membres du foyer. S'il n'y a pas d'enfant, cette url peut renvoyer une chaîne v
         personRepository.makePersonModels(root);
         this.arrayListPersons = personRepository.getArrayListPersons();
 
-        HashMap<PersonModel, Integer> listOfChildrenAndAges= getListAndAgesOfChildren();
-        System.out.println("whole number of children is :");
-        System.out.println(listOfChildrenAndAges.size());
+       // HashMap<PersonModel, Integer> listOfChildrenAndAges= getListAndAgesOfChildren();
+
         ArrayList<PersonModel> household = personRepository.getPeopleInSameHouseHold(address, arrayListPersons);
-        System.out.println("number of persons in household is "+ household.size());
+
             for (PersonModel item : household) { //pour chaque personne dans le foyer
-
-
-
-                if (listOfChildrenAndAges.containsKey(item)) { //si cette personne est dans la liste des enfants
-
-                    String nameOfChild = item.getFirstName() + " " + item.getLastName(); //1donne lui un nom-prenom
-
-                    int ageOfChild = listOfChildrenAndAges.get(item);//2cherche son âge
-
+                if(item.getAge()<19){
+                    nameOfChild = item.getFirstName()+" "+item.getLastName();
                     HashMap<String, Integer> informationsAge = new HashMap<>(); //3et crée un hashmap "age" > age
-                    informationsAge.put("age", ageOfChild);
+                    informationsAge.put("age", item.getAge());
                     ArrayList<String> namesOfOtherMembers = new ArrayList<>();//4crée une liste de strings "autres membres"
 
                     for (PersonModel otherMember : household) {//repasse en revue les personnes dans le foyer
@@ -116,9 +109,6 @@ membres du foyer. S'il n'y a pas d'enfant, cette url peut renvoyer une chaîne v
                     listOfInformations.add(informationsAge);
                     listOfInformations.add(informationsFamily);
                     resultUrl2.put(nameOfChild, listOfInformations);
-
-
-
                 }
             }
 
