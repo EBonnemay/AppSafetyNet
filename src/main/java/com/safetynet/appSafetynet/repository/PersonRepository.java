@@ -1,6 +1,7 @@
 package com.safetynet.appSafetynet.repository;
 
 import com.jsoniter.any.Any;
+import com.safetynet.appSafetynet.model.MedicalrecordsModel;
 import com.safetynet.appSafetynet.model.PersonModel;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,28 +14,43 @@ import java.util.List;
 @Data
 @Repository
 public class PersonRepository{
+    ArrayList<MedicalrecordsModel> arrayListMedicalrecords = new ArrayList<>();
     @Autowired
     MakingModels makingModels;
+
+    @Autowired
+    MedicalrecordsRepository medicalrecordsRepository;
     ArrayList<PersonModel> arrayListPersons = new ArrayList<>();
+
+
     Any root;
     public PersonRepository() throws FileNotFoundException {
     }
     public void makePersonModels(Any deserializedFile){
         try {
             //deserializedFile = makingModels.modelMaker();
+            medicalrecordsRepository.makeMedicalrecordsModels(deserializedFile);
+            this.arrayListMedicalrecords = medicalrecordsRepository.getArrayListMedicalrecords();
             Any json_persons = deserializedFile.get("persons");
-            List<Any> list = json_persons.asList();
+            Any json_medicalrecords = deserializedFile.get("medicalrecords");
+
+            List<Any> listPersons = json_persons.asList();
+            //List<Any> listMedicalrecords = json_medicalrecords.asList();
 
 
-            for (int i = 0; i < list.size(); i++) {
+            for (int i = 0; i < listPersons.size(); i++) {
                 PersonModel model = new PersonModel();
-                model.setFirstName(list.get(i).get("firstName").toString());
-                model.setLastName(list.get(i).get("lastName").toString());
-                model.setAddress(list.get(i).get("address").toString());
-                model.setCity(list.get(i).get("city").toString());
-                model.setZip(list.get(i).get("zip").toString());
-                model.setPhone(list.get(i).get("phone").toString());
-                model.setEmail(list.get(i).get("email").toString());
+                model.setFirstName(listPersons.get(i).get("firstName").toString());
+                model.setLastName(listPersons.get(i).get("lastName").toString());
+                model.setAddress(listPersons.get(i).get("address").toString());
+                model.setCity(listPersons.get(i).get("city").toString());
+                model.setZip(listPersons.get(i).get("zip").toString());
+                model.setPhone(listPersons.get(i).get("phone").toString());
+                model.setEmail(listPersons.get(i).get("email").toString());
+                model.setMedicalrecords(arrayListMedicalrecords.get(i));
+
+
+                //model.setMedicalrecords();
 
                 arrayListPersons.add(model);
             }
@@ -67,7 +83,7 @@ public class PersonRepository{
             makePersonModels(root);
         }
         for (PersonModel element : arrayListPersons){
-            if((element.getFirstName()+element.getLastName()).equals(firstLastName)){
+            if((element.getFirstName()+" "+ element.getLastName()).equals(firstLastName)){
                 if(field.equals("address") ){
                     element.setAddress(newContent);
                 }
@@ -87,4 +103,17 @@ public class PersonRepository{
         }
         System.out.println("now person "+ firstLastName + " has "+field+ " "+ newContent );
     }
+    public ArrayList<PersonModel> getPeopleInSameHouseHold(String address, ArrayList<PersonModel>array){
+        ArrayList<PersonModel> peopleInSameHousehold = new ArrayList<>();
+
+        for (PersonModel personModel : array) {//array is null
+            //ArrayList<String> firstAndLastName = new ArrayList<>();
+            if (address.equals(personModel.getAddress())) {
+                peopleInSameHousehold.add(personModel);
+            }
+
+        }
+        return peopleInSameHousehold;
+    }
+
 }

@@ -15,7 +15,8 @@ public class Url1Controller {
 
 
     @GetMapping("/firestation")
-    public HashMap<String, HashMap> urlOne(String firestationNumber) {
-        return urlService1.urlOne(firestationNumber);
+    public HashMap<String, HashMap> urlOne(String stationNumber) {
+        System.out.println("firestationNumber in control "+stationNumber);
+        return urlService1.urlOne(stationNumber);
     }
 }

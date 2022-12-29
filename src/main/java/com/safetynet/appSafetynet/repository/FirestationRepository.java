@@ -61,7 +61,19 @@ public class FirestationRepository {
         }
         return null;
     }
-
+    public ArrayList <String> findAddressesServedByOneStation(String numberOfStation, ArrayList<FirestationModel> array){
+        //if(root==null){
+        //root = makingModels.modelMaker();
+        //}
+        //makeFirestationModels(root);
+        ArrayList<String> listOfAddressesServedByOneStation = new ArrayList<>();
+        for (FirestationModel element : array){
+            if(numberOfStation.equals(element.getStation())&&!listOfAddressesServedByOneStation.contains(element.getAddress())){ //number0fStation est NULL
+                listOfAddressesServedByOneStation.add(element.getAddress());
+            }
+        }
+        return listOfAddressesServedByOneStation;
+    }
     public void deleteOneAddressStationMapping(String address){
         if (arrayListFirestations.isEmpty()){
             if(root == null){

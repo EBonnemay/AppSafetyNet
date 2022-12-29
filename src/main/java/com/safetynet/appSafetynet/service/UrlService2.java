@@ -49,39 +49,31 @@ membres du foyer. S'il n'y a pas d'enfant, cette url peut renvoyer une chaîne v
     ArrayList<MedicalrecordsModel> arrayListMedicalrecords;
 
     Any root;
-    HashMap<String, ArrayList> resultUrl2 = new HashMap<>();//the key is first and last name concatenated
 
-    //HashMap<String, ArrayList> family = new HashMap<>(); //the key is "members of family"
-
-
-    public ArrayList<PersonModel> getPeopleInSameHouseHold(String address){
-        ArrayList<PersonModel> peopleInSameHousehold = new ArrayList<>();
-
-        for (PersonModel personModel : arrayListPersons) {
-            ArrayList<String> firstAndLastName = new ArrayList<>();
-            if (address.equals(personModel.getAddress())) {
-                peopleInSameHousehold.add(personModel);
-            }
-
-        }
-        return peopleInSameHousehold;
-    }
-
-    public HashMap<PersonModel, Integer> getListOfChildren(){
+    public HashMap<PersonModel, Integer> getListAndAgesOfChildren(){
         HashMap<PersonModel, Integer> listOfChildrenAndAges= new HashMap<>();
-        for (PersonModel personModel:arrayListPersons){
-            String firstLastName = personModel.getFirstName()+personModel.getLastName();
-            int age = urlService1.howOldIsThisPerson(firstLastName, arrayListMedicalrecords);
-            if(age<19){
-                listOfChildrenAndAges.put(personModel, age);
-
+        //System.out.println("arraylistpersons vide? "+arrayListPersons.isEmpty());
+        for (PersonModel personModel:arrayListPersons) { // pour chaque personne dans la liste
+            String firstLastName = personModel.getFirstName() + " " + personModel.getLastName(); //récupère firsLastName
+            System.out.println("test name "+ firstLastName);
+            System.out.println("test dateOfBirth "+ personModel.getMedicalrecords().getBirthdate());
+            for (MedicalrecordsModel medicalModel : arrayListMedicalrecords) { //pour chaque dossier médical aussi
+                String id = medicalModel.getFirstName() + " "+ medicalModel.getLastName();// aussi
+                if (firstLastName.equals(id)) {//si dossier correspond au nom de la perosnne
+                    String stringDateOfBirth = medicalModel.getBirthdate();// récupère la date de naissance qui y figure
+                    int age = medicalrecordsRepository.howOldIsThisPerson2(stringDateOfBirth);//calcule son age
+                    if (age < 19) {//s'il est inférieur à 19
+                        listOfChildrenAndAges.put(personModel, age);//place le dans une map avec le person model en clé
+                    }
+                }
             }
-
         }
+        System.out.println(listOfChildrenAndAges);
         return listOfChildrenAndAges;
     }
 
     public HashMap<String, ArrayList> urlTwo(String address) {
+        HashMap<String, ArrayList> resultUrl2 = new HashMap<>();
         if(root==null){
             root = makingModels.modelMaker();
         }
@@ -94,41 +86,42 @@ membres du foyer. S'il n'y a pas d'enfant, cette url peut renvoyer une chaîne v
         personRepository.makePersonModels(root);
         this.arrayListPersons = personRepository.getArrayListPersons();
 
-        HashMap<PersonModel, Integer> listOfChildrenAndAges= new HashMap<>();
-        listOfChildrenAndAges = getListOfChildren();
-        System.out.println("list of children and ages" + listOfChildrenAndAges);
-        ArrayList<PersonModel> household = getPeopleInSameHouseHold(address);
-            System.out.println("household is"+ household);
-            for (PersonModel item : household) {
+        HashMap<PersonModel, Integer> listOfChildrenAndAges= getListAndAgesOfChildren();
+        System.out.println("whole number of children is :");
+        System.out.println(listOfChildrenAndAges.size());
+        ArrayList<PersonModel> household = personRepository.getPeopleInSameHouseHold(address, arrayListPersons);
+        System.out.println("number of persons in household is "+ household.size());
+            for (PersonModel item : household) { //pour chaque personne dans le foyer
 
-                if (listOfChildrenAndAges.containsKey(item)) {
-                    String nameOfChild = item.getFirstName() + " " + item.getLastName();
-                    System.out.println("name of child = "+ nameOfChild);
-                    int ageOfChild = listOfChildrenAndAges.get(item);
-                    System.out.println("age of child = " + ageOfChild);
-                    HashMap<String, Integer> informationsAge = new HashMap<>(); //the key is "age"
+
+
+                if (listOfChildrenAndAges.containsKey(item)) { //si cette personne est dans la liste des enfants
+
+                    String nameOfChild = item.getFirstName() + " " + item.getLastName(); //1donne lui un nom-prenom
+
+                    int ageOfChild = listOfChildrenAndAges.get(item);//2cherche son âge
+
+                    HashMap<String, Integer> informationsAge = new HashMap<>(); //3et crée un hashmap "age" > age
                     informationsAge.put("age", ageOfChild);
+                    ArrayList<String> namesOfOtherMembers = new ArrayList<>();//4crée une liste de strings "autres membres"
 
-                    System.out.println("household without child is "+ household);
-                    ArrayList<String> namesOfOtherMembers = new ArrayList<>();
-                    for (PersonModel otherMember : household) {
-                        if(nameOfChild!= (otherMember.getFirstName()+ " "+ otherMember.getLastName())) {
-                            namesOfOtherMembers.add(otherMember.getFirstName() + " " + otherMember.getLastName());
+                    for (PersonModel otherMember : household) {//repasse en revue les personnes dans le foyer
+                        if(!item.equals(otherMember)) {//s'il est faux que l'enfant est cette personne
+                            namesOfOtherMembers.add(otherMember.getFirstName() + " " + otherMember.getLastName()); //ajoute le nom de cette personne à une liste
                         }
                     }
-                    System.out.println("names of other members are "+ namesOfOtherMembers);
                     HashMap<String, ArrayList<String>> informationsFamily = new HashMap<>();
                     informationsFamily.put("household", namesOfOtherMembers);
                     ArrayList<HashMap> listOfInformations = new ArrayList<>();
                     listOfInformations.add(informationsAge);
-
                     listOfInformations.add(informationsFamily);
-                    System.out.println ("listOf Informations " + listOfInformations);
                     resultUrl2.put(nameOfChild, listOfInformations);
-                    System.out.println("informations put in result");
+
+
+
                 }
             }
-        System.out.println(resultUrl2);
+
         return resultUrl2;
     }
 

@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.io.FileNotFoundException;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,7 +56,7 @@ public class MedicalrecordsRepository {
                     listOfAllergies.add(all);
                 }
                 model.setAllergies(listOfAllergies);
-                System.out.println("model is" + model);
+
                 arrayListMedicalrecords.add(model);
             }
         } catch (Exception e) {
@@ -80,7 +83,7 @@ public class MedicalrecordsRepository {
             makeMedicalrecordsModels(root);
         }
         for (MedicalrecordsModel element : arrayListMedicalrecords) {
-            if ((element.getFirstName() + element.getLastName()).equals(firstLastName)) {
+            if ((element.getFirstName() + " " +element.getLastName()).equals(firstLastName)) {
                 return element;
             }
         }
@@ -106,7 +109,7 @@ public class MedicalrecordsRepository {
             makeMedicalrecordsModels(root);
         }
         for (MedicalrecordsModel element : arrayListMedicalrecords) {
-            if ((element.getFirstName() + element.getLastName()).equals(firstLastName)) {
+            if ((element.getFirstName() + " " + element.getLastName()).equals(firstLastName)) {
                 arrayListMedicalrecords.remove(element);
             }
         }
@@ -124,7 +127,7 @@ public class MedicalrecordsRepository {
             makeMedicalrecordsModels(root);
         }
         for (MedicalrecordsModel element : arrayListMedicalrecords) {
-            if ((element.getFirstName() + element.getLastName()).equals(firstLastName)) {
+            if ((element.getFirstName() +" "+ element.getLastName()).equals(firstLastName)) {
                 if (field.equals("allergies")) {
                     ArrayList<String> listOfAllergies = element.getAllergies();
                     if (action.equals("add")) {
@@ -161,6 +164,49 @@ public class MedicalrecordsRepository {
         }
 
     }
+    public int howOldIsThisPerson2(String stringDateOfBirth){
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        System.out.println("formatter ok");
+
+        LocalDate dateOfBirth = LocalDate.parse(stringDateOfBirth, formatter);
+        int age = Period.between(dateOfBirth, today).getYears();
+        System.out.println("age"+ age);
+        return age;
+    }
+
+
+   /* public int howOldIsThisPerson(String firstLastName, ArrayList <MedicalrecordsModel> list ){
+        try{
+            System.out.println("in function how old");
+            System.out.println("firstlastName = "+ firstLastName);
+            System.out.println(list);
+            System.out.println("list printed");
+            for (MedicalrecordsModel model : list) {
+                System.out.println(model.toString());
+                String modelsName = model.getFirstName()+" "+model.getLastName();
+                if (firstLastName.equals(modelsName)) {
+                    LocalDate today = LocalDate.now();
+                    System.out.println("today"+today);
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+                    System.out.println("formatter ok");
+                    String stringDateOfBirth = model.getBirthdate();
+                    System.out.println("stringdateofBirth" +stringDateOfBirth);
+
+
+                    LocalDate dateOfBirth = LocalDate.parse(stringDateOfBirth, formatter);
+                    System.out.println("dateOfBirth"+ dateOfBirth);
+                    //LocalDate nineteenthBirthday = dateOfBirth.plusYears(19);
+                    int age = Period.between(dateOfBirth, today).getYears();
+                    System.out.println("age"+ age);
+                    return age;
+                }
+            }
+        }catch(Exception e){
+            throw new RuntimeException("not found person");
+        }
+        return -1;
+    }*/
 
 
 
