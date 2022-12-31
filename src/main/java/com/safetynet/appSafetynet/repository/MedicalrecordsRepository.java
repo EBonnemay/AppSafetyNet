@@ -1,15 +1,14 @@
 package com.safetynet.appSafetynet.repository;
 
 import com.jsoniter.any.Any;
+import com.safetynet.appSafetynet.model.ListOfMedicalrecordsModels;
+
 import com.safetynet.appSafetynet.model.MedicalrecordsModel;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.io.FileNotFoundException;
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,13 +18,14 @@ import java.util.List;
 public class MedicalrecordsRepository {
     @Autowired
     MakingModels makingModels;
-    ArrayList<MedicalrecordsModel> arrayListMedicalrecords = new ArrayList<>();
+    ListOfMedicalrecordsModels listOfMedicalrecordsModels = new ListOfMedicalrecordsModels();
     Any root;
 
     public MedicalrecordsRepository() throws FileNotFoundException {
     }
 
-    public void makeMedicalrecordsModels(Any deserializedFile) {
+    public ListOfMedicalrecordsModels fillInMedicalrecordsModels(Any deserializedFile) {
+       List<MedicalrecordsModel> attributeList = new ArrayList<>();
         try {
             //Any deserializedFile = makingModels.modelMaker();
             Any json_medicalrecords = deserializedFile.get("medicalrecords");
@@ -44,11 +44,8 @@ public class MedicalrecordsRepository {
                     String medName = med.substring(0, index);
                     String medQuantity = med.substring(index + 1);
                     mapOfMed.put(medName, medQuantity);
-
                 }
                 model.setMedications(mapOfMed);
-
-
                 ArrayList<String> listOfAllergies = new ArrayList<>();
                 Any json_listOfAll = list.get(i).get("allergies");
                 for (Any element : json_listOfAll) {
@@ -56,26 +53,27 @@ public class MedicalrecordsRepository {
                     listOfAllergies.add(all);
                 }
                 model.setAllergies(listOfAllergies);
-
-                arrayListMedicalrecords.add(model);
+                attributeList.add(model);
             }
+            listOfMedicalrecordsModels.setListOfMedicalrecordsModels(attributeList);
         } catch (Exception e) {
             System.out.println("problems filling models");
         }
+        return listOfMedicalrecordsModels;
     }
 
-    public Iterable<MedicalrecordsModel> findAll() {
+    public ListOfMedicalrecordsModels findAll() {
         //arrayListMedicalrecords.clear();
-        if (arrayListMedicalrecords.isEmpty()) {
+        if (listOfMedicalrecordsModels==null) {
             if (root == null){
                 root = makingModels.modelMaker();
             }
-            makeMedicalrecordsModels(root);
+            fillInMedicalrecordsModels(root);
         }
-        return arrayListMedicalrecords;
+        return listOfMedicalrecordsModels;
     }
 
-    public MedicalrecordsModel findMedicalRecordsForOnePerson(String firstLastName) {
+    /*public MedicalrecordsModel findMedicalRecordsForOnePerson(String firstLastName) {
         if (arrayListMedicalrecords.isEmpty()) {
             if(root == null){
                 root = makingModels.modelMaker();
@@ -88,29 +86,31 @@ public class MedicalrecordsRepository {
             }
         }
         return null;
-    }
+    }*/
 
     //ajouter un dossier médical ;
     public void addOneMedicalRecords(MedicalrecordsModel element) {
-        if (arrayListMedicalrecords.isEmpty()) {
+        if (listOfMedicalrecordsModels==null) {
             if (root == null){
                 root = makingModels.modelMaker();
             }
-            makeMedicalrecordsModels(root);
+            listOfMedicalrecordsModels = fillInMedicalrecordsModels(root);
         }
-        arrayListMedicalrecords.add(element);
+        listOfMedicalrecordsModels.getListOfMedicalrecordsModels().add(element);
     }
 
     public void deleteOneMedicalRecord(String firstLastName) {
-        if (arrayListMedicalrecords.isEmpty()) {
+        if (listOfMedicalrecordsModels==null) {
             if (root == null){
                 root = makingModels.modelMaker();
             }
-            makeMedicalrecordsModels(root);
+            listOfMedicalrecordsModels=fillInMedicalrecordsModels(root);
         }
-        for (MedicalrecordsModel element : arrayListMedicalrecords) {
+        for (MedicalrecordsModel element : listOfMedicalrecordsModels.getListOfMedicalrecordsModels()) {
             if ((element.getFirstName() + " " + element.getLastName()).equals(firstLastName)) {
-                arrayListMedicalrecords.remove(element);
+                List <MedicalrecordsModel> theList = listOfMedicalrecordsModels.getListOfMedicalrecordsModels();
+                theList.remove(element);
+                listOfMedicalrecordsModels.setListOfMedicalrecordsModels(theList);
             }
         }
 
@@ -120,13 +120,14 @@ public class MedicalrecordsRepository {
 
 
     public void updateAllergiesOrMeds(String firstLastName, String field, String action, String newAllergyOrMed) {
-        if (arrayListMedicalrecords.isEmpty()) {
+        if (listOfMedicalrecordsModels == null) {
             if (root == null){
                 root = makingModels.modelMaker();
             }
-            makeMedicalrecordsModels(root);
+            fillInMedicalrecordsModels(root);
         }
-        for (MedicalrecordsModel element : arrayListMedicalrecords) {
+        List<MedicalrecordsModel> AttributeList = new ArrayList<>();
+        for (MedicalrecordsModel element : listOfMedicalrecordsModels.getListOfMedicalrecordsModels()) {//pour chaque modèle de la "listeAttribut" de LMM
             if ((element.getFirstName() +" "+ element.getLastName()).equals(firstLastName)) {
                 if (field.equals("allergies")) {
                     ArrayList<String> listOfAllergies = element.getAllergies();
@@ -157,24 +158,14 @@ public class MedicalrecordsRepository {
                         mapOfMedications.remove(newAllergyOrMed);
 
                     }
-                    element.setMedications(mapOfMedications);
+                    element.setMedications(mapOfMedications); //j'ai modifié mon élément MedicationRecords
+
                 }
             }
 
         }
 
     }
-    public int howOldIsThisPerson2(String stringDateOfBirth){
-        LocalDate today = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        System.out.println("formatter ok");
-
-        LocalDate dateOfBirth = LocalDate.parse(stringDateOfBirth, formatter);
-        int age = Period.between(dateOfBirth, today).getYears();
-        System.out.println("age"+ age);
-        return age;
-    }
-
 
 }
 

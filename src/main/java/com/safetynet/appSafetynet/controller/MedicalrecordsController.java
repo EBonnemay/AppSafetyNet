@@ -1,6 +1,6 @@
 package com.safetynet.appSafetynet.controller;
 
-import com.safetynet.appSafetynet.model.MedicalrecordsModel;
+import com.safetynet.appSafetynet.model.ListOfMedicalrecordsModels;
 import com.safetynet.appSafetynet.service.MedicalrecordsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +14,7 @@ public class MedicalrecordsController {
     private MedicalrecordsService medicalrecordsService;
 
     @GetMapping("/medicalrecords")
-    public Iterable<MedicalrecordsModel> getMedicalRecords(){
+    public ListOfMedicalrecordsModels getMedicalRecords(){
         return medicalrecordsService.getMedicalrecords();
     }
     @PutMapping("/medicalrecords")

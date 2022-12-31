@@ -1,7 +1,7 @@
 package com.safetynet.appSafetynet.controller;
 
 
-import com.safetynet.appSafetynet.model.FirestationModel;
+import com.safetynet.appSafetynet.model.ListOfFirestationModels;
 import com.safetynet.appSafetynet.service.FirestationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +16,7 @@ public class FirestationController {
 
 
     @GetMapping("/firestations")
-    public Iterable<FirestationModel> getFirestations() {
+    public ListOfFirestationModels getFirestations() {
         return firestationService.getFirestations();
     }
 

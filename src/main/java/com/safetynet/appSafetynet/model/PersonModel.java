@@ -4,10 +4,14 @@ package com.safetynet.appSafetynet.model;
 //        "city":"Culver", "zip":"97451", "phone":"841-874-6512", "email":"jaboyd@email.com" },
 
 import lombok.Data;
+import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.List;
 
 
 @Data
-
+@Component
 
 public class PersonModel {
 
@@ -23,8 +27,10 @@ public class PersonModel {
 
     private String phone;
     private String email;
+    private String dateOfBirth;
     private int age;
-    private MedicalrecordsModel medicalrecords;
+    private List<String> listOfAllergies;
+    private HashMap<String, String> map0fMedications;
 
 // utiliser jsoniter pour aller chercher dans le fichier json
     //ne pas toucher à la classe main.(@springboot annotation > il saura quel bean aller chercher)

@@ -1,6 +1,6 @@
 package com.safetynet.appSafetynet.controller;
 
-import com.safetynet.appSafetynet.model.PersonModel;
+import com.safetynet.appSafetynet.model.ListOfPersonModels;
 import com.safetynet.appSafetynet.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +14,7 @@ public class PersonController {
     private PersonService personService;
 
     @GetMapping("/person")
-    public Iterable <PersonModel> getPersons(){
+    public ListOfPersonModels getPersons(){
         return personService.getPersons();
     }
     @PutMapping("/person")

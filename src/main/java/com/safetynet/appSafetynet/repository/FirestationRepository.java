@@ -2,6 +2,7 @@ package com.safetynet.appSafetynet.repository;
 
 import com.jsoniter.any.Any;
 import com.safetynet.appSafetynet.model.FirestationModel;
+import com.safetynet.appSafetynet.model.ListOfFirestationModels;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -14,12 +15,14 @@ import java.util.List;
 public class FirestationRepository {
     @Autowired
    MakingModels makingModels;
-    ArrayList<FirestationModel> arrayListFirestations = new ArrayList<>();
+    ListOfFirestationModels listOfFirestationModels = new ListOfFirestationModels(); //1 object returned by the call
 
     Any root;
     public FirestationRepository() throws FileNotFoundException {
     }
-    public void makeFirestationModels(Any deserializedFile){
+    public ListOfFirestationModels fillInFirestationModels(Any deserializedFile){
+
+        List<FirestationModel> attributeList = new ArrayList<>();
         try {
             //Any deserializedFile = makingModels.modelMaker();
 
@@ -30,24 +33,28 @@ public class FirestationRepository {
                 FirestationModel model = new FirestationModel();
                 model.setAddress(list.get(i).get("address").toString());
                 model.setStation(list.get(i).get("station").toString());
-
-                arrayListFirestations.add(model);
+                //List <FirestationModel> listOfFirestations = listOfFirestationModels.getListOfFirestationModels();
+                attributeList.add(model);
             }
+            listOfFirestationModels.setListOfFirestationModels(attributeList);
         } catch(Exception e){
             System.out.println("problems filling models");
         }
+        return listOfFirestationModels;
     }
-    public Iterable<FirestationModel> findAll() {
+
+    public ListOfFirestationModels findAll() {
         //arrayListFirestations.clear();
-        if (arrayListFirestations.isEmpty()){
+
+        if (listOfFirestationModels==null){
             if(root == null){
                 root = makingModels.modelMaker();
             }
-            makeFirestationModels(root);
+            fillInFirestationModels(root);
         }
-        return arrayListFirestations;
+        return listOfFirestationModels;
     }
-    public String findStationServingOneAddress(String address){
+    /*public String findStationServingOneAddress(String address){
         if (arrayListFirestations.isEmpty()){
             if(root == null){
                 root = makingModels.modelMaker();
@@ -60,8 +67,8 @@ public class FirestationRepository {
             }
         }
         return null;
-    }
-    public ArrayList <String> findAddressesServedByOneStation(String numberOfStation, ArrayList<FirestationModel> array){
+    }*/
+    public ArrayList <String> findAddressesServedByOneStation(String numberOfStation, listOf){
         //if(root==null){
         //root = makingModels.modelMaker();
         //}
@@ -75,30 +82,38 @@ public class FirestationRepository {
         return listOfAddressesServedByOneStation;
     }
     public void deleteOneAddressStationMapping(String address){
-        if (arrayListFirestations.isEmpty()){
+        if (listOfFirestationModels==null){
             if(root == null){
                 root = makingModels.modelMaker();
             }
-            makeFirestationModels(root);
+            listOfFirestationModels = fillInFirestationModels(root);
         }
-        for (FirestationModel element : arrayListFirestations) {
+        for (FirestationModel element : listOfFirestationModels.getListOfFirestationModels()) {
             if (element.getAddress().equals(address)) {
-                arrayListFirestations.remove(element);
+                List <FirestationModel> theList = listOfFirestationModels.getListOfFirestationModels();
+                theList.remove(element);
+                listOfFirestationModels.setListOfFirestationModels(theList);
             }
         }
     }
-    public void addOneAddressStationMapping(FirestationModel element){
-        if (arrayListFirestations.isEmpty()){
+    public void addOneAddressStationMapping(String address, String station){
+        if (listOfFirestationModels==null){
             if(root == null){
                 root = makingModels.modelMaker();
             }
-            makeFirestationModels(root);
+            listOfFirestationModels = fillInFirestationModels(root);
         }
-            arrayListFirestations.add(element);
+        FirestationModel firestationModel = new FirestationModel();
+        firestationModel.setStation(station);
+        firestationModel.setAddress(address);
+        List <FirestationModel> attributeList = listOfFirestationModels.getListOfFirestationModels();
+        attributeList.add(firestationModel);
+        listOfFirestationModels.setListOfFirestationModels(attributeList);
+
 
 
     }
-    public void deleteOneAddressStationMapping(FirestationModel element){
+    /*public void deleteOneAddressStationMapping(FirestationModel element){
         if (arrayListFirestations.isEmpty()){
             if(root == null){
                 root = makingModels.modelMaker();
@@ -106,19 +121,18 @@ public class FirestationRepository {
             makeFirestationModels(root);
         }
         arrayListFirestations.remove(element);
-    }
+    }*/
     public void updateFirestationNumberForAddress(String address, String number){
-        if (arrayListFirestations.isEmpty()){
+        if (listOfFirestationModels==null){
             if(root == null){
                 root = makingModels.modelMaker();
             }
-            makeFirestationModels(root);
+            fillInFirestationModels(root);
         }
-        for (FirestationModel element : arrayListFirestations) {
+        for (FirestationModel element : listOfFirestationModels.getListOfFirestationModels()) {
             if (element.getAddress().equals(address)) {
                 element.setStation(number);
                 System.out.println("address "+ address + " has now firestation number "+ number);
-                System.out.println(arrayListFirestations);
             }
         }
     }

@@ -1,6 +1,6 @@
 package com.safetynet.appSafetynet.service;
 
-import com.safetynet.appSafetynet.model.FirestationModel;
+import com.safetynet.appSafetynet.model.ListOfFirestationModels;
 import com.safetynet.appSafetynet.repository.FirestationRepository;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ public class FirestationService {
     @Autowired
     private FirestationRepository firestationRepository;
 
-    public Iterable<FirestationModel> getFirestations() {
+    public ListOfFirestationModels getFirestations() {
         return firestationRepository.findAll();
     }
     public void updateF(String address, String number){

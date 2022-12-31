@@ -1,6 +1,8 @@
 package com.safetynet.appSafetynet.repository;
 
 import com.jsoniter.any.Any;
+import com.safetynet.appSafetynet.model.ListOfMedicalrecordsModels;
+import com.safetynet.appSafetynet.model.ListOfPersonModels;
 import com.safetynet.appSafetynet.model.MedicalrecordsModel;
 import com.safetynet.appSafetynet.model.PersonModel;
 import lombok.Data;
@@ -23,22 +25,22 @@ public class PersonRepository{
 
     @Autowired
     MedicalrecordsRepository medicalrecordsRepository;
-    ArrayList<PersonModel> arrayListPersons = new ArrayList<>();
-
+    //ArrayList<PersonModel> arrayListPersons = new ArrayList<>();
+    ListOfPersonModels listOfPersonModels = new ListOfPersonModels();
 
     Any root;
     public PersonRepository() throws FileNotFoundException {
     }
-    public void makePersonModels(Any deserializedFile){
+    public ListOfPersonModels fillInPersonModels(Any deserializedFile){
+        List<PersonModel> attributeList = new ArrayList<>();
         try {
             //deserializedFile = makingModels.modelMaker();
-            medicalrecordsRepository.makeMedicalrecordsModels(deserializedFile);
-            this.arrayListMedicalrecords = medicalrecordsRepository.getArrayListMedicalrecords();
+            ListOfMedicalrecordsModels listOfMedicalrecordsModels = medicalrecordsRepository.fillInMedicalrecordsModels(deserializedFile);
             Any json_persons = deserializedFile.get("persons");
-            Any json_medicalrecords = deserializedFile.get("medicalrecords");
+            //Any json_medicalrecords = deserializedFile.get("medicalrecords");
 
             List<Any> listPersons = json_persons.asList();
-            //List<Any> listMedicalrecords = json_medicalrecords.asList();
+
 
 
             for (int i = 0; i < listPersons.size(); i++) {
@@ -50,48 +52,65 @@ public class PersonRepository{
                 model.setZip(listPersons.get(i).get("zip").toString());
                 model.setPhone(listPersons.get(i).get("phone").toString());
                 model.setEmail(listPersons.get(i).get("email").toString());
-                model.setMedicalrecords(arrayListMedicalrecords.get(i));
-                String dateOfBirth = model.getMedicalrecords().getBirthdate();
-                model.setAge(howOldIsThisPerson2(dateOfBirth));
+                model.setListOfAllergies (listOfMedicalrecordsModels.getListOfMedicalrecordsModels().get(i).getAllergies());
+                model.setMap0fMedications((listOfMedicalrecordsModels).getListOfMedicalrecordsModels().get(i).getMedications());
+                model.setDateOfBirth(listOfMedicalrecordsModels.getListOfMedicalrecordsModels().get(i).getBirthdate());
+                //String dateOfBirth = model.getMedicalrecords().getBirthdate();
+                model.setAge(howOldIsThisPerson(model.getDateOfBirth()));
 
 
                 //model.setMedicalrecords();
 
-                arrayListPersons.add(model);
+                attributeList.add(model);
             }
         } catch(Exception e){
             System.out.println("problems filling models");
         }
+        listOfPersonModels.setListOfPersonModels(attributeList);
+        return listOfPersonModels;
     }
-    public Iterable<PersonModel> findAll() {
-        //arrayListPersons.clear();
-        if (arrayListPersons.isEmpty()){
-            if(root == null){
+    public ListOfPersonModels findAll() {
+        //ListOfPersonModels listOfPersonModels = new ListOfPersonModels();
+        /*if (listOfPersonModels==null) {
+            if (root == null) {
                 root = makingModels.modelMaker();
             }
-            makePersonModels(root);
-        }
-        return arrayListPersons;
+        }*/
+        listOfPersonModels =  fillInPersonModels(root);
+        return listOfPersonModels;
     }
-    public void addOnePerson(PersonModel person){
-        arrayListPersons.add(person);
+    public void addOnePerson(PersonModel person) {
+        if (listOfPersonModels == null) {
+            if (root == null) {
+                root = makingModels.modelMaker();
+            }
+            listOfPersonModels = fillInPersonModels(root);
+        }
+
+        listOfPersonModels.getListOfPersonModels().add(person);
 
     }
     public void deleteOnePerson(String firstLastName){
-        for(PersonModel person : arrayListPersons){
+        if (listOfPersonModels == null) {
+            if (root == null) {
+                root = makingModels.modelMaker();
+            }
+            listOfPersonModels = fillInPersonModels(root);
+        }
+        for(PersonModel person : listOfPersonModels.getListOfPersonModels()){
             if(firstLastName.equals(person.getFirstName()+" "+person.getLastName())){
-                arrayListPersons.remove(person);
+                listOfPersonModels.getListOfPersonModels().remove(person);
             }
         }
     }
     public void updatePerson(String firstLastName, String field, String newContent ){
-        if (arrayListPersons.isEmpty()){
+        if (listOfPersonModels ==null){
             if(root == null){
                 root = makingModels.modelMaker();
             }
-            makePersonModels(root);
+            listOfPersonModels = fillInPersonModels(root);
         }
-        for (PersonModel element : arrayListPersons){
+        for (PersonModel element : listOfPersonModels.getListOfPersonModels()){
             if((element.getFirstName()+" "+ element.getLastName()).equals(firstLastName)){
                 if(field.equals("address") ){
                     element.setAddress(newContent);
@@ -112,10 +131,10 @@ public class PersonRepository{
         }
         System.out.println("now person "+ firstLastName + " has "+field+ " "+ newContent );
     }
-    public ArrayList<PersonModel> getPeopleInSameHouseHold(String address, ArrayList<PersonModel>array){
+    public ArrayList<PersonModel> getPeopleInSameHouseHold(String address, ListOfPersonModels listOfPersonModels){
         ArrayList<PersonModel> peopleInSameHousehold = new ArrayList<>();
 
-        for (PersonModel personModel : array) {//array is null
+        for (PersonModel personModel : listOfPersonModels.getListOfPersonModels()) {//array is null
             //ArrayList<String> firstAndLastName = new ArrayList<>();
             if (address.equals(personModel.getAddress())) {
                 peopleInSameHousehold.add(personModel);
@@ -124,7 +143,7 @@ public class PersonRepository{
         }
         return peopleInSameHousehold;
     }
-    public int howOldIsThisPerson2(String stringDateOfBirth){
+    public int howOldIsThisPerson(String stringDateOfBirth){
         LocalDate today = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         System.out.println("formatter ok");
