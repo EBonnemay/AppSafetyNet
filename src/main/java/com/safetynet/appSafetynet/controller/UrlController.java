@@ -1,12 +1,14 @@
 package com.safetynet.appSafetynet.controller;
 
 
-import com.safetynet.appSafetynet.model.dto.ListOfChildrenAndTheHouseholdWithOneAddressUrl2;
-import com.safetynet.appSafetynet.model.dto.ListOfPersonsCoveredByAFirestationUrl1;
+import com.safetynet.appSafetynet.model.dto.*;
 import com.safetynet.appSafetynet.service.UrlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 @RestController
 public class UrlController {
@@ -29,15 +31,14 @@ public class UrlController {
         return urlService.urlTwo(address);
     }
 
-}
-    /*@GetMapping("/phoneAlert")
-    public ListOfPhoneNumbersUrl3 urlThree(String firestation) {
+    @GetMapping("/phoneAlert")
+    public HashMap<String, ArrayList<String>> urlThree(String firestation) {
         return urlService.urlThree(firestation);
     }
 
     @GetMapping("/fire")
     public HouseholdUrl4 urlFour(String address) {
-        System.out.println("address in control "+address);
+        System.out.println("address in control " + address);
         return urlService.urlFour(address);
     }
 
@@ -46,14 +47,17 @@ public class UrlController {
         return urlService.urlFive(stations);
     }
 
+
     @GetMapping("/personInfo")
     PersonInfoUrl6 urlSix(String firstName, String lastName) {
         return urlService.urlSix(firstName, lastName);
     }
+
+
     @GetMapping("/communityEmail")
-    ListOfMailAddressesUrl7 urlSeven(String city) {
+    ArrayList<String> urlSeven(String city) {
         return urlService.urlSeven(city);
     }
 }
 
-*/
+

@@ -1,5 +1,8 @@
 package com.safetynet.appSafetynet.model.dto;
 
+import lombok.Data;
+
+@Data
 public class PersonInfoForUrl4And5 {
     private String firstName;
     private String lastName;
