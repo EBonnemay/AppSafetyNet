@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public class FirestationRepository {
     @Autowired
-   MakingModels makingModels;
+    MakingModels makingModels;
     ListOfFirestationModels listOfFirestationModels = new ListOfFirestationModels(); //1 object returned by the call
 
     Any root;
@@ -42,37 +42,25 @@ public class FirestationRepository {
         }
         return listOfFirestationModels;
     }
+    public void setUpListOfFirestationsModel(){
+        if (listOfFirestationModels.getListOfFirestationModels().size()==0) {
+            if (root == null) {
+                System.out.println("root is null");
+                root = makingModels.modelMaker();
+            }
+            listOfFirestationModels = fillInFirestationModels(root);
+            System.out.println("listOfFirestationModels filled in");
+        }
+    }
 
     public ListOfFirestationModels findAll() {
-        //arrayListFirestations.clear();
 
-        if (listOfFirestationModels==null){
-            if(root == null){
-                root = makingModels.modelMaker();
-            }
-            fillInFirestationModels(root);
-        }
+        setUpListOfFirestationsModel();
         return listOfFirestationModels;
     }
-    /*public String findStationServingOneAddress(String address){
-        if (arrayListFirestations.isEmpty()){
-            if(root == null){
-                root = makingModels.modelMaker();
-            }
-            makeFirestationModels(root);
-        }
-        for (FirestationModel element : arrayListFirestations){
-            if (element.getAddress().equals(address)){
-                return(element.getStation());
-            }
-        }
-        return null;
-    }*/
+
     public ArrayList <String> findAddressesServedByOneStation(String numberOfStation, ListOfFirestationModels listOfFirestationModels){
-        //if(root==null){
-        //root = makingModels.modelMaker();
-        //}
-        //makeFirestationModels(root);
+        setUpListOfFirestationsModel();
         ArrayList<String> listOfAddressesServedByOneStation = new ArrayList<>();
         for (FirestationModel element : listOfFirestationModels.getListOfFirestationModels()){
             if(numberOfStation.equals(element.getStation())&&!listOfAddressesServedByOneStation.contains(element.getAddress())){ //number0fStation est NULL
@@ -82,12 +70,7 @@ public class FirestationRepository {
         return listOfAddressesServedByOneStation;
     }
     public void deleteOneAddressStationMapping(String address){
-        if (listOfFirestationModels==null){
-            if(root == null){
-                root = makingModels.modelMaker();
-            }
-            listOfFirestationModels = fillInFirestationModels(root);
-        }
+        setUpListOfFirestationsModel();
         for (FirestationModel element : listOfFirestationModels.getListOfFirestationModels()) {
             if (element.getAddress().equals(address)) {
                 List <FirestationModel> theList = listOfFirestationModels.getListOfFirestationModels();
@@ -97,12 +80,7 @@ public class FirestationRepository {
         }
     }
     public void addOneAddressStationMapping(String address, String station){
-        if (listOfFirestationModels==null){
-            if(root == null){
-                root = makingModels.modelMaker();
-            }
-            listOfFirestationModels = fillInFirestationModels(root);
-        }
+        setUpListOfFirestationsModel();
         FirestationModel firestationModel = new FirestationModel();
         firestationModel.setStation(station);
         firestationModel.setAddress(address);
@@ -113,22 +91,10 @@ public class FirestationRepository {
 
 
     }
-    /*public void deleteOneAddressStationMapping(FirestationModel element){
-        if (arrayListFirestations.isEmpty()){
-            if(root == null){
-                root = makingModels.modelMaker();
-            }
-            makeFirestationModels(root);
-        }
-        arrayListFirestations.remove(element);
-    }*/
-    public void updateFirestationNumberForAddress(String address, String number){
-        if (listOfFirestationModels==null){
-            if(root == null){
-                root = makingModels.modelMaker();
-            }
-            fillInFirestationModels(root);
-        }
+
+    //put
+    public void updateFirestationNumberForAnAddress(String address, String number){
+        setUpListOfFirestationsModel();
         for (FirestationModel element : listOfFirestationModels.getListOfFirestationModels()) {
             if (element.getAddress().equals(address)) {
                 element.setStation(number);

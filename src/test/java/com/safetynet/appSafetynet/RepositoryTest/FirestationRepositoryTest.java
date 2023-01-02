@@ -1,22 +1,29 @@
 package com.safetynet.appSafetynet.RepositoryTest;
 
+import com.safetynet.appSafetynet.model.FirestationModel;
+import com.safetynet.appSafetynet.model.ListOfFirestationModels;
 import com.safetynet.appSafetynet.repository.FirestationRepository;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.FileNotFoundException;
 
+@SpringBootTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class FirestationRepositoryTest {
-    private static FirestationRepository firestationRepository;
 
+    @Autowired
+    FirestationRepository firestationRepository;
+
+    @Autowired
+    ListOfFirestationModels listOfFirestationModels;
 
     @BeforeAll
     //désérialiser le fichier data
-    public static void setUp() throws FileNotFoundException {
+    public void setUp() throws FileNotFoundException {
 
-        firestationRepository= new FirestationRepository();
+        firestationRepository.setUpListOfFirestationsModel();
     }
 
 
@@ -58,10 +65,15 @@ public class FirestationRepositoryTest {
         @Test
         public void addOneAddressStationMappingTest() {
 //ARRANGE
-            //ArrayList persons remplie en attribut de classe
-//ACT
-//ASSERT
+            FirestationModel expected = new FirestationModel();
+            expected.setAddress("10 downing street");
+            expected.setStation("5");
+            listOfFirestationModels.getListOfFirestationModels().add(expected);
 
+//ACT
+
+//ASSERT
+            Assertions.assertTrue(listOfFirestationModels.getListOfFirestationModels().contains(expected));
     }
     @Test
     public void updateFirestationNumberForAddressTest(){

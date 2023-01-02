@@ -61,51 +61,26 @@ public class MedicalrecordsRepository {
         }
         return listOfMedicalrecordsModels;
     }
-
-    public ListOfMedicalrecordsModels findAll() {
-        //arrayListMedicalrecords.clear();
-        if (listOfMedicalrecordsModels==null) {
-            if (root == null){
-                root = makingModels.modelMaker();
-            }
-            fillInMedicalrecordsModels(root);
-        }
-        return listOfMedicalrecordsModels;
-    }
-
-    /*public MedicalrecordsModel findMedicalRecordsForOnePerson(String firstLastName) {
-        if (arrayListMedicalrecords.isEmpty()) {
-            if(root == null){
-                root = makingModels.modelMaker();
-            }
-            makeMedicalrecordsModels(root);
-        }
-        for (MedicalrecordsModel element : arrayListMedicalrecords) {
-            if ((element.getFirstName() + " " +element.getLastName()).equals(firstLastName)) {
-                return element;
-            }
-        }
-        return null;
-    }*/
-
-    //ajouter un dossier médical ;
-    public void addOneMedicalRecords(MedicalrecordsModel element) {
-        if (listOfMedicalrecordsModels==null) {
-            if (root == null){
+    public void setUpListOfMedicalrecordsModel(){
+        if (listOfMedicalrecordsModels.getListOfMedicalrecordsModels().size()==0) {
+            if (root == null) {
+                System.out.println("root is null");
                 root = makingModels.modelMaker();
             }
             listOfMedicalrecordsModels = fillInMedicalrecordsModels(root);
+            System.out.println("listOfMedicalrecordsModels filled in");
         }
+    }
+    public ListOfMedicalrecordsModels findAll() {
+        setUpListOfMedicalrecordsModel();
+        return listOfMedicalrecordsModels;
+    }
+    public void addOneMedicalRecords(MedicalrecordsModel element) {
+        setUpListOfMedicalrecordsModel();
         listOfMedicalrecordsModels.getListOfMedicalrecordsModels().add(element);
     }
-
     public void deleteOneMedicalRecord(String firstLastName) {
-        if (listOfMedicalrecordsModels==null) {
-            if (root == null){
-                root = makingModels.modelMaker();
-            }
-            listOfMedicalrecordsModels=fillInMedicalrecordsModels(root);
-        }
+        setUpListOfMedicalrecordsModel();
         for (MedicalrecordsModel element : listOfMedicalrecordsModels.getListOfMedicalrecordsModels()) {
             if ((element.getFirstName() + " " + element.getLastName()).equals(firstLastName)) {
                 List <MedicalrecordsModel> theList = listOfMedicalrecordsModels.getListOfMedicalrecordsModels();
@@ -120,12 +95,7 @@ public class MedicalrecordsRepository {
 
 
     public void updateAllergiesOrMeds(String firstLastName, String field, String action, String newAllergyOrMed) {
-        if (listOfMedicalrecordsModels == null) {
-            if (root == null){
-                root = makingModels.modelMaker();
-            }
-            fillInMedicalrecordsModels(root);
-        }
+        setUpListOfMedicalrecordsModel();
         List<MedicalrecordsModel> AttributeList = new ArrayList<>();
         for (MedicalrecordsModel element : listOfMedicalrecordsModels.getListOfMedicalrecordsModels()) {//pour chaque modèle de la "listeAttribut" de LMM
             if ((element.getFirstName() +" "+ element.getLastName()).equals(firstLastName)) {

@@ -4,10 +4,7 @@ package com.safetynet.appSafetynet.controller;
 import com.safetynet.appSafetynet.model.ListOfFirestationModels;
 import com.safetynet.appSafetynet.service.FirestationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class FirestationController {
@@ -15,16 +12,25 @@ public class FirestationController {
     private FirestationService firestationService;
 
 
-    @GetMapping("/firestations")
+    @GetMapping("/firestation")
     public ListOfFirestationModels getFirestations() {
         return firestationService.getFirestations();
     }
 
-    @PutMapping("/firestations")
+    @PutMapping("/firestation")
     public void updateFirestation(@RequestParam String address, @RequestParam String number){
-        firestationService.updateF( address, number);
+        firestationService.updateFirestation( address, number);
         //que renvoie-t-il? 200? mais si après ça je fais un get mapping il va reprendre la liste initiale...
 
+    }
+    @PostMapping("/firestation")
+    public void addFirestation(@RequestParam String address, @RequestParam String number){
+        firestationService.addFirestation(address, number);
+    }
+
+    @DeleteMapping("/firestation")
+    public void deleteFirestation(@RequestParam String address){
+        firestationService.deleteFirestation(address);
     }
 }
 

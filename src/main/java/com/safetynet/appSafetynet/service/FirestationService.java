@@ -16,17 +16,16 @@ public class FirestationService {
     public ListOfFirestationModels getFirestations() {
         return firestationRepository.findAll();
     }
-    public void updateF(String address, String number){
-        firestationRepository.updateFirestationNumberForAddress( address,  number);
-    }
-    /*
-    public void deleteFirestation(final Long id) {
-        firestationRepository.deleteById(id);
+    public void updateFirestation(String address, String number){
+        firestationRepository.updateFirestationNumberForAnAddress( address,  number);
     }
 
-    public Firestation saveFirestation(Firestation firestation) {
-        Firestation savedFirestation = firestationRepository.save(firestation);
-        return savedFirestation;
-    }*/
+    public void deleteFirestation(String address) {
+        firestationRepository.deleteOneAddressStationMapping(address);
+    }
+    public void addFirestation(String address, String number){
+        firestationRepository.addOneAddressStationMapping(address, number);
+    }
+
 
 }

@@ -69,47 +69,39 @@ public class PersonRepository{
         listOfPersonModels.setListOfPersonModels(attributeList);
         return listOfPersonModels;
     }
-    public ListOfPersonModels findAll() {
-        //ListOfPersonModels listOfPersonModels = new ListOfPersonModels();
-        /*if (listOfPersonModels==null) {
+
+    public void setUpListOfPersonModels(){
+        if (listOfPersonModels.getListOfPersonModels().size()==0) {
             if (root == null) {
-                root = makingModels.modelMaker();
-            }
-        }*/
-        listOfPersonModels =  fillInPersonModels(root);
-        return listOfPersonModels;
-    }
-    public void addOnePerson(PersonModel person) {
-        if (listOfPersonModels == null) {
-            if (root == null) {
+                System.out.println("root is null");
                 root = makingModels.modelMaker();
             }
             listOfPersonModels = fillInPersonModels(root);
+            System.out.println("listOfPersonModels filled in");
         }
-
+    }
+    public ListOfPersonModels findAll() {
+        setUpListOfPersonModels();
+        return listOfPersonModels;
+    }
+    public void addOnePerson(PersonModel person) {
+        setUpListOfPersonModels();
         listOfPersonModels.getListOfPersonModels().add(person);
 
     }
     public void deleteOnePerson(String firstLastName){
-        if (listOfPersonModels == null) {
-            if (root == null) {
-                root = makingModels.modelMaker();
-            }
-            listOfPersonModels = fillInPersonModels(root);
-        }
-        for(PersonModel person : listOfPersonModels.getListOfPersonModels()){
-            if(firstLastName.equals(person.getFirstName()+" "+person.getLastName())){
-                listOfPersonModels.getListOfPersonModels().remove(person);
+        setUpListOfPersonModels();
+        PersonModel personToDelete = new PersonModel();
+        for(PersonModel person : listOfPersonModels.getListOfPersonModels()) {
+            if (firstLastName.equals(person.getFirstName() + " " + person.getLastName())) {
+                personToDelete = person;
             }
         }
+        listOfPersonModels.getListOfPersonModels().remove(personToDelete);
+
     }
     public void updatePerson(String firstLastName, String field, String newContent ){
-        if (listOfPersonModels ==null){
-            if(root == null){
-                root = makingModels.modelMaker();
-            }
-            listOfPersonModels = fillInPersonModels(root);
-        }
+        setUpListOfPersonModels();
         for (PersonModel element : listOfPersonModels.getListOfPersonModels()){
             if((element.getFirstName()+" "+ element.getLastName()).equals(firstLastName)){
                 if(field.equals("address") ){

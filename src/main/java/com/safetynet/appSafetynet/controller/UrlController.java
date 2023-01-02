@@ -16,11 +16,11 @@ public class UrlController {
     private UrlService urlService;
 
 
-    @GetMapping("/firestation")
+   /*@GetMapping("/firestation")
     public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String stationNumber) {
-        System.out.println("firestationNumber in control " + stationNumber);
-        return urlService.urlOne(stationNumber);
-    }
+       System.out.println("firestationNumber in control " + stationNumber);
+       return urlService.urlOne(stationNumber);
+   }*/
 
 
     @GetMapping("/childAlert")
