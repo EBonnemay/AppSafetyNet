@@ -1,28 +1,36 @@
 package com.safetynet.appSafetynet.RepositoryTest;
 
 
+import com.safetynet.appSafetynet.model.ListOfMedicalrecordsModels;
 import com.safetynet.appSafetynet.repository.MedicalrecordsRepository;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.FileNotFoundException;
 
+@SpringBootTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class MedicalrecordsRepositoryTest {
-    private static MedicalrecordsRepository medicalrecordsRepository;
+    @Autowired
+    MedicalrecordsRepository medicalrecordsRepository;
+
+    @Autowired
+    ListOfMedicalrecordsModels listOfMedicalrecordsModels;
 
 
-    @BeforeAll
-    //désérialiser le fichier data
-    public static void setUp() throws FileNotFoundException {
 
-        medicalrecordsRepository= new MedicalrecordsRepository();
+    @BeforeEach
+
+    public void setUp() throws FileNotFoundException {
+        //medicalrecordsRepository.setUpListOfMedicalrecordsModel();
+      // MakingModels makingModels = medicalrecordsRepository.getMakingModels();
     }
 
 
-    @Tag("")
-    @DisplayName("")
+
 
     @Test
     public void makeMedicalrecordsModelsTest(){

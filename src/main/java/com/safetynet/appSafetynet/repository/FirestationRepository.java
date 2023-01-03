@@ -71,11 +71,11 @@ public class FirestationRepository {
     }
     public void deleteOneAddressStationMapping(String address){
         setUpListOfFirestationsModel();
-        for (FirestationModel element : listOfFirestationModels.getListOfFirestationModels()) {
-            if (element.getAddress().equals(address)) {
-                List <FirestationModel> theList = listOfFirestationModels.getListOfFirestationModels();
-                theList.remove(element);
-                listOfFirestationModels.setListOfFirestationModels(theList);
+        List <FirestationModel> theList = listOfFirestationModels.getListOfFirestationModels();
+        for (int i=0;i<listOfFirestationModels.getListOfFirestationModels().size();i++) {
+            if (listOfFirestationModels.getListOfFirestationModels().get(i).getAddress().equals(address)) {
+                theList.remove(listOfFirestationModels.getListOfFirestationModels().get(i));
+                i--;
             }
         }
     }

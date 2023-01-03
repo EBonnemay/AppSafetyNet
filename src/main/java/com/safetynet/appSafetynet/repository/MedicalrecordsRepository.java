@@ -2,7 +2,6 @@ package com.safetynet.appSafetynet.repository;
 
 import com.jsoniter.any.Any;
 import com.safetynet.appSafetynet.model.ListOfMedicalrecordsModels;
-
 import com.safetynet.appSafetynet.model.MedicalrecordsModel;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;

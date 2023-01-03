@@ -2,7 +2,6 @@ package com.safetynet.appSafetynet.repository;
 
 import com.jsoniter.JsonIterator;
 import com.jsoniter.any.Any;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
@@ -10,7 +9,7 @@ import java.io.*;
 import java.util.stream.Collectors;
 
 @Repository
-@Component
+
 public class MakingModels {
     
     public Any modelMaker(){
