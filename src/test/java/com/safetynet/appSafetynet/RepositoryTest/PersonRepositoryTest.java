@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class PersonRepositoryTest {
@@ -17,6 +19,9 @@ public class PersonRepositoryTest {
     PersonRepository personRepository;
     @Autowired
     ListOfPersonModels listOfPersonModels;
+
+    @Autowired
+    MakingModels makingModels;
 
     @BeforeEach
     //désérialiser le fichier data
@@ -31,7 +36,7 @@ public class PersonRepositoryTest {
     @DisplayName("")
 
     @Test
-    public void makePersonModelsTest(){
+    public void setUpPersonModelsTest(){
 //ARRANGE
 
         // vérifier que personModels n'est plus vide après passage de la méthode
@@ -41,12 +46,20 @@ public class PersonRepositoryTest {
     }
 
 
+   @Test
+   public void fillInPersonModelsTest() {
+       listOfPersonModels.getListOfPersonModels().clear();
+       makingModels = personRepository.getMakingModels();
+       Any root = makingModels.modelMaker();
+       listOfPersonModels = personRepository.fillInPersonModels(root);
+       Assertions.assertTrue(listOfPersonModels.getListOfPersonModels().size()>0);
+
+   }
     @Test
     public void findAllPersonsTest(){
         listOfPersonModels.getListOfPersonModels().clear();
-        MakingModels makingModels = personRepository.getMakingModels();
-        Any root = makingModels.modelMaker();
-        listOfPersonModels = personRepository.fillInPersonModels(root);
+        personRepository.findAll();
+
 
         Assertions.assertTrue(listOfPersonModels.getListOfPersonModels().size()>0);
     }
@@ -79,19 +92,26 @@ public class PersonRepositoryTest {
     }
     @Test
     public void updatePersonTest(){
-        //String address = listOfPersonModels.getListOfFirestationModels().get(5).getAddress();
+        String city = "";
+        personRepository.updatePerson("Reginold Walker", "city", "Paris");
+        for(PersonModel person : listOfPersonModels.getListOfPersonModels()){
+            if(person.getFirstName().equals("Reginold")){
+                city = person.getCity();
+            }
 
-        //firestationRepository.updateFirestationNumberForAnAddress(address, "new station number");
-        //Assertions.assertEquals("new station number", listOfFirestationModels.getListOfFirestationModels().get(5).getStation());
-//ARRANGE
-//ACT
-//ASSERT
+        }
+        Assertions.assertEquals("Paris", city);
     }
     @Test
     public void getPeopleInSameHouseholdTest(){
-//ARRANGE
-//ACT
-//ASSERT
+        ArrayList<PersonModel> actual = personRepository.getPeopleInSameHouseHold("892 Downing Ct", listOfPersonModels);
+        ArrayList<PersonModel> expected = new ArrayList<>();
+        for(PersonModel person : listOfPersonModels.getListOfPersonModels()){
+            if(person.getLastName().equals("Zemicks")){
+                expected.add(person);
+            }
+        }
+        Assertions.assertEquals(expected, actual);
     }
     @Test
     public void howOldIsThisPerson2Test(){
