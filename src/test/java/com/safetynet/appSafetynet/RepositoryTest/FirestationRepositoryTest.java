@@ -48,16 +48,7 @@ public class FirestationRepositoryTest {
         Assertions.assertTrue(listOfFirestationModels.getListOfFirestationModels().size()>0);
     }
 
-    @Test
-    public void makeFirestationModelsTest(){
-//ARRANGE
-        // un fichier désérialisé en attribut de classe
-        //
-        // vérifier que medicalrecords n'est plus vide après passage de la méthode
-//ACT
-        //personRepository.makemedicalRecors models(Any deseralizedFile)
-// ASSERT  l'attribut arrayList n'est pas vide
-    }
+
 
 
     @Test

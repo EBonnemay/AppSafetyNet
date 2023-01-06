@@ -80,11 +80,11 @@ public class MedicalrecordsRepository {
     }
     public void deleteOneMedicalRecord(String firstLastName) {
         setUpListOfMedicalrecordsModel();
-        for (MedicalrecordsModel element : listOfMedicalrecordsModels.getListOfMedicalrecordsModels()) {
+        for(int i = 0; i<listOfMedicalrecordsModels.getListOfMedicalrecordsModels().size(); i++){
+            MedicalrecordsModel element = listOfMedicalrecordsModels.getListOfMedicalrecordsModels().get(i);
             if ((element.getFirstName() + " " + element.getLastName()).equals(firstLastName)) {
-                List <MedicalrecordsModel> theList = listOfMedicalrecordsModels.getListOfMedicalrecordsModels();
-                theList.remove(element);
-                listOfMedicalrecordsModels.setListOfMedicalrecordsModels(theList);
+                listOfMedicalrecordsModels.getListOfMedicalrecordsModels().remove(element);
+
             }
         }
 
@@ -103,7 +103,9 @@ public class MedicalrecordsRepository {
                     if (action.equals("add")) {
 
                         System.out.println(listOfAllergies);
-                        listOfAllergies.add(newAllergyOrMed);
+                        if(!listOfAllergies.contains(newAllergyOrMed)) {
+                            listOfAllergies.add(newAllergyOrMed);
+                        }
                     }
                     if (action.equals("delete")) {
                         listOfAllergies = element.getAllergies();
@@ -117,9 +119,7 @@ public class MedicalrecordsRepository {
                         int index = newAllergyOrMed.indexOf("=");
                         String medName = newAllergyOrMed.substring(0, index);
                         String medQuantity = newAllergyOrMed.substring(index + 1);
-                        if (mapOfMedications.containsKey(medName)) {
-                            mapOfMedications.remove(medName);
-                        }
+
                         mapOfMedications.put(medName, medQuantity);
                     }
 
