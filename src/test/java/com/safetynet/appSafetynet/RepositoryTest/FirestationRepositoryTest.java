@@ -18,6 +18,7 @@ public class FirestationRepositoryTest {
 //
     @Autowired
     FirestationRepository firestationRepository;
+
     @Autowired
     ListOfFirestationModels listOfFirestationModels;
    // @Autowired

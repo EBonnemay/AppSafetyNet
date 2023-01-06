@@ -19,7 +19,7 @@ public class PersonController {
 
     @PutMapping("/person")
     public void updatePerson(@RequestParam String firstLastName, @RequestParam String field, @RequestParam String newContent){
-        personService.updateP(firstLastName, field, newContent);
+        personService.updatePerson(firstLastName, field, newContent);
     }
     @PostMapping("/person")
     public void addPerson(@RequestBody PersonModel personModel){
