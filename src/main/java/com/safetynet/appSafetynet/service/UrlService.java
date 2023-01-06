@@ -220,7 +220,10 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
 
     }
 }
-
+//intégrer la gestion d'erreur
+//try catch dans les fonctions
+//avant de retourner résultat : log info avant
+//rajouter la dépendance log4j et avant faire un commit https://www.tutorialspoint.com/log4j/log4j_sample_program.html
 
 
 
