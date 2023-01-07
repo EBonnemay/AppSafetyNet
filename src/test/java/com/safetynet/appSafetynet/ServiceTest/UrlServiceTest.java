@@ -23,6 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @SpringBootTest
@@ -103,24 +105,14 @@ public class UrlServiceTest {
         Assertions.assertFalse(listOfHouseholdChild1.contains(firstNameChild1+" "+ lastNameChild1));
         Assertions.assertTrue(listOfHouseholdChild1.contains(firstNameChild2+" "+lastNameChild2));
         Assertions.assertEquals(5, child2AndHousehold.getAge());
-        //Assertions.assertEquals();
 
-//ARRANGE
-        // un fichier désérialisé en attribut de classe
-        //
-        // vérifier que personModels n'est plus vide après passage de la méthode
-//ACT
-        //personRepository.makePersonModels(Any deseralizedFile)
-// ASSERT  l'attribut arrayList n'est pas vide
     }
 
     @Test
     public void urlThreeTest(){
-
-
-    }
-    @Test
-    public void getHouseholdDataWithNameKeyTest(){
+        HashMap<String, ArrayList<String>> result = urlService.urlThree("1");
+        ArrayList listOfPhones = result.get("Phone numbers for firestation 1");
+        Assertions.assertEquals(4, listOfPhones.size());
 
     }
 
@@ -150,9 +142,8 @@ public class UrlServiceTest {
 
     @Test
     public void urlSevenTest(){
-        //FAUT IL APPELER LA METHODE MAKEPERSONMODELTESTS DANS LES AUTRES?
-        //ArrayList persons remplie en attribut de classe
-        //étant donnée une arrayList remplie de personModels, est ce que arrayList retourné par la méthode = arraylist attribut de classe?
+        ArrayList<String> result = urlService.urlSeven("Culver");
+        Assertions.assertEquals(23, result.size());
     }
 
 }
