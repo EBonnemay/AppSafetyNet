@@ -31,9 +31,9 @@ public class UrlService {
 
     Any root;
     ListOfFirestationModels listOfFirestationModels;
-    ListOfPersonModels listOfPersonModels;
+    ListOfPersonModelsForUrls listOfPersonModelsForUrls;
     ListOfMedicalrecordsModels listOfMedicalrecordsModels;
-   ArrayList<PersonModel> arrayListPersons;
+   ArrayList<PersonModelForUrls> arrayListPersons;
    ArrayList<FirestationModel> arrayListFirestations;
    ArrayList<MedicalrecordsModel> arrayListMedicalrecords;
 
@@ -48,7 +48,8 @@ public class UrlService {
 
        listOfMedicalrecordsModels = medicalrecordsRepository.fillInMedicalrecordsModels(root);
 
-       listOfPersonModels = personRepository.fillInPersonModels(root);
+       listOfPersonModelsForUrls = personRepository.fillInPersonModelsForUrls(root);
+
 
 
    }
@@ -63,15 +64,15 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
 
            if(firestationModel.getStation().equals(firestationNumber)){ //si le n° de firestation est le même que le param
                String address = firestationModel.getAddress(); // j'appelle "adresse" l'adresse correspondante
-               for(PersonModel personModel : listOfPersonModels.getListOfPersonModels()){ //pour chaque personne
-                   if(address.equals(personModel.getAddress())){ //si elle habite à "adressee
-                       String firstName = personModel.getFirstName();
-                       String lastName = personModel.getLastName();
-                       String phone = personModel.getPhone();//je récupère ses coordonnées
+               for(PersonModelForUrls personModelForUrls : listOfPersonModelsForUrls.getListOfPersonModelForUrls()){ //pour chaque personne
+                   if(address.equals(personModelForUrls.getAddress())){ //si elle habite à "adressee
+                       String firstName = personModelForUrls.getFirstName();
+                       String lastName = personModelForUrls.getLastName();
+                       String phone = personModelForUrls.getPhone();//je récupère ses coordonnées
                        PersonCoveredByAFirestationForUrl1 personCoveredByAFirestationForUrl1 = new PersonCoveredByAFirestationForUrl1(firstName, lastName, address, phone);
                        if(!listOfPersonsCoveredByAFirestationUrl1.getListOfPersonsCoveredByFirestation().contains(personCoveredByAFirestationForUrl1)){
                             listOfPersonsCoveredByAFirestationUrl1.getListOfPersonsCoveredByFirestation().add(personCoveredByAFirestationForUrl1);
-                            int age = personRepository.howOldIsThisPerson(personModel.getDateOfBirth());
+                            int age = personRepository.howOldIsThisPerson(personModelForUrls.getDateOfBirth());
                             if(age<19) {
                                 numberOfChildren++;
                             }else {
@@ -90,17 +91,17 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
     public ListOfChildrenAndTheHouseholdWithOneAddressUrl2 urlTwo(String address) {
         setUp();
         ListOfChildrenAndTheHouseholdWithOneAddressUrl2 listOfChildrenAndTheHouseholdWithOneAddressUrl2 = new ListOfChildrenAndTheHouseholdWithOneAddressUrl2();
-        List<PersonModel> householdPersonModels = personRepository.getPeopleInSameHouseHold(address, listOfPersonModels);//setUp nécessaire???
-        for(PersonModel personModel : householdPersonModels){
-            if(personModel.getAge()<19){
+        List<PersonModelForUrls> householdPersonModelForUrls = personRepository.getPeopleInSameHouseHold(address, listOfPersonModelsForUrls);//setUp nécessaire???
+        for(PersonModelForUrls personModelForUrls : householdPersonModelForUrls){
+            if(personModelForUrls.getAge()<19){
                 ChildAndHisHouseholdForUrl2 childAndHisHouseholdForUrl2 = new ChildAndHisHouseholdForUrl2();
-                childAndHisHouseholdForUrl2.setFirstNameOfChild(personModel.getFirstName());
-                childAndHisHouseholdForUrl2.setLastNameOfChild(personModel.getLastName());
-                childAndHisHouseholdForUrl2.setAge(personModel.getAge());
+                childAndHisHouseholdForUrl2.setFirstNameOfChild(personModelForUrls.getFirstName());
+                childAndHisHouseholdForUrl2.setLastNameOfChild(personModelForUrls.getLastName());
+                childAndHisHouseholdForUrl2.setAge(personModelForUrls.getAge());
                 List <String> otherMembersString = new ArrayList<>();
-                for(PersonModel personModel2 : householdPersonModels ){
-                    if(!((childAndHisHouseholdForUrl2.getFirstNameOfChild()+" "+childAndHisHouseholdForUrl2.getLastNameOfChild()).equals(personModel2.getFirstName()+" "+personModel2.getLastName()))){
-                    otherMembersString.add(personModel2.getFirstName()+" "+personModel2.getLastName());
+                for(PersonModelForUrls personModelForUrls2 : householdPersonModelForUrls){
+                    if(!((childAndHisHouseholdForUrl2.getFirstNameOfChild()+" "+childAndHisHouseholdForUrl2.getLastNameOfChild()).equals(personModelForUrls2.getFirstName()+" "+ personModelForUrls2.getLastName()))){
+                    otherMembersString.add(personModelForUrls2.getFirstName()+" "+ personModelForUrls2.getLastName());
                     }
                 }
                 childAndHisHouseholdForUrl2.setListOfOtherMembers(otherMembersString);
@@ -120,7 +121,7 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
 
         ArrayList <String> listOfAddressesServedByOneStation = firestationRepository.findAddressesServedByOneStation(numberOfStation, listOfFirestationModels);
         for(String address:listOfAddressesServedByOneStation){//setUp nécessaire?oui
-            for(PersonModel person : listOfPersonModels.getListOfPersonModels() ){
+            for(PersonModelForUrls person : listOfPersonModelsForUrls.getListOfPersonModelForUrls() ){
                 if (address.equals(person.getAddress())){
                     if(!phoneNumbersCoveredByOneStation.contains(person.getPhone())) {
                         phoneNumbersCoveredByOneStation.add(person.getPhone());
@@ -135,8 +136,8 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
 
         setUp();
         HouseholdUrl4 householdUrl4 = new HouseholdUrl4();
-       List<PersonModel> householdPersonModels = personRepository.getPeopleInSameHouseHold(address, listOfPersonModels);//setUp nécessaire?
-       for(PersonModel person : householdPersonModels ){
+       List<PersonModelForUrls> householdPersonModelForUrls = personRepository.getPeopleInSameHouseHold(address, listOfPersonModelsForUrls);//setUp nécessaire?
+       for(PersonModelForUrls person : householdPersonModelForUrls){
            PersonInfoForUrl4And5 personInfoForUrl4And5 = new PersonInfoForUrl4And5();
            MedicalRecordsForUrl4And5 medicalRecordsForUrl4And5 = new MedicalRecordsForUrl4And5();
            medicalRecordsForUrl4And5.setMedications(person.getMap0fMedications());
@@ -186,7 +187,7 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
         setUp();
         PersonInfoUrl6 personInfoUrl6 = new PersonInfoUrl6();
 
-        for (PersonModel person : listOfPersonModels.getListOfPersonModels()) {
+        for (PersonModelForUrls person : listOfPersonModelsForUrls.getListOfPersonModelForUrls()) {
             if (firstName.equals(person.getFirstName()) && lastName.equals(person.getLastName())) {
                 personInfoUrl6.setFirstName(firstName);
                 personInfoUrl6.setLastName(lastName);
@@ -209,7 +210,7 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
         ArrayList<String> resultUrl7 = new ArrayList<>();
 
 
-        for (PersonModel person :listOfPersonModels.getListOfPersonModels()){
+        for (PersonModelForUrls person : listOfPersonModelsForUrls.getListOfPersonModelForUrls()){
             if(person.getCity().equals(city)){
                 resultUrl7.add(person.getEmail());
             }
@@ -223,7 +224,7 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
 //intégrer la gestion d'erreur
 //try catch dans les fonctions
 //avant de retourner résultat : log info avant
-//rajouter la dépendance log4j et avant faire un commit https://www.tutorialspoint.com/log4j/log4j_sample_program.html
+//rajouter la dépendance log4j et avant faire un commit https://www.tutorialspoint.com/log4j/log4j_sample_program.htm
 
 
 

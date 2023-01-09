@@ -1,6 +1,7 @@
 package com.safetynet.appSafetynet.repository;
 
 import com.jsoniter.any.Any;
+import com.jsoniter.spi.JsonException;
 import com.safetynet.appSafetynet.model.ListOfMedicalrecordsModels;
 import com.safetynet.appSafetynet.model.MedicalrecordsModel;
 import lombok.Data;
@@ -24,7 +25,7 @@ public class MedicalrecordsRepository {
     }
 
     public ListOfMedicalrecordsModels fillInMedicalrecordsModels(Any deserializedFile) {
-       List<MedicalrecordsModel> attributeList = new ArrayList<>();
+        List<MedicalrecordsModel> attributeList = new ArrayList<>();
         try {
             //Any deserializedFile = makingModels.modelMaker();
             Any json_medicalrecords = deserializedFile.get("medicalrecords");
@@ -55,7 +56,9 @@ public class MedicalrecordsRepository {
                 attributeList.add(model);
             }
             listOfMedicalrecordsModels.setListOfMedicalrecordsModels(attributeList);
-        } catch (Exception e) {
+        }catch(JsonException e){
+            System.out.println("medicalrecords not found in file");
+        }catch (Exception e) {
             System.out.println("problems filling models");
         }
         return listOfMedicalrecordsModels;
@@ -63,7 +66,6 @@ public class MedicalrecordsRepository {
     public void setUpListOfMedicalrecordsModel(){
         if (listOfMedicalrecordsModels.getListOfMedicalrecordsModels().size()==0) {
             if (root == null) {
-                System.out.println("root is null");
                 root = makingModels.modelMaker();
             }
             listOfMedicalrecordsModels = fillInMedicalrecordsModels(root);
@@ -93,45 +95,11 @@ public class MedicalrecordsRepository {
     //prénom et le nom de famille ne changent pas) ;
 
 
-    public void updateAllergiesOrMeds(String firstLastName, String field, String action, String newAllergyOrMed) {
+    public void updateAllergiesOrMeds(MedicalrecordsModel model) {
         setUpListOfMedicalrecordsModel();
         List<MedicalrecordsModel> AttributeList = new ArrayList<>();
-        for (MedicalrecordsModel element : listOfMedicalrecordsModels.getListOfMedicalrecordsModels()) {//pour chaque modèle de la "listeAttribut" de LMM
-            if ((element.getFirstName() +" "+ element.getLastName()).equals(firstLastName)) {
-                if (field.equals("allergies")) {
-                    ArrayList<String> listOfAllergies = element.getAllergies();
-                    if (action.equals("add")) {
-
-                        System.out.println(listOfAllergies);
-                        if(!listOfAllergies.contains(newAllergyOrMed)) {
-                            listOfAllergies.add(newAllergyOrMed);
-                        }
-                    }
-                    if (action.equals("delete")) {
-                        listOfAllergies = element.getAllergies();
-                        listOfAllergies.remove(newAllergyOrMed);
-                    }
-                    element.setAllergies(listOfAllergies);
-                }
-                if (field.equals("medications"))    {
-                    HashMap<String, String> mapOfMedications = element.getMedications();
-                    if (action.equals("add")) {
-                        int index = newAllergyOrMed.indexOf("=");
-                        String medName = newAllergyOrMed.substring(0, index);
-                        String medQuantity = newAllergyOrMed.substring(index + 1);
-
-                        mapOfMedications.put(medName, medQuantity);
-                    }
-
-                    if(action.equals("delete")){
-                        mapOfMedications.remove(newAllergyOrMed);
-
-                    }
-                    element.setMedications(mapOfMedications); //j'ai modifié mon élément MedicationRecords
-
-                }
-            }
-
+        for(int i = 0; i<listOfMedicalrecordsModels.getListOfMedicalrecordsModels().size(); i++){
+            listOfMedicalrecordsModels.getListOfMedicalrecordsModels().set(i, model);
         }
 
     }

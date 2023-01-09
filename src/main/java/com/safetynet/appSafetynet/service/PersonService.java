@@ -16,8 +16,8 @@ public class PersonService {
     public ListOfPersonModels getPersons(){
         return personRepository.findAll();
     }
-    public void updatePerson(String firstLastName, String field, String newContent ){
-        personRepository.updatePerson(firstLastName, field, newContent);
+    public void updatePerson(PersonModel updated ){
+        personRepository.updatePerson(updated);
     }
     public void deletePerson(String firstLastName){
         personRepository.deleteOnePerson(firstLastName);

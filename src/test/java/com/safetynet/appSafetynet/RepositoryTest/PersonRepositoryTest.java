@@ -2,7 +2,9 @@ package com.safetynet.appSafetynet.RepositoryTest;
 
 import com.jsoniter.any.Any;
 import com.safetynet.appSafetynet.model.ListOfPersonModels;
+import com.safetynet.appSafetynet.model.ListOfPersonModelsForUrls;
 import com.safetynet.appSafetynet.model.PersonModel;
+import com.safetynet.appSafetynet.model.PersonModelForUrls;
 import com.safetynet.appSafetynet.repository.MakingModels;
 import com.safetynet.appSafetynet.repository.PersonRepository;
 import org.junit.jupiter.api.*;
@@ -19,7 +21,8 @@ public class PersonRepositoryTest {
     PersonRepository personRepository;
     @Autowired
     ListOfPersonModels listOfPersonModels;
-
+    @Autowired
+    ListOfPersonModelsForUrls listOfPersonModelsForUrls;
     @Autowired
     MakingModels makingModels;
 
@@ -28,7 +31,9 @@ public class PersonRepositoryTest {
     public void setUp() throws FileNotFoundException {
         MakingModels makingModels = personRepository.getMakingModels();
         Any root = makingModels.modelMaker();
+
         listOfPersonModels = personRepository.fillInPersonModels(root);
+        listOfPersonModelsForUrls = personRepository.fillInPersonModelsForUrls(root);
     }
 
 
@@ -51,10 +56,21 @@ public class PersonRepositoryTest {
        listOfPersonModels.getListOfPersonModels().clear();
        makingModels = personRepository.getMakingModels();
        Any root = makingModels.modelMaker();
+
        listOfPersonModels = personRepository.fillInPersonModels(root);
        Assertions.assertTrue(listOfPersonModels.getListOfPersonModels().size()>0);
 
    }
+    @Test
+    public void fillInPersonModelsForUrlsTest() {
+        listOfPersonModelsForUrls.getListOfPersonModelForUrls().clear();
+        makingModels = personRepository.getMakingModels();
+        Any root = makingModels.modelMaker();
+
+        listOfPersonModelsForUrls = personRepository.fillInPersonModelsForUrls(root);
+        Assertions.assertTrue(listOfPersonModelsForUrls.getListOfPersonModelForUrls().size()>0);
+
+    }
     @Test
     public void findAllPersonsTest(){
         listOfPersonModels.getListOfPersonModels().clear();
@@ -92,21 +108,28 @@ public class PersonRepositoryTest {
     }
     @Test
     public void updatePersonTest(){
+        PersonModel updated = listOfPersonModels.getListOfPersonModels().get(14);
+        updated.setAddress("2 chemin des platanes");
+        updated.setCity("Paris");
+
+        personRepository.updatePerson(updated);
         String city = "";
-        personRepository.updatePerson("Reginold Walker", "city", "Paris");
+        String address = "";
         for(PersonModel person : listOfPersonModels.getListOfPersonModels()){
-            if(person.getFirstName().equals("Reginold")){
+            if(person.getFirstName().equals("Reginold")&&person.getLastName().equals("Walker")){
                 city = person.getCity();
+                address = person.getAddress();
             }
 
         }
         Assertions.assertEquals("Paris", city);
+        Assertions.assertEquals("2 chemin des platanes", address);
     }
     @Test
     public void getPeopleInSameHouseholdTest(){
-        ArrayList<PersonModel> actual = personRepository.getPeopleInSameHouseHold("892 Downing Ct", listOfPersonModels);
-        ArrayList<PersonModel> expected = new ArrayList<>();
-        for(PersonModel person : listOfPersonModels.getListOfPersonModels()){
+        ArrayList<PersonModelForUrls> actual = personRepository.getPeopleInSameHouseHold("892 Downing Ct", listOfPersonModelsForUrls);
+        ArrayList<PersonModelForUrls> expected = new ArrayList<>();
+        for(PersonModelForUrls person : listOfPersonModelsForUrls.getListOfPersonModelForUrls()){
             if(person.getLastName().equals("Zemicks")){
                 expected.add(person);
             }

@@ -1,5 +1,6 @@
 package com.safetynet.appSafetynet.service;
 
+import com.safetynet.appSafetynet.model.FirestationModel;
 import com.safetynet.appSafetynet.model.ListOfFirestationModels;
 import com.safetynet.appSafetynet.repository.FirestationRepository;
 import lombok.Data;
@@ -16,8 +17,8 @@ public class FirestationService {
     public ListOfFirestationModels getFirestations() {
         return firestationRepository.findAll();
     }
-    public void updateFirestation(String address, String number){
-        firestationRepository.updateFirestationNumberForAnAddress( address,  number);
+    public void updateFirestation(FirestationModel model){
+        firestationRepository.updateFirestationNumberForAnAddress( model);
     }
 
     public void deleteFirestation(String address) {

@@ -5,9 +5,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-
 @Data
 @Component
-public class ListOfPersonModels {
-    List<PersonModel> listOfPersonModels = new ArrayList<>();
+public class ListOfPersonModelsForUrls {
+    List <PersonModelForUrls> listOfPersonModelForUrls = new ArrayList<>();
 }

@@ -18,8 +18,8 @@ public class PersonController {
     }
 
     @PutMapping("/person")
-    public void updatePerson(@RequestParam String firstLastName, @RequestParam String field, @RequestParam String newContent){
-        personService.updatePerson(firstLastName, field, newContent);
+    public void updatePerson(@RequestBody PersonModel person){
+        personService.updatePerson(person);
     }
     @PostMapping("/person")
     public void addPerson(@RequestBody PersonModel personModel){

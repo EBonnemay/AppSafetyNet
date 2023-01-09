@@ -16,8 +16,8 @@ public class MedicalrecordsService {
     public ListOfMedicalrecordsModels getMedicalrecords(){
         return medicalrecordsRepository.findAll();
     }
-    public void updateAllergiesOrMeds(String firstLastName, String field, String action, String newAllergyOrMed){
-        medicalrecordsRepository.updateAllergiesOrMeds(firstLastName, field, action, newAllergyOrMed);
+    public void updateAllergiesOrMeds(MedicalrecordsModel model){
+        medicalrecordsRepository.updateAllergiesOrMeds(model);
     }
 
     public void addMedicalrecordsModel(MedicalrecordsModel medicalrecordsModel){

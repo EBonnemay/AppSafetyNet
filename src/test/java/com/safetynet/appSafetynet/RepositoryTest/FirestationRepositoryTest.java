@@ -30,7 +30,9 @@ public class FirestationRepositoryTest {
 
     public void setUp() throws FileNotFoundException {
         MakingModels makingModels = firestationRepository.getMakingModels();
-        Any root = makingModels.modelMaker();
+        Any root;
+        root = makingModels.modelMaker();
+
         listOfFirestationModels = firestationRepository.fillInFirestationModels(root);
 
     }
@@ -43,6 +45,7 @@ public class FirestationRepositoryTest {
         listOfFirestationModels.getListOfFirestationModels().clear();
         MakingModels makingModels = firestationRepository.getMakingModels();
         Any root = makingModels.modelMaker();
+
         //listOfFirestationModels = firestationRepository.fillInFirestationModels(root);
         listOfFirestationModels = firestationRepository.fillInFirestationModels(root);
 
@@ -99,9 +102,12 @@ public class FirestationRepositoryTest {
     }
     @Test
     public void updateFirestationNumberForAddressTest(){
-        String address = listOfFirestationModels.getListOfFirestationModels().get(5).getAddress();
+        FirestationModel model = new FirestationModel();
+        model.setAddress("112 Steppes Pl");
+        model.setStation("new station number");
+        //String address = listOfFirestationModels.getListOfFirestationModels().get(5).getAddress();
 
-        firestationRepository.updateFirestationNumberForAnAddress(address, "new station number");
+        firestationRepository.updateFirestationNumberForAnAddress(model);
         Assertions.assertEquals("new station number", listOfFirestationModels.getListOfFirestationModels().get(5).getStation());
 //ARRANGE
 //ACT

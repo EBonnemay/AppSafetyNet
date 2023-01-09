@@ -17,8 +17,8 @@ public class MedicalrecordsController {
     }
 
     @PutMapping("/medicalRecord")
-    public void updateAllergiesOrMeds(@RequestParam String firstLastName, @RequestParam String field, @RequestParam String action, @RequestParam String newAllergyOrMed){
-        medicalrecordsService.updateAllergiesOrMeds(firstLastName, field, action, newAllergyOrMed);
+    public void updateAllergiesOrMeds(@RequestBody MedicalrecordsModel model){
+        medicalrecordsService.updateAllergiesOrMeds(model);
     }
     @PostMapping("/medicalRecord")
     public void addMedicalrecord(@RequestBody MedicalrecordsModel medicalrecordModel){

@@ -1,13 +1,13 @@
 package com.safetynet.appSafetynet.repository;
 
 import com.jsoniter.any.Any;
+import com.jsoniter.spi.JsonException;
 import com.safetynet.appSafetynet.model.FirestationModel;
 import com.safetynet.appSafetynet.model.ListOfFirestationModels;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 @Data
@@ -18,34 +18,36 @@ public class FirestationRepository {
     ListOfFirestationModels listOfFirestationModels = new ListOfFirestationModels(); //1 object returned by the call
 
     Any root;
-    public FirestationRepository() throws FileNotFoundException {
+    public FirestationRepository() {
     }
-    public ListOfFirestationModels fillInFirestationModels(Any deserializedFile){
+    public ListOfFirestationModels fillInFirestationModels(Any deserializedFile) {
 
         List<FirestationModel> attributeList = new ArrayList<>();
+        Any json_firestations;
+
         try {
-            //Any deserializedFile = makingModels.modelMaker();
-
-            Any json_firestations = deserializedFile.get("firestations");
+            json_firestations = deserializedFile.get("firestations");
             List<Any> list = json_firestations.asList();
-
             for (int i = 0; i < list.size(); i++) {
                 FirestationModel model = new FirestationModel();
                 model.setAddress(list.get(i).get("address").toString());
                 model.setStation(list.get(i).get("station").toString());
-                //List <FirestationModel> listOfFirestations = listOfFirestationModels.getListOfFirestationModels();
                 attributeList.add(model);
             }
             listOfFirestationModels.setListOfFirestationModels(attributeList);
-        } catch(Exception e){
-            System.out.println("problems filling models");
+        }catch(JsonException e){
+
+            System.out.println("firestations key not found in file");
+        }catch (Exception e) {
+            throw new RuntimeException("models could not get filled in", e);
+
         }
         return listOfFirestationModels;
     }
+
     public void setUpListOfFirestationsModel(){
         if (listOfFirestationModels.getListOfFirestationModels().size()==0) {
             if (root == null) {
-                System.out.println("root is null");
                 root = makingModels.modelMaker();
             }
             listOfFirestationModels = fillInFirestationModels(root);
@@ -93,12 +95,21 @@ public class FirestationRepository {
     }
 
     //put
-    public void updateFirestationNumberForAnAddress(String address, String number){
+   /* public void updateFirestationNumberForAnAddress(String address, String number){
         setUpListOfFirestationsModel();
         for (FirestationModel element : listOfFirestationModels.getListOfFirestationModels()) {
             if (element.getAddress().equals(address)) {
                 element.setStation(number);
                 System.out.println("address "+ address + " has now firestation number "+ number);
+            }
+        }
+    }*/
+    public void updateFirestationNumberForAnAddress(FirestationModel updatedFirestationModel){
+        setUpListOfFirestationsModel();
+        for(int i=0;i<listOfFirestationModels.getListOfFirestationModels().size();i++){
+            if(listOfFirestationModels.getListOfFirestationModels().get(i).getAddress().equals(updatedFirestationModel.getAddress())){
+                listOfFirestationModels.getListOfFirestationModels().set(i, updatedFirestationModel);
+
             }
         }
     }

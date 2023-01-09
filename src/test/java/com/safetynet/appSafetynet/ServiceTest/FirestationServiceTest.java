@@ -32,6 +32,7 @@ public class FirestationServiceTest {
     public void setUp() throws FileNotFoundException {
         MakingModels makingModels = firestationRepository.getMakingModels();
         Any root = makingModels.modelMaker();
+
         listOfFirestationModels = firestationRepository.fillInFirestationModels(root);
     }
 
@@ -45,8 +46,10 @@ public class FirestationServiceTest {
     @Test
     public void updateFirestationTest(){
         //String address = listOfFirestationModels.getListOfFirestationModels().get(5).getAddress();
-
-        firestationService.updateFirestation("947 E. Rose Dr",  "new station number");
+        FirestationModel model = new FirestationModel();
+        model.setAddress("947 E. Rose Dr");
+        model.setStation("new station number");
+        firestationService.updateFirestation(model);
         Assertions.assertEquals("new station number", listOfFirestationModels.getListOfFirestationModels().get(10).getStation());
     }
     @Test
