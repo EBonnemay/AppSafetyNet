@@ -16,7 +16,7 @@ import java.util.List;
 
 @Data
 @Repository
-public class PersonRepository{
+public class PersonRepository implements IPersonRepository{
     ArrayList<MedicalrecordsModel> arrayListMedicalrecords = new ArrayList<>();
     @Autowired
     MakingModels makingModels;

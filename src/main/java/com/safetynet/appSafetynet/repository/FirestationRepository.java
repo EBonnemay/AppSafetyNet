@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 @Data
 @Repository
-public class FirestationRepository {
+public class FirestationRepository implements IFirestationRepository{
     @Autowired
     MakingModels makingModels;
     ListOfFirestationModels listOfFirestationModels = new ListOfFirestationModels(); //1 object returned by the call

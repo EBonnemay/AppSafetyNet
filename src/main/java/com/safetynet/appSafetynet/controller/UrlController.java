@@ -38,7 +38,6 @@ public class UrlController {
 
     @GetMapping("/fire")
     public HouseholdUrl4 urlFour(String address) {
-        System.out.println("address in control " + address);
         return urlService.urlFour(address);
     }
 

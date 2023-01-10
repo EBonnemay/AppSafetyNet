@@ -3,10 +3,10 @@ package com.safetynet.appSafetynet.service;
 import com.jsoniter.any.Any;
 import com.safetynet.appSafetynet.model.*;
 import com.safetynet.appSafetynet.model.dto.*;
-import com.safetynet.appSafetynet.repository.FirestationRepository;
+import com.safetynet.appSafetynet.repository.IFirestationRepository;
+import com.safetynet.appSafetynet.repository.IPersonRepository;
 import com.safetynet.appSafetynet.repository.MakingModels;
 import com.safetynet.appSafetynet.repository.MedicalrecordsRepository;
-import com.safetynet.appSafetynet.repository.PersonRepository;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,11 +20,11 @@ import java.util.List;
 @Service
 public class UrlService {
     @Autowired
-    FirestationRepository firestationRepository;
+    IFirestationRepository firestationRepository;
     @Autowired
     MedicalrecordsRepository medicalrecordsRepository;
     @Autowired
-    PersonRepository personRepository;
+    IPersonRepository personRepository;
 
     @Autowired
     MakingModels makingModels;

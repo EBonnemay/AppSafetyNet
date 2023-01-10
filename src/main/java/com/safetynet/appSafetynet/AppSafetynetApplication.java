@@ -11,5 +11,7 @@ public class AppSafetynetApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(AppSafetynetApplication.class, args);
 
+
+
 	}
 }
