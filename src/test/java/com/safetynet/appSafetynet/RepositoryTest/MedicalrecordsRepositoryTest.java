@@ -66,7 +66,8 @@ public class MedicalrecordsRepositoryTest {
         MedicalrecordsModel added = new MedicalrecordsModel();
         added.setFirstName("Emma");
         added.setLastName("Bovary");
-        listOfMedicalrecordsModels.getListOfMedicalrecordsModels().add(added);
+        //listOfMedicalrecordsModels.getListOfMedicalrecordsModels().add(added);
+        medicalrecordsRepository.addOneMedicalRecords(added);
         Assertions.assertTrue(listOfMedicalrecordsModels.getListOfMedicalrecordsModels().contains(added));
 
     }

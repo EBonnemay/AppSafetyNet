@@ -52,16 +52,6 @@ public class FirestationRepositoryTest {
         Assertions.assertTrue(listOfFirestationModels.getListOfFirestationModels().size()>0);
     }
 
-    @Test
-    public void makeFirestationModelsTest(){
-//ARRANGE
-        // un fichier désérialisé en attribut de classe
-        //
-        // vérifier que medicalrecords n'est plus vide après passage de la méthode
-//ACT
-        //personRepository.makemedicalRecors models(Any deseralizedFile)
-// ASSERT  l'attribut arrayList n'est pas vide
-    }
 
 
     @Test
@@ -88,20 +78,34 @@ public class FirestationRepositoryTest {
         Assertions.assertFalse(listOfFirestationModels.getListOfFirestationModels().contains(model));
     }
     @Test
+    public void deleteNonExistingAddressStationMappingTest() {
+        FirestationModel model = new FirestationModel();
+        model.setAddress("3 Sailor Road");
+        model.setStation("2");
+
+        Assertions.assertThrows(RuntimeException.class, ()-> firestationRepository.deleteOneAddressStationMapping("3 Sailor Road"));
+    }
+    @Test
     public void addOneAddressStationMappingTest() {
 //ARRANGE
         FirestationModel added = new FirestationModel();
         added.setAddress("10 downing street");
         added.setStation("5");
         //listOfFirestationModels.getListOfFirestationModels().add(expected);
-        firestationRepository.addOneAddressStationMapping("10 downing street", "5");
-//ACT
-
-//ASSERT
+        firestationRepository.addOneAddressStationMapping(added);
         Assertions.assertTrue(listOfFirestationModels.getListOfFirestationModels().contains(added));
     }
     @Test
-    public void updateFirestationNumberForAddressTest(){
+    public void addAlreadyExistingAddressStationMappingTest(){
+        FirestationModel model = new FirestationModel();
+        model.setAddress("644 Gershwin Cir");
+        model.setStation("1");
+
+        Assertions.assertThrows(RuntimeException.class, () -> firestationRepository.addOneAddressStationMapping(model));
+
+    }
+    @Test
+    public void updateFirestationNumberWithExistingAddressTest(){
         FirestationModel model = new FirestationModel();
         model.setAddress("112 Steppes Pl");
         model.setStation("new station number");
@@ -113,6 +117,14 @@ public class FirestationRepositoryTest {
 //ACT
 //ASSERT
     }
+    @Test
+    public void updateFirestationNumberForAddressTestWithUnexistingAddress(){
+        FirestationModel model = new FirestationModel();
+        model.setAddress("12 Flower St");
+        model.setStation("2");
+        RuntimeException r = new RuntimeException();
+        Assertions.assertThrows(RuntimeException.class, () -> firestationRepository.updateFirestationNumberForAnAddress(model));
 
+    }
 
 }

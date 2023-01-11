@@ -5,6 +5,7 @@ import com.safetynet.appSafetynet.model.dto.*;
 import com.safetynet.appSafetynet.service.UrlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -16,23 +17,22 @@ public class UrlController {
     private UrlService urlService;
 
 
-   /*@GetMapping("/firestation")
-    public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String stationNumber) {
-       System.out.println("firestationNumber in control " + stationNumber);
+   @GetMapping("/firestation")
+    public ListOfPersonsCoveredByAFirestationUrl1 urlOne(@RequestParam String stationNumber) {
+
        return urlService.urlOne(stationNumber);
-   }*/
+   }
 
 
     @GetMapping("/childAlert")
 
     public ListOfChildrenAndTheHouseholdWithOneAddressUrl2 urlTwo(String address) {
 
-        System.out.println(address);
         return urlService.urlTwo(address);
     }
 
     @GetMapping("/phoneAlert")
-    public HashMap<String, ArrayList<String>> urlThree(String firestation) {
+    public HashMap<String, ArrayList<String>> urlThree(@RequestParam String firestation) {
         return urlService.urlThree(firestation);
     }
 

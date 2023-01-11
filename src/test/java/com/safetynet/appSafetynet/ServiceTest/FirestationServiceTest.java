@@ -66,7 +66,7 @@ public class FirestationServiceTest {
         added.setAddress("10 downing street");
         added.setStation("5");
         //listOfFirestationModels.getListOfFirestationModels().add(expected);
-        firestationService.addFirestation("10 downing street", "5");
+        firestationService.addFirestation(added);
         Assertions.assertTrue(listOfFirestationModels.getListOfFirestationModels().contains(added));
     }
 

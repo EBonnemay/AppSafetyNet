@@ -55,7 +55,8 @@ public class MedicarecordsServiceTest {
         MedicalrecordsModel added = new MedicalrecordsModel();
         added.setFirstName("Emma");
         added.setLastName("Bovary");
-        listOfMedicalrecordsModels.getListOfMedicalrecordsModels().add(added);
+        //listOfMedicalrecordsModels.getListOfMedicalrecordsModels().add(added);
+        medicalrecordsService.addMedicalrecordsModel(added);
         Assertions.assertTrue(listOfMedicalrecordsModels.getListOfMedicalrecordsModels().contains(added));
 
     }
@@ -66,12 +67,9 @@ public class MedicarecordsServiceTest {
         HashMap<String, String> map = new HashMap<>();
         map.put("aznol", "500mg");
         allisonFile.setMedications(map);
+        medicalrecordsService.updateAllergiesOrMeds(allisonFile);
         Assertions.assertEquals("500mg", allisonFile.getMedications().get("aznol"));
-
-
     }
-
-
 }
 
 

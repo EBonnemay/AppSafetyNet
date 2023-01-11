@@ -4,10 +4,12 @@ import com.jsoniter.any.Any;
 import com.safetynet.appSafetynet.model.*;
 import com.safetynet.appSafetynet.model.dto.*;
 import com.safetynet.appSafetynet.repository.IFirestationRepository;
+import com.safetynet.appSafetynet.repository.IMakingModels;
+import com.safetynet.appSafetynet.repository.IMedicalrecordsRepository;
 import com.safetynet.appSafetynet.repository.IPersonRepository;
-import com.safetynet.appSafetynet.repository.MakingModels;
-import com.safetynet.appSafetynet.repository.MedicalrecordsRepository;
 import lombok.Data;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,16 +20,16 @@ import java.util.List;
 
 @Data
 @Service
-public class UrlService {
+public class UrlService implements IUrlService{
     @Autowired
     IFirestationRepository firestationRepository;
     @Autowired
-    MedicalrecordsRepository medicalrecordsRepository;
+    IMedicalrecordsRepository medicalrecordsRepository;
     @Autowired
     IPersonRepository personRepository;
 
     @Autowired
-    MakingModels makingModels;
+    IMakingModels makingModels;
 
     Any root;
     ListOfFirestationModels listOfFirestationModels;
@@ -36,6 +38,7 @@ public class UrlService {
    ArrayList<PersonModelForUrls> arrayListPersons;
    ArrayList<FirestationModel> arrayListFirestations;
    ArrayList<MedicalrecordsModel> arrayListMedicalrecords;
+    static final Logger logger = LogManager.getLogger();
 
 
    public void setUp(){
@@ -55,6 +58,7 @@ public class UrlService {
    }
 
 public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
+        logger.info("returns the list of persons covered by station {} as well as their addresses, phone numbers, and the global number of children and adults covered by this firestation ", firestationNumber);
        setUp();
        ListOfPersonsCoveredByAFirestationUrl1 listOfPersonsCoveredByAFirestationUrl1 = new ListOfPersonsCoveredByAFirestationUrl1();
        int numberOfChildren = 0;
@@ -85,10 +89,18 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
        }
        listOfPersonsCoveredByAFirestationUrl1.setNumberOfAdults(numberOfAdults);
        listOfPersonsCoveredByAFirestationUrl1.setNumberOfChildren(numberOfChildren);
+       if(listOfPersonsCoveredByAFirestationUrl1.getListOfPersonsCoveredByFirestation().isEmpty()){
+           logger.info("input parameter was not found in the file, please check spelling");
+       }
+
+
        return listOfPersonsCoveredByAFirestationUrl1;
+
 
 }
     public ListOfChildrenAndTheHouseholdWithOneAddressUrl2 urlTwo(String address) {
+        logger.info("returns list of children living at {} as well as their ages and each one's household ", address);
+
         setUp();
         ListOfChildrenAndTheHouseholdWithOneAddressUrl2 listOfChildrenAndTheHouseholdWithOneAddressUrl2 = new ListOfChildrenAndTheHouseholdWithOneAddressUrl2();
         List<PersonModelForUrls> householdPersonModelForUrls = personRepository.getPeopleInSameHouseHold(address, listOfPersonModelsForUrls);//setUp nécessaire???
@@ -113,6 +125,7 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
     }
 
     public HashMap<String, ArrayList<String>> urlThree(String numberOfStation) {
+        logger.info("returns the list of phone numbers of all the people covered by firestation number {}", numberOfStation);
         setUp();
         HashMap<String, ArrayList<String>> mapResultUrl3 = new HashMap<>();
         ArrayList<String> phoneNumbersCoveredByOneStation = new ArrayList<>();
@@ -133,7 +146,7 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
         return mapResultUrl3;
     }
    public HouseholdUrl4 urlFour(String address) {
-
+       logger.info("returns names, ages, phone and medical data of persons living at {}, as well as the corresponding station number", address);
         setUp();
         HouseholdUrl4 householdUrl4 = new HouseholdUrl4();
        List<PersonModelForUrls> householdPersonModelForUrls = personRepository.getPeopleInSameHouseHold(address, listOfPersonModelsForUrls);//setUp nécessaire?
@@ -163,14 +176,14 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
    }
 
     public ListOfHouseholdsCoveredByAFirestationUrl5 urlFive(String stringNumbersOfFirestations){
+        logger.info("returns the list of households covered by firestation or firestations {} ; each one includes names, ages, phone and medical data of persons in the household", stringNumbersOfFirestations);
 
         setUp();// pour la deuxième fois!
         ListOfHouseholdsCoveredByAFirestationUrl5 listOfHouseholdsCoveredByAFirestationUrl5 = new ListOfHouseholdsCoveredByAFirestationUrl5();
 
         List<String> numbersOfFirestations = Arrays.asList(stringNumbersOfFirestations.split(","));
         for (String numberOfFirestation : numbersOfFirestations){
-            //System.out.println("number = "+numberOfFirestation);
-            //HashMap<String, Object>householdDataWithAddressesKeys = new HashMap<>();
+
             ArrayList<String> addressesServedByOneStation = firestationRepository.findAddressesServedByOneStation(numberOfFirestation, listOfFirestationModels);
 
             for (String address : addressesServedByOneStation){
@@ -184,6 +197,8 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
     }
 
     public PersonInfoUrl6 urlSix (String firstName, String lastName) {
+        logger.info("returns information for {} {} : address, age, mail, medical data", firstName, lastName);
+
         setUp();
         PersonInfoUrl6 personInfoUrl6 = new PersonInfoUrl6();
 
@@ -205,6 +220,7 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
     }
 
     public ArrayList<String> urlSeven(String city) {
+        logger.info("returns a list of emails of the inhabitants of {}", city);
 
         setUp();
         ArrayList<String> resultUrl7 = new ArrayList<>();
@@ -221,10 +237,7 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
 
     }
 }
-//intégrer la gestion d'erreur
-//try catch dans les fonctions
-//avant de retourner résultat : log info avant
-//rajouter la dépendance log4j et avant faire un commit https://www.tutorialspoint.com/log4j/log4j_sample_program.htm
+
 
 
 

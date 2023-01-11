@@ -173,8 +173,7 @@ médicaux (médicaments, posologie et allergies) de chaque personne.*/
         Assertions.assertEquals("400mg", result.getMedicalRecordsForUrl4And5().getMedications().get("hydrapermazol") );
 
         Assertions.assertTrue(result.getMedicalRecordsForUrl4And5().getListOfAllergies().contains("nillacilan"));
-    }//e nom, l'adresse, l'âge, l'adresse mail et les antécédents médicaux (médicaments,
-    //posologie, allergies)
+    }
 
     @Test
     public void urlSevenTest(){

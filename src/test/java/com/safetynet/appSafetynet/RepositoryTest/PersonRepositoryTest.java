@@ -36,21 +36,6 @@ public class PersonRepositoryTest {
         listOfPersonModelsForUrls = personRepository.fillInPersonModelsForUrls(root);
     }
 
-
-    @Tag("")
-    @DisplayName("")
-
-    @Test
-    public void setUpPersonModelsTest(){
-//ARRANGE
-
-        // vérifier que personModels n'est plus vide après passage de la méthode
-//ACT
-        //personRepository.makePersonModels(Any deseralizedFile)
-// ASSERT  l'attribut arrayList n'est pas vide
-    }
-
-
    @Test
    public void fillInPersonModelsTest() {
        listOfPersonModels.getListOfPersonModels().clear();
@@ -93,18 +78,12 @@ public class PersonRepositoryTest {
     }
     @Test
     public void addPersonTest() {
-//ARRANGE
-        //FirestationModel added = new FirestationModel();
-        //added.setAddress("10 downing street");
-       // added.setStation("5");
-        //listOfFirestationModels.getListOfFirestationModels().add(expected);
-       // firestationRepository.addOneAddressStationMapping("10 downing street", "5");
-//ACT
-
-        //ArrayList persons remplie en attribut de classe
-//ACT
-//ASSERT
-
+        PersonModel model = new PersonModel();
+        model.setFirstName("Julien");
+        model.setLastName("Sorel");
+        model.setEmail("j@sorel.net");
+        personRepository.addOnePerson(model);
+        Assertions.assertTrue(listOfPersonModels.getListOfPersonModels().contains(model));
     }
     @Test
     public void updatePersonTest(){

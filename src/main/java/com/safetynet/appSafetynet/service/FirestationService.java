@@ -22,14 +22,17 @@ public class FirestationService {
     }
     public void updateFirestation(FirestationModel model){
         firestationRepository.updateFirestationNumberForAnAddress(model);
-        logger.info("log4j: Firestation updated successfully");
+
     }
 
     public void deleteFirestation(String address) {
         firestationRepository.deleteOneAddressStationMapping(address);
+
     }
-    public void addFirestation(String address, String number){
-        firestationRepository.addOneAddressStationMapping(address, number);
+    public void addFirestation(FirestationModel model){
+        firestationRepository.addOneAddressStationMapping(model);
+
+
     }
 
 
