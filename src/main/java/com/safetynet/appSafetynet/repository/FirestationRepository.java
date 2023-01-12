@@ -71,17 +71,42 @@ public class FirestationRepository implements IFirestationRepository{
 
     @Override
     public ArrayList <String> findAddressesServedByOneStation(String numberOfStation, ListOfFirestationModels listOfFirestationModels){
+        int match = 0;
         setUpListOfFirestationsModel();
         ArrayList<String> listOfAddressesServedByOneStation = new ArrayList<>();
         for (FirestationModel element : listOfFirestationModels.getListOfFirestationModels()){
             if(numberOfStation.equals(element.getStation())&&!listOfAddressesServedByOneStation.contains(element.getAddress())){ //number0fStation est NULL
+                match = 1;
                 listOfAddressesServedByOneStation.add(element.getAddress());
             }
+        }
+        if( match == 0){
+            logger.error("Unsuccessful calling of url : the firestation number required is not in the data.");
+            throw new RuntimeException("firestation number not found");
         }
         return listOfAddressesServedByOneStation;
     }
     @Override
-    public void deleteOneAddressStationMapping(String address){
+    public void deleteOneOrMoreAddressStationMappingWithStationNumberParam(String stationNumber){
+        setUpListOfFirestationsModel();
+        int match = 0;
+        for (int i=0;i<listOfFirestationModels.getListOfFirestationModels().size();i++) {
+            if (listOfFirestationModels.getListOfFirestationModels().get(i).getStation().equals(stationNumber)) {
+                match = 1;
+                listOfFirestationModels.getListOfFirestationModels().remove(listOfFirestationModels.getListOfFirestationModels().get(i));
+                i--;
+            }
+        }
+        if(match==0){
+            if(match == 0) {
+                logger.error("the key address of this firestation Model does not exist in data ; no deleting");
+                throw new RuntimeException("no deleting");
+            }
+        }
+
+    }
+    @Override
+    public void deleteOneAddressStationMappingWithAddressParam(String address){
         setUpListOfFirestationsModel();
         List <FirestationModel> theList = listOfFirestationModels.getListOfFirestationModels();
         int match = 0;

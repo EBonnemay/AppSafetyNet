@@ -35,8 +35,8 @@ public class FirestationController {
     }
 
     @DeleteMapping("/firestation")
-    public void deleteFirestation(@RequestParam String address){
-        firestationService.deleteFirestation(address);
+    public void deleteFirestation(@RequestParam String whichParam, @RequestParam String address){
+        firestationService.deleteFirestation(whichParam, address);
         logger.info("Firestation deleted successfully");
     }
 }

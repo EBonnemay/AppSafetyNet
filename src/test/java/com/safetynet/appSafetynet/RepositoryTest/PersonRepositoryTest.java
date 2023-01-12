@@ -71,11 +71,15 @@ public class PersonRepositoryTest {
         String lastName= model.getLastName();
         personRepository.deleteOnePerson(firstName+" "+lastName);
         Assertions.assertFalse(listOfPersonModels.getListOfPersonModels().contains(model));
-//ARRANGE
-        //ArrayList persons remplie en attribut de classe
-//ACT
-//ASSERT
     }
+    @Test
+    public void deleteNonExistentPerson(){
+
+        Assertions.assertThrows(RuntimeException.class,()-> personRepository.deleteOnePerson("Julien Sorel"));
+
+
+    }
+
     @Test
     public void addPersonTest() {
         PersonModel model = new PersonModel();
@@ -84,6 +88,11 @@ public class PersonRepositoryTest {
         model.setEmail("j@sorel.net");
         personRepository.addOnePerson(model);
         Assertions.assertTrue(listOfPersonModels.getListOfPersonModels().contains(model));
+    }
+    @Test
+    public void addAlreadyExistingPersonTest(){
+        PersonModel model = listOfPersonModels.getListOfPersonModels().get(4);
+        Assertions.assertThrows(RuntimeException.class, () ->personRepository.addOnePerson(model));
     }
     @Test
     public void updatePersonTest(){
@@ -103,6 +112,15 @@ public class PersonRepositoryTest {
         }
         Assertions.assertEquals("Paris", city);
         Assertions.assertEquals("2 chemin des platanes", address);
+    }
+    @Test
+    public void updateNonExistentPersonTest(){
+        PersonModel unexistent = new PersonModel();
+        unexistent.setFirstName("Georges");
+        unexistent.setLastName("Kaplan");
+        unexistent.setAddress("2 chemin des platanes");
+        unexistent.setCity("Paris");
+        Assertions.assertThrows(RuntimeException.class, () -> personRepository.updatePerson(unexistent));
     }
     @Test
     public void getPeopleInSameHouseholdTest(){

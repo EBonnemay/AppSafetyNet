@@ -58,15 +58,16 @@ public class UrlService implements IUrlService{
    }
 
 public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
-        logger.info("returns the list of persons covered by station {} as well as their addresses, phone numbers, and the global number of children and adults covered by this firestation ", firestationNumber);
+        logger.info("url 1 returns the list of persons covered by station {} as well as their addresses, phone numbers, and the global number of children and adults covered by this firestation ", firestationNumber);
        setUp();
        ListOfPersonsCoveredByAFirestationUrl1 listOfPersonsCoveredByAFirestationUrl1 = new ListOfPersonsCoveredByAFirestationUrl1();
        int numberOfChildren = 0;
        int numberOfAdults = 0;
-
+       int match = 0;
        for (FirestationModel firestationModel: listOfFirestationModels.getListOfFirestationModels()){ //pour chaque firestation
 
            if(firestationModel.getStation().equals(firestationNumber)){ //si le n° de firestation est le même que le param
+               match = 1;
                String address = firestationModel.getAddress(); // j'appelle "adresse" l'adresse correspondante
                for(PersonModelForUrls personModelForUrls : listOfPersonModelsForUrls.getListOfPersonModelForUrls()){ //pour chaque personne
                    if(address.equals(personModelForUrls.getAddress())){ //si elle habite à "adressee
@@ -86,12 +87,15 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
                    }
                }
            }
+
        }
+        if(match ==0){
+            logger.error("parameter not found in file for url 1");
+            throw new RuntimeException("unsuccessful request of url 1");
+
+        }
        listOfPersonsCoveredByAFirestationUrl1.setNumberOfAdults(numberOfAdults);
        listOfPersonsCoveredByAFirestationUrl1.setNumberOfChildren(numberOfChildren);
-       if(listOfPersonsCoveredByAFirestationUrl1.getListOfPersonsCoveredByFirestation().isEmpty()){
-           logger.info("input parameter was not found in the file, please check spelling");
-       }
 
 
        return listOfPersonsCoveredByAFirestationUrl1;
@@ -99,11 +103,12 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
 
 }
     public ListOfChildrenAndTheHouseholdWithOneAddressUrl2 urlTwo(String address) {
-        logger.info("returns list of children living at {} as well as their ages and each one's household ", address);
+        logger.info("url 2 returns list of children living at {} as well as their ages and each one's household ", address);
 
         setUp();
         ListOfChildrenAndTheHouseholdWithOneAddressUrl2 listOfChildrenAndTheHouseholdWithOneAddressUrl2 = new ListOfChildrenAndTheHouseholdWithOneAddressUrl2();
-        List<PersonModelForUrls> householdPersonModelForUrls = personRepository.getPeopleInSameHouseHold(address, listOfPersonModelsForUrls);//setUp nécessaire???
+        List<PersonModelForUrls> householdPersonModelForUrls = new ArrayList<>();
+        householdPersonModelForUrls = personRepository.getPeopleInSameHouseHold(address, listOfPersonModelsForUrls);
         for(PersonModelForUrls personModelForUrls : householdPersonModelForUrls){
             if(personModelForUrls.getAge()<19){
                 ChildAndHisHouseholdForUrl2 childAndHisHouseholdForUrl2 = new ChildAndHisHouseholdForUrl2();
@@ -125,28 +130,34 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
     }
 
     public HashMap<String, ArrayList<String>> urlThree(String numberOfStation) {
-        logger.info("returns the list of phone numbers of all the people covered by firestation number {}", numberOfStation);
+        logger.info("url 3 returns the list of phone numbers of all the people covered by firestation number {}", numberOfStation);
         setUp();
         HashMap<String, ArrayList<String>> mapResultUrl3 = new HashMap<>();
         ArrayList<String> phoneNumbersCoveredByOneStation = new ArrayList<>();
-
+        int match = 0;
 
 
         ArrayList <String> listOfAddressesServedByOneStation = firestationRepository.findAddressesServedByOneStation(numberOfStation, listOfFirestationModels);
         for(String address:listOfAddressesServedByOneStation){//setUp nécessaire?oui
             for(PersonModelForUrls person : listOfPersonModelsForUrls.getListOfPersonModelForUrls() ){
                 if (address.equals(person.getAddress())){
+                    match = 1;
                     if(!phoneNumbersCoveredByOneStation.contains(person.getPhone())) {
                         phoneNumbersCoveredByOneStation.add(person.getPhone());
                     }
                 }
             }
         }
+        if(match ==0){
+            logger.error("parameter not found in file for url 3");
+            throw new RuntimeException("unsuccessful request of url 3");
+
+        }
         mapResultUrl3.put("Phone numbers for firestation " + numberOfStation, phoneNumbersCoveredByOneStation);
         return mapResultUrl3;
     }
    public HouseholdUrl4 urlFour(String address) {
-       logger.info("returns names, ages, phone and medical data of persons living at {}, as well as the corresponding station number", address);
+       logger.info("url 4 returns names, ages, phone and medical data of persons living at {}, as well as the corresponding station number", address);
         setUp();
         HouseholdUrl4 householdUrl4 = new HouseholdUrl4();
        List<PersonModelForUrls> householdPersonModelForUrls = personRepository.getPeopleInSameHouseHold(address, listOfPersonModelsForUrls);//setUp nécessaire?
@@ -176,7 +187,7 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
    }
 
     public ListOfHouseholdsCoveredByAFirestationUrl5 urlFive(String stringNumbersOfFirestations){
-        logger.info("returns the list of households covered by firestation or firestations {} ; each one includes names, ages, phone and medical data of persons in the household", stringNumbersOfFirestations);
+        logger.info("url 5 returns the list of households covered by firestation or firestations {} ; each one includes names, ages, phone and medical data of persons in the household", stringNumbersOfFirestations);
 
         setUp();// pour la deuxième fois!
         ListOfHouseholdsCoveredByAFirestationUrl5 listOfHouseholdsCoveredByAFirestationUrl5 = new ListOfHouseholdsCoveredByAFirestationUrl5();
@@ -197,13 +208,15 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
     }
 
     public PersonInfoUrl6 urlSix (String firstName, String lastName) {
-        logger.info("returns information for {} {} : address, age, mail, medical data", firstName, lastName);
-
+        logger.info("url 6 returns information for {} {} : address, age, mail, medical data", firstName, lastName);
+        int match = 0;
         setUp();
+
         PersonInfoUrl6 personInfoUrl6 = new PersonInfoUrl6();
 
         for (PersonModelForUrls person : listOfPersonModelsForUrls.getListOfPersonModelForUrls()) {
             if (firstName.equals(person.getFirstName()) && lastName.equals(person.getLastName())) {
+                match = 1;
                 personInfoUrl6.setFirstName(firstName);
                 personInfoUrl6.setLastName(lastName);
                 personInfoUrl6.setAddress(person.getAddress());
@@ -216,23 +229,31 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
 
             }
         }
+        if( match == 0){
+            logger.error("Unsuccessful calling of url 6: the name required is not in the data.");
+            throw new RuntimeException("name not found");
+        }
         return personInfoUrl6;
     }
 
     public ArrayList<String> urlSeven(String city) {
-        logger.info("returns a list of emails of the inhabitants of {}", city);
-
+        logger.info("url 7 returns a list of emails of the inhabitants of {}", city);
+        int match = 0;
         setUp();
         ArrayList<String> resultUrl7 = new ArrayList<>();
 
 
         for (PersonModelForUrls person : listOfPersonModelsForUrls.getListOfPersonModelForUrls()){
             if(person.getCity().equals(city)){
+                match = 1;
                 resultUrl7.add(person.getEmail());
             }
 
         }
-
+        if( match == 0){
+            logger.error("Unsuccessful calling of url 7: the city required is not in the data.");
+            throw new RuntimeException("city not found");
+        }
         return resultUrl7;
 
     }

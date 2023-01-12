@@ -11,7 +11,8 @@ public interface IFirestationRepository {
     public void setUpListOfFirestationsModel();
     public ListOfFirestationModels findAll();
     public ArrayList<String> findAddressesServedByOneStation(String numberOfStation, ListOfFirestationModels listOfFirestationModels);
-    public void deleteOneAddressStationMapping(String address);
+    public void deleteOneAddressStationMappingWithAddressParam(String address);
+    public void deleteOneOrMoreAddressStationMappingWithStationNumberParam(String stationNumber);
     public void addOneAddressStationMapping(FirestationModel model);
     public void updateFirestationNumberForAnAddress(FirestationModel updatedFirestationModel);
 }

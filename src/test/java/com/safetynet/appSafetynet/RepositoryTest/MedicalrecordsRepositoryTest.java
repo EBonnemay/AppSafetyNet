@@ -62,15 +62,30 @@ public class MedicalrecordsRepositoryTest {
         Assertions.assertFalse(listOfMedicalrecordsModels.getListOfMedicalrecordsModels().contains(model));
     }
     @Test
+    public void deleteNonExistentMedicarecordsModelTest(){
+        MedicalrecordsModel model = new MedicalrecordsModel();
+        model.setFirstName("Emma");
+        model.setLastName("Bovary");
+        Assertions.assertThrows(RuntimeException.class, () -> medicalrecordsRepository.deleteOneMedicalRecord(model.getFirstName()+" "+model.getLastName()));
+    }
+
+    @Test
     public void addMedicalrecordsModelTest() {
         MedicalrecordsModel added = new MedicalrecordsModel();
         added.setFirstName("Emma");
         added.setLastName("Bovary");
-        //listOfMedicalrecordsModels.getListOfMedicalrecordsModels().add(added);
+
         medicalrecordsRepository.addOneMedicalRecords(added);
         Assertions.assertTrue(listOfMedicalrecordsModels.getListOfMedicalrecordsModels().contains(added));
 
     }
+    @Test
+    public void addAlreadyExistentMedicalrecordsModelTest() {
+        MedicalrecordsModel existing = listOfMedicalrecordsModels.getListOfMedicalrecordsModels().get(4);
+
+        Assertions.assertThrows(RuntimeException.class, () ->  medicalrecordsRepository.addOneMedicalRecords(existing));
+    }
+
     @Test
     @DisplayName("update Allergies-add an allergy to the list")
     public void updateAllergiesAddNewAllergyTest(){
@@ -86,8 +101,23 @@ public class MedicalrecordsRepositoryTest {
         MedicalrecordsModel allisonFile = listOfMedicalrecordsModels.getListOfMedicalrecordsModels().get(17);
         Assertions.assertTrue(allisonFile.getAllergies().contains("nuts"));
 
+    }
+    @Test
+    @DisplayName("update non existent Medical File")
+    public void updateNonExistentMedicalFile(){
+        MedicalrecordsModel model = new MedicalrecordsModel();
+        model.setFirstName("Nathalie");
+        model.setLastName("Boyd");
+        ArrayList<String> list = new ArrayList<String>();
+        list.add("nuts");
+        list.add("apple");
+        model.setAllergies(list);
+        model.setBirthdate("31/10/2017");
+
+        Assertions.assertThrows(RuntimeException.class, () -> medicalrecordsRepository.updateAllergiesOrMeds(model));
 
     }
+
 
 
 }

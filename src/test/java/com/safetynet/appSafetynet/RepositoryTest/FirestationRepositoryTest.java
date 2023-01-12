@@ -74,7 +74,7 @@ public class FirestationRepositoryTest {
         FirestationModel model = listOfFirestationModels.getListOfFirestationModels().get(5);
         String address = model.getAddress();
         String station= model.getStation();
-        firestationRepository.deleteOneAddressStationMapping(address);
+        firestationRepository.deleteOneAddressStationMappingWithAddressParam(address);
         Assertions.assertFalse(listOfFirestationModels.getListOfFirestationModels().contains(model));
     }
     @Test
@@ -83,7 +83,7 @@ public class FirestationRepositoryTest {
         model.setAddress("3 Sailor Road");
         model.setStation("2");
 
-        Assertions.assertThrows(RuntimeException.class, ()-> firestationRepository.deleteOneAddressStationMapping("3 Sailor Road"));
+        Assertions.assertThrows(RuntimeException.class, ()-> firestationRepository.deleteOneAddressStationMappingWithAddressParam("3 Sailor Road"));
     }
     @Test
     public void addOneAddressStationMappingTest() {
@@ -105,7 +105,7 @@ public class FirestationRepositoryTest {
 
     }
     @Test
-    public void updateFirestationNumberWithExistingAddressTest(){
+    public void updateFirestationNumberWithExistingAddressTestAndDifferentFirestationNumber(){
         FirestationModel model = new FirestationModel();
         model.setAddress("112 Steppes Pl");
         model.setStation("new station number");
@@ -118,7 +118,7 @@ public class FirestationRepositoryTest {
 //ASSERT
     }
     @Test
-    public void updateFirestationNumberForAddressTestWithUnexistingAddress(){
+    public void updateFirestationNumberForAddressTestWithNonExistingAddress(){
         FirestationModel model = new FirestationModel();
         model.setAddress("12 Flower St");
         model.setStation("2");

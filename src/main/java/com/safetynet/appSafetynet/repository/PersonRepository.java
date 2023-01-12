@@ -182,12 +182,17 @@ public class PersonRepository implements IPersonRepository{
     @Override
     public ArrayList<PersonModelForUrls> getPeopleInSameHouseHold(String address, ListOfPersonModelsForUrls listOfPersonModelsForUrls){
         ArrayList<PersonModelForUrls> peopleInSameHousehold = new ArrayList<>();
-
+        int match = 0;
         for (PersonModelForUrls personModelForUrls : listOfPersonModelsForUrls.getListOfPersonModelForUrls()) {//array is null
             //ArrayList<String> firstAndLastName = new ArrayList<>();
             if (address.equals(personModelForUrls.getAddress())) {
+                match = 1;
                 peopleInSameHousehold.add(personModelForUrls);
             }
+        }
+        if( match == 0){
+            logger.error("Unsuccessful calling of url : the address required is not in the data.");
+            throw new RuntimeException("address not found");
         }
         return peopleInSameHousehold;
     }

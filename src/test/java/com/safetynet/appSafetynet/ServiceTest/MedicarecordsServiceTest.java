@@ -44,7 +44,7 @@ public class MedicarecordsServiceTest {
     }
     @Test
     public void deleteMedicalrecordsModelTest(){
-        MedicalrecordsModel model = listOfMedicalrecordsModels.getListOfMedicalrecordsModels().get(5);
+        MedicalrecordsModel model = listOfMedicalrecordsModels.getListOfMedicalrecordsModels().get(2);
         String firstName = model.getFirstName();
         String lastName = model.getLastName();
         medicalrecordsService.deleteMedicalRecordsModel(firstName+" "+lastName);

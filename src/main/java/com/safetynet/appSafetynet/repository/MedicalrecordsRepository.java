@@ -111,8 +111,9 @@ public class MedicalrecordsRepository implements IMedicalrecordsRepository {
                 listOfMedicalrecordsModels.getListOfMedicalrecordsModels().remove(element);
 
             }
+
         }
-        if (match == 0) {
+        if(match == 0) {
             logger.error("the medical record to delete is not in the data. No deleting");
             throw new RuntimeException("delete failed");
         }

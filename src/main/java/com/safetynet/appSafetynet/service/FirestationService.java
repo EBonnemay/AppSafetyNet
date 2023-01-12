@@ -25,8 +25,14 @@ public class FirestationService {
 
     }
 
-    public void deleteFirestation(String address) {
-        firestationRepository.deleteOneAddressStationMapping(address);
+    public void deleteFirestation(String whichParam, String addressOrFirestationNumber) {
+        if(whichParam.equals("address")){
+            firestationRepository.deleteOneAddressStationMappingWithAddressParam(addressOrFirestationNumber);
+        }
+        if(whichParam.equals("firestationNumber")){
+            firestationRepository.deleteOneOrMoreAddressStationMappingWithStationNumberParam(addressOrFirestationNumber);
+        }
+
 
     }
     public void addFirestation(FirestationModel model){
