@@ -10,7 +10,6 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 @SpringBootTest
@@ -26,9 +25,9 @@ public class MedicalrecordsRepositoryTest {
 
     @BeforeEach
 
-    public void setUp() throws FileNotFoundException {
+    public void setUp() {
        MakingModels makingModels = medicalrecordsRepository.getMakingModels();
-       Any root = makingModels.modelMaker();
+       Any root = makingModels.modelMaker("classpath:data.json");
 
        listOfMedicalrecordsModels = medicalrecordsRepository.fillInMedicalrecordsModels(root);
     }
@@ -40,7 +39,7 @@ public class MedicalrecordsRepositoryTest {
    public void fillInMedicalRecordsModelsTest(){
        listOfMedicalrecordsModels.getListOfMedicalrecordsModels().clear();
        MakingModels makingModels = medicalrecordsRepository.getMakingModels();
-       Any root = makingModels.modelMaker();
+       Any root = makingModels.modelMaker("classpath:data.json");
 
        medicalrecordsRepository.fillInMedicalrecordsModels(root);
        listOfMedicalrecordsModels = medicalrecordsRepository.fillInMedicalrecordsModels(root);
@@ -92,7 +91,7 @@ public class MedicalrecordsRepositoryTest {
         MedicalrecordsModel model = new MedicalrecordsModel();
         model.setFirstName("Allison");
         model.setLastName("Boyd");
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         list.add("nuts");
         list.add("apple");
         model.setAllergies(list);
@@ -108,7 +107,7 @@ public class MedicalrecordsRepositoryTest {
         MedicalrecordsModel model = new MedicalrecordsModel();
         model.setFirstName("Nathalie");
         model.setLastName("Boyd");
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         list.add("nuts");
         list.add("apple");
         model.setAllergies(list);

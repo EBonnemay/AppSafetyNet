@@ -7,11 +7,13 @@ import com.safetynet.appSafetynet.model.PersonModel;
 import com.safetynet.appSafetynet.model.PersonModelForUrls;
 import com.safetynet.appSafetynet.repository.MakingModels;
 import com.safetynet.appSafetynet.repository.PersonRepository;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 @SpringBootTest
@@ -28,9 +30,9 @@ public class PersonRepositoryTest {
 
     @BeforeEach
     //désérialiser le fichier data
-    public void setUp() throws FileNotFoundException {
+    public void setUp() {
         MakingModels makingModels = personRepository.getMakingModels();
-        Any root = makingModels.modelMaker();
+        Any root = makingModels.modelMaker("classpath:data.json");
 
         listOfPersonModels = personRepository.fillInPersonModels(root);
         listOfPersonModelsForUrls = personRepository.fillInPersonModelsForUrls(root);
@@ -40,7 +42,7 @@ public class PersonRepositoryTest {
    public void fillInPersonModelsTest() {
        listOfPersonModels.getListOfPersonModels().clear();
        makingModels = personRepository.getMakingModels();
-       Any root = makingModels.modelMaker();
+       Any root = makingModels.modelMaker("classpath:data.json");
 
        listOfPersonModels = personRepository.fillInPersonModels(root);
        Assertions.assertTrue(listOfPersonModels.getListOfPersonModels().size()>0);
@@ -50,7 +52,7 @@ public class PersonRepositoryTest {
     public void fillInPersonModelsForUrlsTest() {
         listOfPersonModelsForUrls.getListOfPersonModelForUrls().clear();
         makingModels = personRepository.getMakingModels();
-        Any root = makingModels.modelMaker();
+        Any root = makingModels.modelMaker("classpath:data.json");
 
         listOfPersonModelsForUrls = personRepository.fillInPersonModelsForUrls(root);
         Assertions.assertTrue(listOfPersonModelsForUrls.getListOfPersonModelForUrls().size()>0);
@@ -135,12 +137,8 @@ public class PersonRepositoryTest {
     }
     @Test
     public void howOldIsThisPerson2Test(){
-//ARRANGE
         String dateOfBirth = "10/31/2017";
-        int Expected  = 5;
         Assertions.assertEquals(5, personRepository.howOldIsThisPerson(dateOfBirth));
-        //ACT //ASSERT
-
 
     }
 }

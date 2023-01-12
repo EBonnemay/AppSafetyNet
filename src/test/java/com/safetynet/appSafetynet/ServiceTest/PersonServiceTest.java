@@ -14,8 +14,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.FileNotFoundException;
-
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class PersonServiceTest {
@@ -31,9 +29,9 @@ public class PersonServiceTest {
 
     @BeforeEach
 
-    public void setUp() throws FileNotFoundException {
+    public void setUp()  {
         MakingModels makingModels = personRepository.getMakingModels();
-        Any root = makingModels.modelMaker();
+        Any root = makingModels.modelMaker("classpath:data.json");
 
         listOfPersonModelsForUrls = personRepository.fillInPersonModelsForUrls(root);
         listOfPersonModels = personRepository.fillInPersonModels(root);
@@ -43,7 +41,7 @@ public class PersonServiceTest {
 
     public void getPersonsTest() {
         ListOfPersonModels result = personService.getPersons();
-        Assertions.assertFalse(result.getListOfPersonModels().size()==0);
+        Assertions.assertNotEquals(0, result.getListOfPersonModels().size());
 
     }
     @Test

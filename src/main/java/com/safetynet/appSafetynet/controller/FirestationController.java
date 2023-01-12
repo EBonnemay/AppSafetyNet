@@ -23,7 +23,7 @@ public class FirestationController {
     }
 
     @PutMapping("/firestation")
-    public void updateFirestation(@RequestBody FirestationModel model) throws Exception {
+    public void updateFirestation(@RequestBody FirestationModel model) {
         firestationService.updateFirestation(model);
         logger.info("Firestation updated successfully");
 

@@ -10,7 +10,6 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 
 
@@ -28,9 +27,9 @@ public class MedicarecordsServiceTest {
 
     @BeforeEach
 
-    public void setUp() throws FileNotFoundException {
+    public void setUp() {
         MakingModels makingModels = medicalrecordsRepository.getMakingModels();
-        Any root  = makingModels.modelMaker();
+        Any root  = makingModels.modelMaker("classpath:data.json");
 
         listOfMedicalrecordsModels = medicalrecordsRepository.fillInMedicalrecordsModels(root);
     }

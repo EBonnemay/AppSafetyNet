@@ -9,7 +9,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
@@ -34,7 +33,7 @@ public class PersonRepository implements IPersonRepository{
     Any root;
     static final Logger logger = LogManager.getLogger();
 
-    public PersonRepository() throws FileNotFoundException {
+    public PersonRepository()  {
     }
     @Override
     public ListOfPersonModelsForUrls fillInPersonModelsForUrls(Any deserializedFile) {
@@ -113,7 +112,7 @@ public class PersonRepository implements IPersonRepository{
     public void setUpListOfPersonModelsForUrls() {
         if (listOfPersonModelsForUrls.getListOfPersonModelForUrls().size() == 0) {
             if (root == null) {
-                root = makingModels.modelMaker();
+                root = makingModels.modelMaker("classpath:data.json");
             }
             listOfPersonModelsForUrls = fillInPersonModelsForUrls(root);
             System.out.println("listOfPersonModels for Urls filled in");
@@ -123,7 +122,7 @@ public class PersonRepository implements IPersonRepository{
     public void setUpListOfPersonModels(){
         if (listOfPersonModels.getListOfPersonModels().size()==0) {
             if (root == null) {
-                root = makingModels.modelMaker();
+                root = makingModels.modelMaker("classpath:data.json");
             }
             listOfPersonModels = fillInPersonModels(root);
         }
@@ -201,8 +200,7 @@ public class PersonRepository implements IPersonRepository{
         LocalDate today = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         LocalDate dateOfBirth = LocalDate.parse(stringDateOfBirth, formatter);
-        int age = Period.between(dateOfBirth, today).getYears();
-        return age;
+        return Period.between(dateOfBirth, today).getYears();
     }
 
 }

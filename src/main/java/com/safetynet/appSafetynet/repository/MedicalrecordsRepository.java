@@ -10,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +23,7 @@ public class MedicalrecordsRepository implements IMedicalrecordsRepository {
     Any root;
     static final Logger logger = LogManager.getLogger();
 
-    public MedicalrecordsRepository() throws FileNotFoundException {
+    public MedicalrecordsRepository()  {
     }
 
     @Override
@@ -75,7 +74,7 @@ public class MedicalrecordsRepository implements IMedicalrecordsRepository {
     public void setUpListOfMedicalrecordsModel() {
         if (listOfMedicalrecordsModels.getListOfMedicalrecordsModels().size() == 0) {
             if (root == null) {
-                root = makingModels.modelMaker();
+                root = makingModels.modelMaker("classpath:data.json");
             }
             listOfMedicalrecordsModels = fillInMedicalrecordsModels(root);
             System.out.println("listOfMedicalrecordsModels filled in");

@@ -9,14 +9,14 @@ import com.safetynet.appSafetynet.model.PersonModelForUrls;
 import java.util.ArrayList;
 
 public interface IPersonRepository {
-    public ListOfPersonModelsForUrls fillInPersonModelsForUrls(Any deserializedFile);
-    public ListOfPersonModels fillInPersonModels(Any deserializedFile);
-    public void setUpListOfPersonModelsForUrls();
-    public void setUpListOfPersonModels();
-    public ListOfPersonModels findAll();
-    public void addOnePerson(PersonModel person);
-    public void deleteOnePerson(String firstLastName);
-    public void updatePerson(PersonModel updatedPerson );
-    public int howOldIsThisPerson(String stringDateOfBirth);
-    public ArrayList<PersonModelForUrls> getPeopleInSameHouseHold(String address, ListOfPersonModelsForUrls listOfPersonModelsForUrls);
+    ListOfPersonModelsForUrls fillInPersonModelsForUrls(Any deserializedFile);
+    ListOfPersonModels fillInPersonModels(Any deserializedFile);
+    void setUpListOfPersonModelsForUrls();
+    void setUpListOfPersonModels();
+    ListOfPersonModels findAll();
+    void addOnePerson(PersonModel person);
+    void deleteOnePerson(String firstLastName);
+    void updatePerson(PersonModel updatedPerson );
+    int howOldIsThisPerson(String stringDateOfBirth);
+    ArrayList<PersonModelForUrls> getPeopleInSameHouseHold(String address, ListOfPersonModelsForUrls listOfPersonModelsForUrls);
 }

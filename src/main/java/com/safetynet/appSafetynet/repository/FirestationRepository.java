@@ -57,7 +57,7 @@ public class FirestationRepository implements IFirestationRepository{
     public void setUpListOfFirestationsModel(){
         if (listOfFirestationModels.getListOfFirestationModels().size()==0) {
             if (root == null) {
-                root = makingModels.modelMaker();
+                root = makingModels.modelMaker("classpath:data.json");
             }
             listOfFirestationModels = fillInFirestationModels(root);
         }
@@ -98,10 +98,8 @@ public class FirestationRepository implements IFirestationRepository{
             }
         }
         if(match==0){
-            if(match == 0) {
-                logger.error("the key address of this firestation Model does not exist in data ; no deleting");
-                throw new RuntimeException("no deleting");
-            }
+            logger.error("the key address of this firestation Model does not exist in data ; no deleting");
+            throw new RuntimeException("no deleting");
         }
 
     }

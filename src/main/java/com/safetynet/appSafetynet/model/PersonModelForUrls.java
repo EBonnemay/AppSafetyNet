@@ -16,8 +16,6 @@ import java.util.List;
 public class PersonModelForUrls {
 
     private String firstName;
-
-
     private String lastName;
 
     private String address;

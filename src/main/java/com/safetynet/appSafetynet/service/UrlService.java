@@ -43,7 +43,7 @@ public class UrlService implements IUrlService{
 
    public void setUp(){
        if (root ==null) {
-           root = makingModels.modelMaker();
+           root = makingModels.modelMaker("classpath:data.json");
        }
 
        listOfFirestationModels = firestationRepository.fillInFirestationModels(root);
@@ -107,8 +107,7 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
 
         setUp();
         ListOfChildrenAndTheHouseholdWithOneAddressUrl2 listOfChildrenAndTheHouseholdWithOneAddressUrl2 = new ListOfChildrenAndTheHouseholdWithOneAddressUrl2();
-        List<PersonModelForUrls> householdPersonModelForUrls = new ArrayList<>();
-        householdPersonModelForUrls = personRepository.getPeopleInSameHouseHold(address, listOfPersonModelsForUrls);
+        List<PersonModelForUrls> householdPersonModelForUrls = personRepository.getPeopleInSameHouseHold(address, listOfPersonModelsForUrls);
         for(PersonModelForUrls personModelForUrls : householdPersonModelForUrls){
             if(personModelForUrls.getAge()<19){
                 ChildAndHisHouseholdForUrl2 childAndHisHouseholdForUrl2 = new ChildAndHisHouseholdForUrl2();

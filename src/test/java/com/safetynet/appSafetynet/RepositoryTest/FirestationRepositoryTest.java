@@ -9,7 +9,6 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 @SpringBootTest
@@ -21,17 +20,13 @@ public class FirestationRepositoryTest {
 
     @Autowired
     ListOfFirestationModels listOfFirestationModels;
-   // @Autowired
-    //MakingModels makingModels;
-
-
 
     @BeforeEach
 
-    public void setUp() throws FileNotFoundException {
+    public void setUp() {
         MakingModels makingModels = firestationRepository.getMakingModels();
         Any root;
-        root = makingModels.modelMaker();
+        root = makingModels.modelMaker("classpath:data.json");
 
         listOfFirestationModels = firestationRepository.fillInFirestationModels(root);
 
@@ -44,9 +39,7 @@ public class FirestationRepositoryTest {
     public void fillInFirestationModelsTest (){
         listOfFirestationModels.getListOfFirestationModels().clear();
         MakingModels makingModels = firestationRepository.getMakingModels();
-        Any root = makingModels.modelMaker();
-
-        //listOfFirestationModels = firestationRepository.fillInFirestationModels(root);
+        Any root = makingModels.modelMaker("classpath:data.json");
         listOfFirestationModels = firestationRepository.fillInFirestationModels(root);
 
         Assertions.assertTrue(listOfFirestationModels.getListOfFirestationModels().size()>0);
@@ -57,7 +50,6 @@ public class FirestationRepositoryTest {
     @Test
     public void findAllFirestationModelsTest(){
         listOfFirestationModels = firestationRepository.findAll();
-        System.out.println(listOfFirestationModels.getListOfFirestationModels());
         Assertions.assertEquals(13, firestationRepository.findAll().getListOfFirestationModels().size());
 
 
@@ -73,7 +65,6 @@ public class FirestationRepositoryTest {
     public void deleteOneAddressStationMappingTest() {
         FirestationModel model = listOfFirestationModels.getListOfFirestationModels().get(5);
         String address = model.getAddress();
-        String station= model.getStation();
         firestationRepository.deleteOneAddressStationMappingWithAddressParam(address);
         Assertions.assertFalse(listOfFirestationModels.getListOfFirestationModels().contains(model));
     }
@@ -87,7 +78,7 @@ public class FirestationRepositoryTest {
     }
     @Test
     public void addOneAddressStationMappingTest() {
-//ARRANGE
+
         FirestationModel added = new FirestationModel();
         added.setAddress("10 downing street");
         added.setStation("5");
@@ -109,20 +100,16 @@ public class FirestationRepositoryTest {
         FirestationModel model = new FirestationModel();
         model.setAddress("112 Steppes Pl");
         model.setStation("new station number");
-        //String address = listOfFirestationModels.getListOfFirestationModels().get(5).getAddress();
 
         firestationRepository.updateFirestationNumberForAnAddress(model);
         Assertions.assertEquals("new station number", listOfFirestationModels.getListOfFirestationModels().get(5).getStation());
-//ARRANGE
-//ACT
-//ASSERT
     }
+
     @Test
     public void updateFirestationNumberForAddressTestWithNonExistingAddress(){
         FirestationModel model = new FirestationModel();
         model.setAddress("12 Flower St");
         model.setStation("2");
-        RuntimeException r = new RuntimeException();
         Assertions.assertThrows(RuntimeException.class, () -> firestationRepository.updateFirestationNumberForAnAddress(model));
 
     }

@@ -21,7 +21,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,9 +57,9 @@ public class UrlServiceTest {
     @BeforeAll
 
     //désérialiser le fichier data
-    public void setUp() throws FileNotFoundException {
+    public void setUp() {
         MakingModels makingModels = firestationRepository.getMakingModels();
-        Any root = makingModels.modelMaker();
+        Any root = makingModels.modelMaker("classpath:data.json");
 
         listOfFirestationModels = firestationRepository.fillInFirestationModels(root);
         listOfMedicalrecordsModels = medicalrecordsRepository.fillInMedicalrecordsModels(root);
@@ -114,11 +113,9 @@ public class UrlServiceTest {
     @Test
     public void urlThreeTest(){
         HashMap<String, ArrayList<String>> result = urlService.urlThree("1");
-        ArrayList listOfPhones = result.get("Phone numbers for firestation 1");
+        ArrayList<String> listOfPhones = result.get("Phone numbers for firestation 1");
         Assertions.assertEquals(4, listOfPhones.size());
-
     }
-
 
     @Test
     public void urlFourTest(){

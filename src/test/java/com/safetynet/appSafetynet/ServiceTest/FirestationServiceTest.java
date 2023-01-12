@@ -13,8 +13,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.FileNotFoundException;
-
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class FirestationServiceTest {
@@ -29,9 +27,9 @@ public class FirestationServiceTest {
 
     @BeforeEach
 
-    public void setUp() throws FileNotFoundException {
+    public void setUp() {
         MakingModels makingModels = firestationRepository.getMakingModels();
-        Any root = makingModels.modelMaker();
+        Any root = makingModels.modelMaker("classpath:data.json");
 
         listOfFirestationModels = firestationRepository.fillInFirestationModels(root);
     }
@@ -40,7 +38,7 @@ public class FirestationServiceTest {
 
     public void getFirestationsTest() {
         ListOfFirestationModels result = firestationService.getFirestations();
-        Assertions.assertFalse(result.getListOfFirestationModels().size()==0);
+        Assertions.assertNotEquals(0, result.getListOfFirestationModels().size());
 
     }
     @Test
@@ -57,7 +55,6 @@ public class FirestationServiceTest {
         FirestationModel model = listOfFirestationModels.getListOfFirestationModels().get(5);
         String param = "address";
         String addressContent = model.getAddress();
-        String station= model.getStation();
         firestationService.deleteFirestation(param, addressContent);
         Assertions.assertFalse(listOfFirestationModels.getListOfFirestationModels().contains(model));
     }
