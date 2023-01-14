@@ -29,7 +29,6 @@ public class MakingModelsTest {
     public void modelMakerWithEmptyFileTest(){
         Exception exception = Assertions.assertThrows(Exception.class, () -> makingModels.modelMaker("classpath:data3.json"));
         Assertions.assertEquals("the file could not be read", exception.getMessage());
-        //.assertThrows(RuntimeException.class, ()-> makingModels.modelMaker("classpath:data3.json"));
     }
 
 

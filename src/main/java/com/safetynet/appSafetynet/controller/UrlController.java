@@ -64,8 +64,8 @@ public class UrlController {
 
 
     @GetMapping("/personInfo")
-    PersonInfoUrl6 urlSix(String firstName, String lastName) {
-        PersonInfoUrl6 result = urlService.urlSix(firstName, lastName);
+    ListOfPersonsInfosUrl6 urlSix(String firstName, String lastName){
+       ListOfPersonsInfosUrl6 result = urlService.urlSix(firstName, lastName);
         logger.info("successful calling of url 6");
         return result;
     }

@@ -2,9 +2,9 @@ package com.safetynet.appSafetynet.RepositoryTest;
 
 import com.jsoniter.any.Any;
 import com.safetynet.appSafetynet.model.ListOfPersonModels;
-import com.safetynet.appSafetynet.model.ListOfPersonModelsForUrls;
+
 import com.safetynet.appSafetynet.model.PersonModel;
-import com.safetynet.appSafetynet.model.PersonModelForUrls;
+
 import com.safetynet.appSafetynet.repository.MakingModels;
 import com.safetynet.appSafetynet.repository.PersonRepository;
 import org.junit.jupiter.api.Assertions;
@@ -23,8 +23,7 @@ public class PersonRepositoryTest {
     PersonRepository personRepository;
     @Autowired
     ListOfPersonModels listOfPersonModels;
-    @Autowired
-    ListOfPersonModelsForUrls listOfPersonModelsForUrls;
+
     @Autowired
     MakingModels makingModels;
 
@@ -35,7 +34,6 @@ public class PersonRepositoryTest {
         Any root = makingModels.modelMaker("classpath:data.json");
 
         listOfPersonModels = personRepository.fillInPersonModels(root);
-        listOfPersonModelsForUrls = personRepository.fillInPersonModelsForUrls(root);
     }
 
    @Test
@@ -48,16 +46,7 @@ public class PersonRepositoryTest {
        Assertions.assertTrue(listOfPersonModels.getListOfPersonModels().size()>0);
 
    }
-    @Test
-    public void fillInPersonModelsForUrlsTest() {
-        listOfPersonModelsForUrls.getListOfPersonModelForUrls().clear();
-        makingModels = personRepository.getMakingModels();
-        Any root = makingModels.modelMaker("classpath:data.json");
 
-        listOfPersonModelsForUrls = personRepository.fillInPersonModelsForUrls(root);
-        Assertions.assertTrue(listOfPersonModelsForUrls.getListOfPersonModelForUrls().size()>0);
-
-    }
     @Test
     public void findAllPersonsTest(){
         listOfPersonModels.getListOfPersonModels().clear();
@@ -126,9 +115,9 @@ public class PersonRepositoryTest {
     }
     @Test
     public void getPeopleInSameHouseholdTest(){
-        ArrayList<PersonModelForUrls> actual = personRepository.getPeopleInSameHouseHold("892 Downing Ct", listOfPersonModelsForUrls);
-        ArrayList<PersonModelForUrls> expected = new ArrayList<>();
-        for(PersonModelForUrls person : listOfPersonModelsForUrls.getListOfPersonModelForUrls()){
+        ArrayList<PersonModel> actual = personRepository.getPeopleInSameHouseHold("892 Downing Ct", listOfPersonModels);
+        ArrayList<PersonModel> expected = new ArrayList<>();
+        for(PersonModel person : listOfPersonModels.getListOfPersonModels()){
             if(person.getLastName().equals("Zemicks")){
                 expected.add(person);
             }
@@ -136,7 +125,7 @@ public class PersonRepositoryTest {
         Assertions.assertEquals(expected, actual);
     }
     @Test
-    public void howOldIsThisPerson2Test(){
+    public void howOldIsThisPersonTest(){
         String dateOfBirth = "10/31/2017";
         Assertions.assertEquals(5, personRepository.howOldIsThisPerson(dateOfBirth));
 

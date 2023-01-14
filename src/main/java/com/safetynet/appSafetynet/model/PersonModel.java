@@ -18,5 +18,6 @@ public class PersonModel {
 
     private String phone;
     private String email;
+    private MedicalrecordsModel medicalrecordsModel;
 
 }

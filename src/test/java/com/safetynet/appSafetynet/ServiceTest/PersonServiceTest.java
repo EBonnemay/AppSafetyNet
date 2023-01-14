@@ -2,7 +2,7 @@ package com.safetynet.appSafetynet.ServiceTest;
 
 import com.jsoniter.any.Any;
 import com.safetynet.appSafetynet.model.ListOfPersonModels;
-import com.safetynet.appSafetynet.model.ListOfPersonModelsForUrls;
+
 import com.safetynet.appSafetynet.model.PersonModel;
 import com.safetynet.appSafetynet.repository.MakingModels;
 import com.safetynet.appSafetynet.repository.PersonRepository;
@@ -22,8 +22,7 @@ public class PersonServiceTest {
     @Autowired
     PersonRepository personRepository;
 
-    @Autowired
-    ListOfPersonModelsForUrls listOfPersonModelsForUrls;
+
     @Autowired
     ListOfPersonModels listOfPersonModels;
 
@@ -33,7 +32,6 @@ public class PersonServiceTest {
         MakingModels makingModels = personRepository.getMakingModels();
         Any root = makingModels.modelMaker("classpath:data.json");
 
-        listOfPersonModelsForUrls = personRepository.fillInPersonModelsForUrls(root);
         listOfPersonModels = personRepository.fillInPersonModels(root);
     }
 

@@ -51,20 +51,12 @@ public class FirestationServiceTest {
         Assertions.assertEquals("new station number", listOfFirestationModels.getListOfFirestationModels().get(10).getStation());
     }
     @Test
-    public void deleteFirestationWithAddressParamTest() {
+    public void deleteFirestationTest() {
         FirestationModel model = listOfFirestationModels.getListOfFirestationModels().get(5);
-        String param = "address";
-        String addressContent = model.getAddress();
-        firestationService.deleteFirestation(param, addressContent);
+        firestationService.deleteFirestation(model);
         Assertions.assertFalse(listOfFirestationModels.getListOfFirestationModels().contains(model));
     }
-    @Test
-    public void deleteFirestationWithFirestationNumberParamTest() {
-        String param = "firestationNumber";
-        String fireNumber = "4";
-        firestationService.deleteFirestation(param, fireNumber);
-        Assertions.assertEquals(11,listOfFirestationModels.getListOfFirestationModels().size());
-    }
+
     @Test
     public void addFirestationTest(){
         FirestationModel added = new FirestationModel();

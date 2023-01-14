@@ -87,11 +87,11 @@ public class FirestationRepository implements IFirestationRepository{
         return listOfAddressesServedByOneStation;
     }
     @Override
-    public void deleteOneOrMoreAddressStationMappingWithStationNumberParam(String stationNumber){
+    public void deleteFirestation(FirestationModel model){
         setUpListOfFirestationsModel();
         int match = 0;
         for (int i=0;i<listOfFirestationModels.getListOfFirestationModels().size();i++) {
-            if (listOfFirestationModels.getListOfFirestationModels().get(i).getStation().equals(stationNumber)) {
+            if (listOfFirestationModels.getListOfFirestationModels().get(i).equals(model)) {
                 match = 1;
                 listOfFirestationModels.getListOfFirestationModels().remove(listOfFirestationModels.getListOfFirestationModels().get(i));
                 i--;
@@ -103,26 +103,7 @@ public class FirestationRepository implements IFirestationRepository{
         }
 
     }
-    @Override
-    public void deleteOneAddressStationMappingWithAddressParam(String address){
-        setUpListOfFirestationsModel();
-        List <FirestationModel> theList = listOfFirestationModels.getListOfFirestationModels();
-        int match = 0;
-        for (int i=0;i<listOfFirestationModels.getListOfFirestationModels().size();i++) {
-            if (listOfFirestationModels.getListOfFirestationModels().get(i).getAddress().equals(address)) {
-                match = 1;
-                theList.remove(listOfFirestationModels.getListOfFirestationModels().get(i));
-                i--;
-            }
-        }
-        if(match==0){
-            if(match == 0) {
-                logger.error("the key address of this firestation Model does not exist in data ; no deleting");
-                throw new RuntimeException("no deleting");
-            }
-        }
 
-    }
     @Override
     public void addOneAddressStationMapping(FirestationModel model){
         setUpListOfFirestationsModel();

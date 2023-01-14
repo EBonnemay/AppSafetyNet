@@ -4,15 +4,11 @@ import com.jsoniter.any.Any;
 import com.safetynet.appSafetynet.model.ListOfFirestationModels;
 import com.safetynet.appSafetynet.model.ListOfMedicalrecordsModels;
 import com.safetynet.appSafetynet.model.ListOfPersonModels;
-import com.safetynet.appSafetynet.model.ListOfPersonModelsForUrls;
 import com.safetynet.appSafetynet.model.dto.*;
 import com.safetynet.appSafetynet.repository.FirestationRepository;
 import com.safetynet.appSafetynet.repository.MakingModels;
 import com.safetynet.appSafetynet.repository.MedicalrecordsRepository;
 import com.safetynet.appSafetynet.repository.PersonRepository;
-import com.safetynet.appSafetynet.service.FirestationService;
-import com.safetynet.appSafetynet.service.MedicalrecordsService;
-import com.safetynet.appSafetynet.service.PersonService;
 import com.safetynet.appSafetynet.service.UrlService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -36,18 +32,12 @@ public class UrlServiceTest {
     MedicalrecordsRepository medicalrecordsRepository;
     @Autowired
     PersonRepository personRepository;
-    @Autowired
-    FirestationService firestationService;
-    @Autowired
-    MedicalrecordsService medicalrecordsService;
-    @Autowired
-    PersonService personService;
+
     @Autowired
     ListOfMedicalrecordsModels listOfMedicalrecordsModels;
     @Autowired
     ListOfFirestationModels listOfFirestationModels;
-    @Autowired
-    ListOfPersonModelsForUrls listOfPersonModelsForUrls;
+
    @Autowired
    ListOfPersonModels listOfPersonModels;
 
@@ -63,7 +53,6 @@ public class UrlServiceTest {
 
         listOfFirestationModels = firestationRepository.fillInFirestationModels(root);
         listOfMedicalrecordsModels = medicalrecordsRepository.fillInMedicalrecordsModels(root);
-        listOfPersonModelsForUrls = personRepository.fillInPersonModelsForUrls(root);
         listOfPersonModels = personRepository.fillInPersonModels(root);
     }
 
@@ -93,10 +82,8 @@ public class UrlServiceTest {
         String firstNameChild2 = child2AndHousehold.getFirstNameOfChild();
         String lastNameChild1 = child1AndHousehold.getLastNameOfChild();
         String lastNameChild2 = child2AndHousehold.getLastNameOfChild();
-        int ageChild1 = child1AndHousehold.getAge();
-        int ageChild2 = child2AndHousehold.getAge();
+
         List<String> listOfHouseholdChild1 = child1AndHousehold.getListOfOtherMembers();
-        List<String> listOfHouseholdChild2 = child2AndHousehold.getListOfOtherMembers();
 
         Assertions.assertEquals(2, result.getListOfChidrenAndHouseholdWithOneAddress().size());
         Assertions.assertTrue(resultList.contains(child1AndHousehold));
@@ -147,30 +134,26 @@ médicaux (médicaments, posologie et allergies) de chaque personne.*/
         for(HouseholdUrl4 household : result.getListOfHouseholdsCoveredByAFirestationUrl5()){
             System.out.println(household);
         }
-        //System.out.println(result.getListOfHouseholdsCoveredByAFirestationUrl5().);
+
         Assertions.assertEquals(5, result.getListOfHouseholdsCoveredByAFirestationUrl5().size());
-        //644 Gershwin Cir > "Peter", "lastName":"Duncan",
-        //489 Manchester St > "Lily", "lastName":"Cooper"
-        //908 73rd St > Jamie", "lastName":"Peters"
-        //112 Steppes Pl > "Ron", "lastName":"Peters",, Allison", "lastName":"Boyd"
-        //947 E. Rose Dr "Brian", "lastName":"Stelzer", "address":"947 E. Rose Dr", "city":"Culver", "zip":"97451", "phone":"841-874-7784", "email":"bstel@email.com" },
-        //        { "firstName":"Shawna", "lastName":"Stelzer", "address":"947 E. Rose Dr", "city":"Culver", "zip":"97451", "phone":"841-874-7784", "email":"ssanw@email.com" },
-        //        { "firstName":"Kendrik", "lastName":"Stelzer", "address":"947 E. Rose Dr", "city":"Culver", "zip":"97451", "phone":"841-874-7784", "email":"bstel@email.com" },
-        //        (steppes est à la fois 3 et 4)
+
     }
 
     @Test
     public void urlSixTest(){
-        PersonInfoUrl6 result = urlService.urlSix ("Brian", "Stelzer");
-        Assertions.assertEquals( "947 E. Rose Dr",result.getAddress());
-        int age = personRepository.howOldIsThisPerson("12/06/1975");
-        Assertions.assertEquals( age,result.getAge() );
-        Assertions.assertEquals( "bstel@email.com",result.getMailAddress() );
-        Assertions.assertTrue(result.getMedicalRecordsForUrl4And5().getMedications().containsKey("hydrapermazol") );
-        Assertions.assertEquals("400mg", result.getMedicalRecordsForUrl4And5().getMedications().get("hydrapermazol") );
 
-        Assertions.assertTrue(result.getMedicalRecordsForUrl4And5().getListOfAllergies().contains("nillacilan"));
+        ListOfPersonsInfosUrl6 result = urlService.urlSix ("Brian", "Stelzer");
+        Assertions.assertEquals( "947 E. Rose Dr",result.getListOfPersonInfoForUrl6().get(0).getAddress());
+        int age = personRepository.howOldIsThisPerson("12/06/1975");
+        Assertions.assertEquals( age,result.getListOfPersonInfoForUrl6().get(0).getAge() );
+        Assertions.assertEquals( "bstel@email.com",result.getListOfPersonInfoForUrl6().get(0).getMailAddress() );
+        Assertions.assertTrue(result.getListOfPersonInfoForUrl6().get(0).getMedicalRecordsForUrl4And5().getMedications().containsKey("hydrapermazol") );
+        Assertions.assertEquals("400mg", result.getListOfPersonInfoForUrl6().get(0).getMedicalRecordsForUrl4And5().getMedications().get("hydrapermazol") );
+
+        Assertions.assertTrue(result.getListOfPersonInfoForUrl6().get(0).getMedicalRecordsForUrl4And5().getListOfAllergies().contains("nillacilan"));
     }
+
+
 
     @Test
     public void urlSevenTest(){

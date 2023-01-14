@@ -3,7 +3,7 @@ package com.safetynet.appSafetynet.model.dto;
 import lombok.Data;
 
 @Data
-public class PersonInfoUrl6 {
+public class PersonInfoForUrl6 {
     private String firstName;
     private String lastName;
     private String address;

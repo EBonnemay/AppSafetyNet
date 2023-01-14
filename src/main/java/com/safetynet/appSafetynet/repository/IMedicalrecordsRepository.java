@@ -10,5 +10,5 @@ public interface IMedicalrecordsRepository {
     ListOfMedicalrecordsModels findAll();
     void addOneMedicalRecords(MedicalrecordsModel element);
     void deleteOneMedicalRecord(String firstLastName);
-    void updateAllergiesOrMeds(MedicalrecordsModel model);
+    void updateMedicalrecords(MedicalrecordsModel model);
 }

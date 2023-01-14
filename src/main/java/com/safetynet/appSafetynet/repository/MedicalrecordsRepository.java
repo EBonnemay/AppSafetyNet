@@ -77,7 +77,6 @@ public class MedicalrecordsRepository implements IMedicalrecordsRepository {
                 root = makingModels.modelMaker("classpath:data.json");
             }
             listOfMedicalrecordsModels = fillInMedicalrecordsModels(root);
-            System.out.println("listOfMedicalrecordsModels filled in");
         }
     }
 
@@ -119,7 +118,7 @@ public class MedicalrecordsRepository implements IMedicalrecordsRepository {
     }
 
     @Override
-    public void updateAllergiesOrMeds(MedicalrecordsModel model) {
+    public void updateMedicalrecords(MedicalrecordsModel model) {
         setUpListOfMedicalrecordsModel();
         int match = 0;
         for (int i = 0; i < listOfMedicalrecordsModels.getListOfMedicalrecordsModels().size(); i++) {

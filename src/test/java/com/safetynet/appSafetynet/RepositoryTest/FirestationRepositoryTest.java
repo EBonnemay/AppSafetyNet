@@ -64,8 +64,8 @@ public class FirestationRepositoryTest {
     @Test
     public void deleteOneAddressStationMappingTest() {
         FirestationModel model = listOfFirestationModels.getListOfFirestationModels().get(5);
-        String address = model.getAddress();
-        firestationRepository.deleteOneAddressStationMappingWithAddressParam(address);
+
+        firestationRepository.deleteFirestation(model);
         Assertions.assertFalse(listOfFirestationModels.getListOfFirestationModels().contains(model));
     }
     @Test
@@ -74,7 +74,7 @@ public class FirestationRepositoryTest {
         model.setAddress("3 Sailor Road");
         model.setStation("2");
 
-        Assertions.assertThrows(RuntimeException.class, ()-> firestationRepository.deleteOneAddressStationMappingWithAddressParam("3 Sailor Road"));
+        Assertions.assertThrows(RuntimeException.class, ()-> firestationRepository.deleteFirestation(model));
     }
     @Test
     public void addOneAddressStationMappingTest() {

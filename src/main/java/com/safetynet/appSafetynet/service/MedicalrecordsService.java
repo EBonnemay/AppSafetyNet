@@ -20,7 +20,7 @@ public class MedicalrecordsService {
         return medicalrecordsRepository.findAll();
     }
     public void updateAllergiesOrMeds(MedicalrecordsModel model){
-        medicalrecordsRepository.updateAllergiesOrMeds(model);
+        medicalrecordsRepository.updateMedicalrecords(model);
 
     }
 

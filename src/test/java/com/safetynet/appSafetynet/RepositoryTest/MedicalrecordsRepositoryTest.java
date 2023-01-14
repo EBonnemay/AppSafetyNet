@@ -96,7 +96,7 @@ public class MedicalrecordsRepositoryTest {
         list.add("apple");
         model.setAllergies(list);
         model.setBirthdate("31/10/2017");
-        medicalrecordsRepository.updateAllergiesOrMeds(model);
+        medicalrecordsRepository.updateMedicalrecords(model);
         MedicalrecordsModel allisonFile = listOfMedicalrecordsModels.getListOfMedicalrecordsModels().get(17);
         Assertions.assertTrue(allisonFile.getAllergies().contains("nuts"));
 
@@ -113,7 +113,7 @@ public class MedicalrecordsRepositoryTest {
         model.setAllergies(list);
         model.setBirthdate("31/10/2017");
 
-        Assertions.assertThrows(RuntimeException.class, () -> medicalrecordsRepository.updateAllergiesOrMeds(model));
+        Assertions.assertThrows(RuntimeException.class, () -> medicalrecordsRepository.updateMedicalrecords(model));
 
     }
 
