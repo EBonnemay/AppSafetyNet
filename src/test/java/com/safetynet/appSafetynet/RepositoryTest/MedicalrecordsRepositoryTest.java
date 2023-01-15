@@ -2,6 +2,7 @@ package com.safetynet.appSafetynet.RepositoryTest;
 
 
 import com.jsoniter.any.Any;
+import com.jsoniter.spi.JsonException;
 import com.safetynet.appSafetynet.model.ListOfMedicalrecordsModels;
 import com.safetynet.appSafetynet.model.MedicalrecordsModel;
 import com.safetynet.appSafetynet.repository.MakingModels;
@@ -48,6 +49,15 @@ public class MedicalrecordsRepositoryTest {
     }
 
     @Test
+    public void fillInMedicalrecordsModelsTestIfNoStringMedicalmodelFound (){
+        listOfMedicalrecordsModels.getListOfMedicalrecordsModels().clear();
+        MakingModels makingModels = medicalrecordsRepository.getMakingModels();
+        Any root = makingModels.modelMaker("classpath:dataWithWrongKeysForTest.json");
+
+        Assertions.assertThrows(JsonException.class, ()-> medicalrecordsRepository.fillInMedicalrecordsModels(root));
+
+    }
+    @Test
     public void findAllMedicalmodelsTest(){
         listOfMedicalrecordsModels = medicalrecordsRepository.findAll();
         Assertions.assertEquals(23, medicalrecordsRepository.findAll().getListOfMedicalrecordsModels().size());
@@ -57,7 +67,7 @@ public class MedicalrecordsRepositoryTest {
         MedicalrecordsModel model = listOfMedicalrecordsModels.getListOfMedicalrecordsModels().get(5);
         String firstName = model.getFirstName();
         String lastName = model.getLastName();
-        medicalrecordsRepository.deleteOneMedicalRecord(firstName+" "+lastName);
+        listOfMedicalrecordsModels = medicalrecordsRepository.deleteOneMedicalRecord(firstName+" "+lastName);
         Assertions.assertFalse(listOfMedicalrecordsModels.getListOfMedicalrecordsModels().contains(model));
     }
     @Test
@@ -74,7 +84,7 @@ public class MedicalrecordsRepositoryTest {
         added.setFirstName("Emma");
         added.setLastName("Bovary");
 
-        medicalrecordsRepository.addOneMedicalRecords(added);
+        listOfMedicalrecordsModels = medicalrecordsRepository.addOneMedicalRecords(added);
         Assertions.assertTrue(listOfMedicalrecordsModels.getListOfMedicalrecordsModels().contains(added));
 
     }
@@ -87,7 +97,7 @@ public class MedicalrecordsRepositoryTest {
 
     @Test
     @DisplayName("update Allergies-add an allergy to the list")
-    public void updateAllergiesAddNewAllergyTest(){
+    public void updateMedicalrecordsTest(){
         MedicalrecordsModel model = new MedicalrecordsModel();
         model.setFirstName("Allison");
         model.setLastName("Boyd");
@@ -96,9 +106,10 @@ public class MedicalrecordsRepositoryTest {
         list.add("apple");
         model.setAllergies(list);
         model.setBirthdate("31/10/2017");
-        medicalrecordsRepository.updateMedicalrecords(model);
-        MedicalrecordsModel allisonFile = listOfMedicalrecordsModels.getListOfMedicalrecordsModels().get(17);
-        Assertions.assertTrue(allisonFile.getAllergies().contains("nuts"));
+        MedicalrecordsModel result = medicalrecordsRepository.updateMedicalrecords(model);
+
+        Assertions.assertEquals(model, result);
+        Assertions.assertTrue(listOfMedicalrecordsModels.getListOfMedicalrecordsModels().get(17).getAllergies().contains("nuts"));
 
     }
     @Test

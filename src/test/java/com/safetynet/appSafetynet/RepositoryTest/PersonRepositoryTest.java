@@ -1,6 +1,7 @@
 package com.safetynet.appSafetynet.RepositoryTest;
 
 import com.jsoniter.any.Any;
+import com.jsoniter.spi.JsonException;
 import com.safetynet.appSafetynet.model.ListOfPersonModels;
 
 import com.safetynet.appSafetynet.model.PersonModel;
@@ -46,11 +47,19 @@ public class PersonRepositoryTest {
        Assertions.assertTrue(listOfPersonModels.getListOfPersonModels().size()>0);
 
    }
+    @Test
+    public void fillInPersonModelTestIfNoStringPersonFound (){
+        listOfPersonModels.getListOfPersonModels().clear();
+        MakingModels makingModels = personRepository.getMakingModels();
+        Any root = makingModels.modelMaker("classpath:dataWithWrongKeysForTest.json");
 
+        Assertions.assertThrows(JsonException.class, ()-> personRepository.fillInPersonModels(root));
+
+    }
     @Test
     public void findAllPersonsTest(){
         listOfPersonModels.getListOfPersonModels().clear();
-        personRepository.findAll();
+        listOfPersonModels = personRepository.findAll();
 
 
         Assertions.assertTrue(listOfPersonModels.getListOfPersonModels().size()>0);
@@ -60,7 +69,7 @@ public class PersonRepositoryTest {
         PersonModel model = listOfPersonModels.getListOfPersonModels().get(5);
         String firstName = model.getFirstName();
         String lastName= model.getLastName();
-        personRepository.deleteOnePerson(firstName+" "+lastName);
+        listOfPersonModels = personRepository.deleteOnePerson(firstName+" "+lastName);
         Assertions.assertFalse(listOfPersonModels.getListOfPersonModels().contains(model));
     }
     @Test
@@ -77,7 +86,7 @@ public class PersonRepositoryTest {
         model.setFirstName("Julien");
         model.setLastName("Sorel");
         model.setEmail("j@sorel.net");
-        personRepository.addOnePerson(model);
+        listOfPersonModels = personRepository.addOnePerson(model);
         Assertions.assertTrue(listOfPersonModels.getListOfPersonModels().contains(model));
     }
     @Test
@@ -87,22 +96,15 @@ public class PersonRepositoryTest {
     }
     @Test
     public void updatePersonTest(){
-        PersonModel updated = listOfPersonModels.getListOfPersonModels().get(14);
-        updated.setAddress("2 chemin des platanes");
-        updated.setCity("Paris");
+        PersonModel toUpdate = listOfPersonModels.getListOfPersonModels().get(14);
+        toUpdate.setAddress("2 chemin des platanes");
+        toUpdate.setCity("Paris");
 
-        personRepository.updatePerson(updated);
-        String city = "";
-        String address = "";
-        for(PersonModel person : listOfPersonModels.getListOfPersonModels()){
-            if(person.getFirstName().equals("Reginold")&&person.getLastName().equals("Walker")){
-                city = person.getCity();
-                address = person.getAddress();
-            }
+        PersonModel updated = personRepository.updatePerson(toUpdate);
 
-        }
-        Assertions.assertEquals("Paris", city);
-        Assertions.assertEquals("2 chemin des platanes", address);
+        Assertions.assertEquals(updated, listOfPersonModels.getListOfPersonModels().get(14));
+        Assertions.assertEquals("Paris", listOfPersonModels.getListOfPersonModels().get(14).getCity());
+        Assertions.assertEquals("2 chemin des platanes", listOfPersonModels.getListOfPersonModels().get(14).getAddress());
     }
     @Test
     public void updateNonExistentPersonTest(){

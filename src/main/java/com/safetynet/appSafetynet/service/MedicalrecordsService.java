@@ -19,17 +19,17 @@ public class MedicalrecordsService {
     public ListOfMedicalrecordsModels getMedicalrecords(){
         return medicalrecordsRepository.findAll();
     }
-    public void updateAllergiesOrMeds(MedicalrecordsModel model){
-        medicalrecordsRepository.updateMedicalrecords(model);
+    public MedicalrecordsModel updateMedicalrecords(MedicalrecordsModel model){
+        return(medicalrecordsRepository.updateMedicalrecords(model));
 
     }
 
-    public void addMedicalrecordsModel(MedicalrecordsModel medicalrecordsModel){
-        medicalrecordsRepository.addOneMedicalRecords(medicalrecordsModel);
+    public ListOfMedicalrecordsModels addMedicalrecordsModel(MedicalrecordsModel medicalrecordsModel){
+        return(medicalrecordsRepository.addOneMedicalRecords(medicalrecordsModel));
 
     }
-    public void deleteMedicalRecordsModel(String firstLastName){
-        medicalrecordsRepository.deleteOneMedicalRecord(firstLastName);
+    public ListOfMedicalrecordsModels deleteMedicalRecordsModel(String firstLastName){
+        return(medicalrecordsRepository.deleteOneMedicalRecord(firstLastName));
 
     }
 }

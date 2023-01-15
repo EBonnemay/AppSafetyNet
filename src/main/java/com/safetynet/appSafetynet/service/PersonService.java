@@ -19,16 +19,16 @@ public class PersonService {
     public ListOfPersonModels getPersons(){
         return personRepository.findAll();
     }
-    public void updatePerson(PersonModel updated ){
-        personRepository.updatePerson(updated);
+    public PersonModel updatePerson(PersonModel updated ){
+        return personRepository.updatePerson(updated);
 
     }
-    public void deletePerson(String firstLastName){
-        personRepository.deleteOnePerson(firstLastName);
+    public ListOfPersonModels deletePerson(String firstLastName){
+        return  personRepository.deleteOnePerson(firstLastName);
 
     }
-    public void addPerson(PersonModel personModel){
-        personRepository.addOnePerson(personModel);
+    public ListOfPersonModels addPerson(PersonModel personModel){
+        return personRepository.addOnePerson(personModel);
 
     }
 

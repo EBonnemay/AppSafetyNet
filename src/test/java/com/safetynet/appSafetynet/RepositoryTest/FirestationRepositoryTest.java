@@ -1,6 +1,7 @@
 package com.safetynet.appSafetynet.RepositoryTest;
 
 import com.jsoniter.any.Any;
+import com.jsoniter.spi.JsonException;
 import com.safetynet.appSafetynet.model.FirestationModel;
 import com.safetynet.appSafetynet.model.ListOfFirestationModels;
 import com.safetynet.appSafetynet.repository.FirestationRepository;
@@ -45,7 +46,16 @@ public class FirestationRepositoryTest {
         Assertions.assertTrue(listOfFirestationModels.getListOfFirestationModels().size()>0);
     }
 
+    @DisplayName("soit une listOfFirestations avec un attribut 'liste' vide, lorsque la méthode setUpListOfFirestationModels est appelée, alors affiche une erreur si 'firestations' ne se trouve pas dans le fichier")
+    @Test
+    public void fillInFirestationModelsTestIfNoStringFirestationFound (){
+        listOfFirestationModels.getListOfFirestationModels().clear();
+        MakingModels makingModels = firestationRepository.getMakingModels();
+        Any root = makingModels.modelMaker("classpath:dataWithWrongKeysForTest.json");
 
+        Assertions.assertThrows(JsonException.class, ()-> firestationRepository.fillInFirestationModels(root));
+
+    }
 
     @Test
     public void findAllFirestationModelsTest(){
@@ -65,7 +75,7 @@ public class FirestationRepositoryTest {
     public void deleteOneAddressStationMappingTest() {
         FirestationModel model = listOfFirestationModels.getListOfFirestationModels().get(5);
 
-        firestationRepository.deleteFirestation(model);
+        listOfFirestationModels = firestationRepository.deleteFirestation(model);
         Assertions.assertFalse(listOfFirestationModels.getListOfFirestationModels().contains(model));
     }
     @Test
@@ -83,7 +93,7 @@ public class FirestationRepositoryTest {
         added.setAddress("10 downing street");
         added.setStation("5");
         //listOfFirestationModels.getListOfFirestationModels().add(expected);
-        firestationRepository.addOneAddressStationMapping(added);
+        listOfFirestationModels = firestationRepository.addOneAddressStationMapping(added);
         Assertions.assertTrue(listOfFirestationModels.getListOfFirestationModels().contains(added));
     }
     @Test
@@ -100,9 +110,8 @@ public class FirestationRepositoryTest {
         FirestationModel model = new FirestationModel();
         model.setAddress("112 Steppes Pl");
         model.setStation("new station number");
-
-        firestationRepository.updateFirestationNumberForAnAddress(model);
-        Assertions.assertEquals("new station number", listOfFirestationModels.getListOfFirestationModels().get(5).getStation());
+        FirestationModel result = firestationRepository.updateFirestationNumberForAnAddress(model);
+        Assertions.assertEquals(result, model);
     }
 
     @Test

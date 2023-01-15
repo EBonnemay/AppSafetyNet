@@ -13,25 +13,49 @@ public class MedicalrecordsController {
     @Autowired
     private MedicalrecordsService medicalrecordsService;
     static final Logger logger = LogManager.getLogger();
+
     @GetMapping("/medicalRecord")
     public ListOfMedicalrecordsModels getMedicalRecords(){
         return medicalrecordsService.getMedicalrecords();
     }
 
     @PutMapping("/medicalRecord")
-    public void updateAllergiesOrMeds(@RequestBody MedicalrecordsModel model){
-        medicalrecordsService.updateAllergiesOrMeds(model);
-        logger.info("Medicalrecords updated successfully");
+    public MedicalrecordsModel updateMedicalrecords(@RequestBody MedicalrecordsModel model){
+        MedicalrecordsModel result= new MedicalrecordsModel();
+        try{
+            result = medicalrecordsService.updateMedicalrecords(model);
+            logger.info("medical record updated successfully");
+            return result;
+        }catch(RuntimeException e){
+            logger.error("medical record updating failed");
+            return result;
+        }
     }
+
     @PostMapping("/medicalRecord")
-    public void addMedicalrecord(@RequestBody MedicalrecordsModel medicalrecordModel){
-        medicalrecordsService.addMedicalrecordsModel(medicalrecordModel);
-        logger.info("Medicalrecords added successfully");
+    public ListOfMedicalrecordsModels addMedicalrecord(@RequestBody MedicalrecordsModel model){
+        ListOfMedicalrecordsModels result = new ListOfMedicalrecordsModels();
+        try {
+            result = medicalrecordsService.addMedicalrecordsModel(model);
+            logger.info("medical record added successfully");
+            return result;
+        } catch (RuntimeException e) {
+            logger.error("medical record adding failed");
+            return result;
+        }
+
     }
     @DeleteMapping("/medicalRecord")
-    public void deleteMedicalrecord(@RequestParam String firstLastName){
-        medicalrecordsService.deleteMedicalRecordsModel(firstLastName);
-        logger.info("Medicalrecords deleted successfully");
+    public ListOfMedicalrecordsModels deleteMedicalrecord(@RequestParam String firstLastName){
+        ListOfMedicalrecordsModels result = new ListOfMedicalrecordsModels();
+        try {
+            result = medicalrecordsService.deleteMedicalRecordsModel(firstLastName);
+            logger.info("medical record deleted successfully");
+            return result;
+        } catch (RuntimeException e) {
+            logger.error("medical record deleting failed");
+            return result;
+        }
     }
 
 }

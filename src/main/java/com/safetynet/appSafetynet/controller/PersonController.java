@@ -14,26 +14,51 @@ public class PersonController {
     @Autowired
     private PersonService personService;
     static final Logger logger = LogManager.getLogger();
+
+
     @GetMapping("/person")
     public ListOfPersonModels getPersons(){
         return personService.getPersons();
     }
 
     @PutMapping("/person")
-    public void updatePerson(@RequestBody PersonModel person){
-        personService.updatePerson(person);
-        logger.info("Person updated successfully");
+    public PersonModel updatePerson(@RequestBody PersonModel person){
+        PersonModel result= new PersonModel();
+        try{
+            result = personService.updatePerson(person);
+            logger.info("person updated successfully");
+            return result;
+        }catch(RuntimeException e){
+            logger.error("person not found");
+            return result;
+        }
     }
     @PostMapping("/person")
-    public void addPerson(@RequestBody PersonModel personModel){
-        personService.addPerson(personModel);
-        logger.info("Person added successfully");
+    public ListOfPersonModels addPerson(@RequestBody PersonModel personModel){
+        ListOfPersonModels result = new ListOfPersonModels();
+        try {
+            result = personService.addPerson(personModel);
+            logger.info("person added successfully");
+            return result;
+        } catch (RuntimeException e) {
+            logger.error("item not found");
+            return result;
+        }
+
 
     }
     @DeleteMapping("/person")
-    public void deletePerson(@RequestParam String firstLastName){
-        personService.deletePerson(firstLastName);
-        logger.info("Person deleted successfully");
+    public ListOfPersonModels deletePerson(@RequestParam String firstLastName){
+        ListOfPersonModels result = new ListOfPersonModels();
+        try {
+            result = personService.deletePerson(firstLastName);
+            logger.info("person deleted successfully");
+            return result;
+        } catch (RuntimeException e) {
+            logger.error("item not found");
+            return result;
+        }
+
     }
 
 }

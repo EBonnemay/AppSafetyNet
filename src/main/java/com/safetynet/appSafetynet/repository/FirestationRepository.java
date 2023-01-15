@@ -41,15 +41,13 @@ public class FirestationRepository implements IFirestationRepository{
                 model.setStation(list.get(i).get("station").toString());
                 attributeList.add(model);
             }
-            listOfFirestationModels.setListOfFirestationModels(attributeList);
+
         }catch(JsonException e){
             logger.error("the key 'firestation' was not found in deserialized file");
             throw new JsonException("key not found", e);
-        }catch (Exception e) {
-            logger.error("filling Firestation models failed");
-            throw new RuntimeException( "Firestation models could not get filled in", e);
 
         }
+        listOfFirestationModels.setListOfFirestationModels(attributeList);
         return listOfFirestationModels;
     }
 
@@ -87,7 +85,7 @@ public class FirestationRepository implements IFirestationRepository{
         return listOfAddressesServedByOneStation;
     }
     @Override
-    public void deleteFirestation(FirestationModel model){
+    public ListOfFirestationModels deleteFirestation(FirestationModel model){
         setUpListOfFirestationsModel();
         int match = 0;
         for (int i=0;i<listOfFirestationModels.getListOfFirestationModels().size();i++) {
@@ -101,11 +99,12 @@ public class FirestationRepository implements IFirestationRepository{
             logger.error("the key address of this firestation Model does not exist in data ; no deleting");
             throw new RuntimeException("no deleting");
         }
+        return listOfFirestationModels;
 
     }
 
     @Override
-    public void addOneAddressStationMapping(FirestationModel model){
+    public ListOfFirestationModels addOneAddressStationMapping(FirestationModel model){
         setUpListOfFirestationsModel();
         if(!listOfFirestationModels.getListOfFirestationModels().contains(model)){
             listOfFirestationModels.getListOfFirestationModels().add(model);
@@ -114,24 +113,28 @@ public class FirestationRepository implements IFirestationRepository{
             logger.error("the firestation to add is already in the data. No adding");
             throw new RuntimeException("no adding");
         }
+        return listOfFirestationModels;
     }
     @Override
-    public void updateFirestationNumberForAnAddress(FirestationModel updatedFirestationModel){
+    public FirestationModel updateFirestationNumberForAnAddress(FirestationModel updatedFirestationModel)throws RuntimeException{
         setUpListOfFirestationsModel();
         int match = 0;
+        FirestationModel result = new FirestationModel();
         for(int i=0;i<listOfFirestationModels.getListOfFirestationModels().size();i++){
             if(listOfFirestationModels.getListOfFirestationModels().get(i).getAddress().equals(updatedFirestationModel.getAddress())){
                 match = 1;
                 listOfFirestationModels.getListOfFirestationModels().set(i, updatedFirestationModel);
+                result = listOfFirestationModels.getListOfFirestationModels().get(i);
 
             }
+
         }
         if(match == 0){
-            logger.error("the key address of the firestation Model does not exist in data ; no updating");
+            logger.error("key address of the firestation Model not found in the data");
             throw new RuntimeException("no updating");
 
         }
-
+       return result;
     }
 }
 

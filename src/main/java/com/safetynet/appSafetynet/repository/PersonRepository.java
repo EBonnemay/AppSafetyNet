@@ -66,15 +66,13 @@ public class PersonRepository implements IPersonRepository{
                 attributeList.add(model);
             }
 
-        }catch(JsonException e){
-
-            System.out.println("person key not found in file");
-        }catch(Exception e){
-            System.out.println("problems filling models");
-            //throw new RuntimeException("tentative arrêt programme",e);
+        } catch(JsonException e) {
+            logger.error("the key 'persons' was not found in deserialized file");
+            throw new JsonException("key not found", e);
         }
-        listOfPersonModels.setListOfPersonModels(attributeList);
-        return listOfPersonModels;
+            listOfPersonModels.setListOfPersonModels(attributeList);
+            return listOfPersonModels;
+
     }
    @Override
     public void setUpListOfPersonModels() {
@@ -99,7 +97,7 @@ public class PersonRepository implements IPersonRepository{
     }
 
     @Override
-    public void addOnePerson(PersonModel person) {
+    public ListOfPersonModels addOnePerson(PersonModel person) {
         setUpListOfPersonModels();
         if(!listOfPersonModels.getListOfPersonModels().contains(person)){
             listOfPersonModels.getListOfPersonModels().add(person);
@@ -108,9 +106,10 @@ public class PersonRepository implements IPersonRepository{
             logger.error("the person to add is already in the data. No adding");
             throw new RuntimeException("no adding");
         }
+    return listOfPersonModels;
     }
     @Override
-    public void deleteOnePerson(String firstLastName){
+    public ListOfPersonModels deleteOnePerson(String firstLastName){
         setUpListOfPersonModels();
         int match = 0;
         for(int i = 0; i<listOfPersonModels.getListOfPersonModels().size();i++){
@@ -124,20 +123,22 @@ public class PersonRepository implements IPersonRepository{
         }
         if (match == 0) {
             logger.error("the person to delete is not in the data. No deleting");
-            throw new RuntimeException("delete failed");
+            throw new RuntimeException("no deleting");
         }
-
+    return listOfPersonModels;
     }
     @Override
-    public void updatePerson(PersonModel updatedPerson ) {
+    public PersonModel updatePerson(PersonModel updatedPerson ) {
         setUpListOfPersonModels();
         int match = 0;
+        PersonModel result = new PersonModel();
         for (int i = 0; i < listOfPersonModels.getListOfPersonModels().size(); i++) {
             String firstName = listOfPersonModels.getListOfPersonModels().get(i).getFirstName();
             String lastName = listOfPersonModels.getListOfPersonModels().get(i).getLastName();
             if (firstName.equals(updatedPerson.getFirstName()) && lastName.equals(updatedPerson.getLastName())) {
                 match = 1;
                 listOfPersonModels.getListOfPersonModels().set(i, updatedPerson);
+                result = listOfPersonModels.getListOfPersonModels().get(i);
                 //ici update medicalRecords
                 MedicalrecordsModel misterUpdatedsMedicalFile = updatedPerson.getMedicalrecordsModel();
                 for(int j=0;j<listOfMedicalrecordsModels.getListOfMedicalrecordsModels().size();j++){
@@ -152,8 +153,9 @@ public class PersonRepository implements IPersonRepository{
         }
         if(match==0){
             logger.error("the person to update is not in the data. No updating");
-            throw new RuntimeException("update failed");
+            throw new RuntimeException("no updating");
         }
+        return result;
     }
     @Override
     public ArrayList<PersonModel> getPeopleInSameHouseHold(String address, ListOfPersonModels listOfPersonModels){
@@ -167,8 +169,8 @@ public class PersonRepository implements IPersonRepository{
             }
         }
         if( match == 0){
-            logger.error("Unsuccessful calling of url : the address required is not in the data.");
-            throw new RuntimeException("address not found");
+            logger.error("address required not found in the data.");
+            throw new RuntimeException("no adding");
         }
         return peopleInSameHousehold;
     }

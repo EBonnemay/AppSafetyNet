@@ -11,7 +11,7 @@ public interface IFirestationRepository {
     void setUpListOfFirestationsModel();
     ListOfFirestationModels findAll();
     ArrayList<String> findAddressesServedByOneStation(String numberOfStation, ListOfFirestationModels listOfFirestationModels);
-    void deleteFirestation(FirestationModel model);
-    void addOneAddressStationMapping(FirestationModel model);
-    void updateFirestationNumberForAnAddress(FirestationModel updatedFirestationModel);
+    ListOfFirestationModels deleteFirestation(FirestationModel model);
+    ListOfFirestationModels addOneAddressStationMapping(FirestationModel model);
+    FirestationModel updateFirestationNumberForAnAddress(FirestationModel updatedFirestationModel);
 }

@@ -21,13 +21,13 @@ public class MakingModelsTest {
 
     @Test
     public void modelMakerWithNonExistentFileTest(){
-        Exception exception = Assertions.assertThrows(Exception.class, () -> makingModels.modelMaker("classpath:data4.json"));
+        Exception exception = Assertions.assertThrows(Exception.class, () -> makingModels.modelMaker("classpath:data3ForTest.json"));
         Assertions.assertEquals("file not found", exception.getMessage());
     }
 
     @Test
     public void modelMakerWithEmptyFileTest(){
-        Exception exception = Assertions.assertThrows(Exception.class, () -> makingModels.modelMaker("classpath:data3.json"));
+        Exception exception = Assertions.assertThrows(Exception.class, () -> makingModels.modelMaker("classpath:voidDataForTest.json"));
         Assertions.assertEquals("the file could not be read", exception.getMessage());
     }
 

@@ -11,9 +11,9 @@ public interface IPersonRepository {
 
     void setUpListOfPersonModels();
     ListOfPersonModels findAll();
-    void addOnePerson(PersonModel person);
-    void deleteOnePerson(String firstLastName);
-    void updatePerson(PersonModel updatedPerson );
+    ListOfPersonModels addOnePerson(PersonModel person);
+    ListOfPersonModels deleteOnePerson(String firstLastName);
+    PersonModel updatePerson(PersonModel updatedPerson );
     int howOldIsThisPerson(String stringDateOfBirth);
     ArrayList<PersonModel> getPeopleInSameHouseHold(String address, ListOfPersonModels listOfPersonModels);
 }

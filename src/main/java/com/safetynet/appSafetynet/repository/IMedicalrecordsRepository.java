@@ -8,7 +8,7 @@ public interface IMedicalrecordsRepository {
     ListOfMedicalrecordsModels fillInMedicalrecordsModels(Any deserializedFile);
     void setUpListOfMedicalrecordsModel();
     ListOfMedicalrecordsModels findAll();
-    void addOneMedicalRecords(MedicalrecordsModel element);
-    void deleteOneMedicalRecord(String firstLastName);
-    void updateMedicalrecords(MedicalrecordsModel model);
+    ListOfMedicalrecordsModels addOneMedicalRecords(MedicalrecordsModel element);
+    ListOfMedicalrecordsModels deleteOneMedicalRecord(String firstLastName);
+    MedicalrecordsModel updateMedicalrecords(MedicalrecordsModel model);
 }

@@ -46,7 +46,7 @@ public class MedicarecordsServiceTest {
         MedicalrecordsModel model = listOfMedicalrecordsModels.getListOfMedicalrecordsModels().get(2);
         String firstName = model.getFirstName();
         String lastName = model.getLastName();
-        medicalrecordsService.deleteMedicalRecordsModel(firstName+" "+lastName);
+        listOfMedicalrecordsModels = medicalrecordsService.deleteMedicalRecordsModel(firstName+" "+lastName);
         Assertions.assertFalse(listOfMedicalrecordsModels.getListOfMedicalrecordsModels().contains(model));
     }
     @Test
@@ -55,7 +55,7 @@ public class MedicarecordsServiceTest {
         added.setFirstName("Emma");
         added.setLastName("Bovary");
         //listOfMedicalrecordsModels.getListOfMedicalrecordsModels().add(added);
-        medicalrecordsService.addMedicalrecordsModel(added);
+        listOfMedicalrecordsModels = medicalrecordsService.addMedicalrecordsModel(added);
         Assertions.assertTrue(listOfMedicalrecordsModels.getListOfMedicalrecordsModels().contains(added));
 
     }
@@ -66,8 +66,8 @@ public class MedicarecordsServiceTest {
         HashMap<String, String> map = new HashMap<>();
         map.put("aznol", "500mg");
         allisonFile.setMedications(map);
-        medicalrecordsService.updateAllergiesOrMeds(allisonFile);
-        Assertions.assertEquals("500mg", allisonFile.getMedications().get("aznol"));
+        MedicalrecordsModel result = medicalrecordsService.updateMedicalrecords(allisonFile);
+        Assertions.assertEquals("500mg", result.getMedications().get("aznol"));
     }
 }
 

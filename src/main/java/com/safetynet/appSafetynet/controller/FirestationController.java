@@ -23,21 +23,41 @@ public class FirestationController {
     }
 
     @PutMapping("/firestation")
-    public void updateFirestation(@RequestBody FirestationModel model) {
-        firestationService.updateFirestation(model);
-        logger.info("Firestation updated successfully");
-
+    public FirestationModel updateFirestation(@RequestBody FirestationModel model) {
+        FirestationModel result = new FirestationModel();
+        try{
+            result = firestationService.updateFirestation(model);
+            logger.info("firestation updated successfully");
+            return result;
+        }
+        catch(RuntimeException e){
+            logger.error("firestation updating failed");
+            return result;
+        }
     }
     @PostMapping("/firestation")
-    public void addFirestation(@RequestParam FirestationModel model){
-        firestationService.addFirestation(model);
-        logger.info("Firestation added successfully");
+    public ListOfFirestationModels addFirestation(@RequestBody FirestationModel model) {
+        ListOfFirestationModels result = new ListOfFirestationModels();
+        try {
+            result = firestationService.addFirestation(model);
+            logger.info("firestation added successfully");
+            return result;
+        } catch (RuntimeException e) {
+            logger.error("firestation adding failed");
+            return result;
+        }
     }
-
     @DeleteMapping("/firestation")
-    public void deleteFirestation(@RequestBody FirestationModel model){
-        firestationService.deleteFirestation(model);
-        logger.info("Firestation deleted successfully");
+    public ListOfFirestationModels deleteFirestation(@RequestBody FirestationModel model){
+            ListOfFirestationModels result = new ListOfFirestationModels();
+            try {
+                result = firestationService.deleteFirestation(model);
+                logger.info("firestation updated successfully");
+                return result;
+            } catch (RuntimeException e) {
+                logger.error("firestation deleting failed");
+                return result;
+            }
     }
 }
 

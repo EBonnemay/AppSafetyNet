@@ -20,18 +20,18 @@ public class FirestationService {
     public ListOfFirestationModels getFirestations() {
         return firestationRepository.findAll();
     }
-    public void updateFirestation(FirestationModel model){
-        firestationRepository.updateFirestationNumberForAnAddress(model);
+    public FirestationModel updateFirestation(FirestationModel model) throws RuntimeException{
+        return (firestationRepository.updateFirestationNumberForAnAddress(model));
 
     }
 
-    public void deleteFirestation(FirestationModel model) {
+    public ListOfFirestationModels deleteFirestation(FirestationModel model) {
 
-            firestationRepository.deleteFirestation(model);
+            return (firestationRepository.deleteFirestation(model));
 
     }
-    public void addFirestation(FirestationModel model){
-        firestationRepository.addOneAddressStationMapping(model);
+    public ListOfFirestationModels addFirestation(FirestationModel model){
+        return(firestationRepository.addOneAddressStationMapping(model));
 
 
     }

@@ -103,7 +103,7 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
 
        }
         if(match ==0){
-            logger.error("parameter not found in file for url 1");
+            logger.error("the firestation required was not found in the data");
             throw new RuntimeException("unsuccessful request of url 1");
 
         }
@@ -115,7 +115,7 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
 
 
 }
-    public ListOfChildrenAndTheHouseholdWithOneAddressUrl2 urlTwo(String address) {
+    public ListOfChildrenAndTheHouseholdWithOneAddressUrl2 urlTwo(String address) throws RuntimeException {
         logger.info("url 2 returns list of children living at {} as well as their ages and each one's household ", address);
 
         setUp();
@@ -161,14 +161,14 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
             }
         }
         if(match ==0){
-            logger.error("parameter not found in file for url 3");
+            logger.error("the number of station required was not found in the data");
             throw new RuntimeException("unsuccessful request of url 3");
 
         }
         mapResultUrl3.put("Phone numbers for firestation " + numberOfStation, phoneNumbersCoveredByOneStation);
         return mapResultUrl3;
     }
-   public HouseholdUrl4 urlFour(String address) {
+   public HouseholdUrl4 urlFour(String address) throws RuntimeException{
        logger.info("url 4 returns names, ages, phone and medical data of persons living at {}, as well as the corresponding station number", address);
         setUp();
         HouseholdUrl4 householdUrl4 = new HouseholdUrl4();
@@ -190,6 +190,7 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
        householdUrl4.setAddress(address);
        for(FirestationModel firestationModel : listOfFirestationModels.getListOfFirestationModels()){
            if(firestationModel.getAddress().equals(address)){
+
                householdUrl4.setFirestationNumber(firestationModel.getStation());
            }
        }
@@ -198,7 +199,7 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
 
    }
 
-    public ListOfHouseholdsCoveredByAFirestationUrl5 urlFive(String stringNumbersOfFirestations){
+    public ListOfHouseholdsCoveredByAFirestationUrl5 urlFive(String stringNumbersOfFirestations) throws RuntimeException{
         logger.info("url 5 returns the list of households covered by firestation or firestations {} ; each one includes names, ages, phone and medical data of persons in the household", stringNumbersOfFirestations);
 
         setUp();// pour la deuxième fois!
@@ -216,6 +217,7 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
             }
 
         }
+
         return listOfHouseholdsCoveredByAFirestationUrl5;
     }
 
@@ -223,8 +225,6 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
         logger.info("url 6 returns information for {} {} : address, age, mail, medical data", firstName, lastName);
         int match = 0;
         setUp();
-
-
         ListOfPersonsInfosUrl6 listOfPersonsInfosUrl6 = new ListOfPersonsInfosUrl6();
 
         for (PersonModel person : listOfPersonModels.getListOfPersonModels()) {
@@ -244,7 +244,7 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
             }
         }
         if( match == 0){
-            logger.error("Unsuccessful calling of url 6: the name required is not in the data.");
+            logger.error("the name required is not in the data.");
             throw new RuntimeException("name not found");
         }
         return listOfPersonsInfosUrl6;
@@ -263,7 +263,7 @@ public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){
 
         }
         if( match == 0){
-            logger.error("Unsuccessful calling of url 7: the city required is not in the data.");
+            logger.error("the city required is not in the data.");
             throw new RuntimeException("city not found");
         }
         return resultUrl7;
