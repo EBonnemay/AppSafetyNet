@@ -53,7 +53,7 @@ public class UrlService implements IUrlService{
            listOfFirestationModels = firestationRepository.fillInFirestationModels(root);
        }
 
-       listOfMedicalrecordsModels = medicalrecordsRepository.fillInMedicalrecordsModels(root);
+       listOfMedicalrecordsModels = medicalrecordsRepository.findAll();
        if(listOfMedicalrecordsModels.getListOfMedicalrecordsModels().isEmpty()){
            listOfMedicalrecordsModels= medicalrecordsRepository.fillInMedicalrecordsModels(root);
        }
@@ -63,10 +63,6 @@ public class UrlService implements IUrlService{
            listOfPersonModels = personRepository.fillInPersonModels(root);
        }
 
-
-       if(listOfPersonModels.getListOfPersonModels().isEmpty()){
-           listOfPersonModels = personRepository.fillInPersonModels(root);
-       }
    }
 
 public ListOfPersonsCoveredByAFirestationUrl1 urlOne(String firestationNumber){

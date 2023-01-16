@@ -46,7 +46,7 @@ public class PersonRepository implements IPersonRepository{
 
 
             List<Any> listPersons = json_persons.asList();
-
+            //listOfMedicalrecordsModels = medicalrecordsRepository.findAll();
 
 
             for (int i = 0; i < listPersons.size(); i++) {
@@ -58,6 +58,7 @@ public class PersonRepository implements IPersonRepository{
                 model.setZip(listPersons.get(i).get("zip").toString());
                 model.setPhone(listPersons.get(i).get("phone").toString());
                 model.setEmail(listPersons.get(i).get("email").toString());
+
                 for(MedicalrecordsModel medicalFile : listOfMedicalrecordsModels.getListOfMedicalrecordsModels()){
                     if((medicalFile.getFirstName()+" "+medicalFile.getLastName()).equals((model.getFirstName()+" "+model.getLastName()))){
                         model.setMedicalrecordsModel(medicalFile);
@@ -76,11 +77,13 @@ public class PersonRepository implements IPersonRepository{
     }
    @Override
     public void setUpListOfPersonModels() {
-        if (listOfPersonModels.getListOfPersonModels().size() == 0) {
+       //
+
+       if (listOfPersonModels.getListOfPersonModels().size() == 0) {
             if (root == null) {
                 root = makingModels.modelMaker("classpath:data.json");
             }
-            listOfMedicalrecordsModels = medicalrecordsRepository.findAll();
+           listOfMedicalrecordsModels = medicalrecordsRepository.findAll();
             if (listOfMedicalrecordsModels.getListOfMedicalrecordsModels().isEmpty()){
                 listOfMedicalrecordsModels = medicalrecordsRepository.fillInMedicalrecordsModels(root);
             }
@@ -92,7 +95,17 @@ public class PersonRepository implements IPersonRepository{
 
     @Override
     public ListOfPersonModels findAll() {
+        listOfMedicalrecordsModels = medicalrecordsRepository.findAll();
         setUpListOfPersonModels();
+        for(int i = 0;i<listOfPersonModels.getListOfPersonModels().size();i++){
+            String firstLastNamePerson = listOfPersonModels.getListOfPersonModels().get(i).getFirstName()+listOfPersonModels.getListOfPersonModels().get(i).getLastName();
+            for(MedicalrecordsModel medFile : listOfMedicalrecordsModels.getListOfMedicalrecordsModels()){
+                if(firstLastNamePerson.equals((medFile.getFirstName()+medFile.getLastName()))){
+                    listOfPersonModels.getListOfPersonModels().get(i).setMedicalrecordsModel(medFile);
+                }
+            }
+        }
+        //tentative dactualiser persons à partir d'un mr actualisé"
         return listOfPersonModels;
     }
 
@@ -117,7 +130,7 @@ public class PersonRepository implements IPersonRepository{
                     listOfPersonModels.getListOfPersonModels().get(i).getLastName()).equals(firstLastName)) {
                 match = 1;
                 listOfPersonModels.getListOfPersonModels().remove(listOfPersonModels.getListOfPersonModels().get(i));
-                listOfPersonModels.getListOfPersonModels().remove(listOfPersonModels.getListOfPersonModels().get(i));
+
             }
 
         }
